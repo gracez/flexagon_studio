@@ -9,6 +9,7 @@
  * reference. Exact folded arrangements/rotations still need a folding sequence.
  */
 const TAU = Math.PI * 2;
+export const HEXAGON_START_ANGLE = -2 * Math.PI / 3;
 export const SQUARE = [[0, 0], [1, 0], [1, 1], [0, 1]];
 export const TRIANGLE = [[0, 0], [1, 0], [.5, Math.sqrt(3) / 2]];
 // EDIT FACE_MAPS below: each model owns its own faces and orientations.
@@ -62,20 +63,20 @@ export const FACE_MAPS = {
   trihexa: [
     {
       name: 'Face 01', orientations: [
-        orientation('A', [0, 1, 2, 3, 4, 5], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [2, 3, 4, 5, 0, 1], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [0, 2, 7, 9, 12, 14], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+        orientation('B', [14, 12, 9, 7, 2, 0], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
       name: 'Face 02', orientations: [
-        orientation('A', [6, 7, 8, 9, 10, 11], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [8, 9, 10, 11, 6, 7], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [16, 1, 4, 6, 11, 13], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+        orientation('B', [13, 11, 6, 4, 1, 16], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
       name: 'Face 03', orientations: [
-        orientation('A', [12, 13, 14, 15, 16, 17], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [14, 15, 16, 17, 12, 13], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [15, 17, 3, 5, 8, 10], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+        orientation('B', [10, 8, 5, 3, 17, 15], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
   ],
@@ -84,42 +85,42 @@ export const FACE_MAPS = {
       name: 'Face 01', orientations: [
         orientation('A', [0, 1, 2, 3, 4, 5], [0, 0, 0, 0, 0, 0]),
         orientation('B', [2, 3, 4, 5, 0, 1], [0, 0, 0, 0, 0, 0]),
+        orientation('C', [4, 5, 0, 1, 2, 3], [0, 0, 0, 0, 0, 0]),
+        orientation('D', [1, 0, 3, 2, 5, 4], [0, 0, 0, 0, 0, 0]),
       ]
     },
     {
       name: 'Face 02', orientations: [
         orientation('A', [6, 7, 8, 9, 10, 11], [0, 0, 0, 0, 0, 0]),
         orientation('B', [8, 9, 10, 11, 6, 7], [0, 0, 0, 0, 0, 0]),
+        orientation('C', [10, 11, 6, 7, 8, 9], [0, 0, 0, 0, 0, 0]),
+        orientation('D', [7, 6, 9, 8, 11, 10], [0, 0, 0, 0, 0, 0]),
       ]
     },
     {
       name: 'Face 03', orientations: [
         orientation('A', [12, 13, 14, 15, 16, 17], [0, 0, 0, 0, 0, 0]),
         orientation('B', [14, 15, 16, 17, 12, 13], [0, 0, 0, 0, 0, 0]),
+        orientation('C', [16, 17, 12, 13, 14, 15], [0, 0, 0, 0, 0, 0]),
+        orientation('D', [13, 12, 15, 14, 17, 16], [0, 0, 0, 0, 0, 0]),
       ]
     },
     {
       name: 'Face 04', orientations: [
         orientation('A', [18, 19, 20, 21, 22, 23], [0, 0, 0, 0, 0, 0]),
         orientation('B', [20, 21, 22, 23, 18, 19], [0, 0, 0, 0, 0, 0]),
-        orientation('C', [22, 23, 18, 19, 20, 21], [0, 0, 0, 0, 0, 0]),
-        orientation('D', [19, 18, 21, 20, 23, 22], [0, 0, 0, 0, 0, 0]),
       ]
     },
     {
       name: 'Face 05', orientations: [
         orientation('A', [24, 25, 26, 27, 28, 29], [0, 0, 0, 0, 0, 0]),
         orientation('B', [26, 27, 28, 29, 24, 25], [0, 0, 0, 0, 0, 0]),
-        orientation('C', [28, 29, 24, 25, 26, 27], [0, 0, 0, 0, 0, 0]),
-        orientation('D', [25, 24, 27, 26, 29, 28], [0, 0, 0, 0, 0, 0]),
       ]
     },
     {
       name: 'Face 06', orientations: [
         orientation('A', [30, 31, 32, 33, 34, 35], [0, 0, 0, 0, 0, 0]),
         orientation('B', [32, 33, 34, 35, 30, 31], [0, 0, 0, 0, 0, 0]),
-        orientation('C', [34, 35, 30, 31, 32, 33], [0, 0, 0, 0, 0, 0]),
-        orientation('D', [31, 30, 33, 32, 35, 34], [0, 0, 0, 0, 0, 0]),
       ]
     },
   ],
@@ -171,7 +172,7 @@ export const PDF_LAYOUTS = {
     frontRail: 'right', backRail: 'left', duplexFlip: 'short-edge',
   },
   hexahexa: {
-    mode: 'auto', margin: 10, railWidth: 52, railGap: 6,
+    mode: 'bands', margin: 10, railWidth: 52, railGap: 6,
     frontRail: 'right', backRail: 'left', duplexFlip: 'short-edge',
   },
 };
@@ -197,6 +198,23 @@ MODELS.tetra.printOrder = TETRA_NET.map((cell, pat) => ({
 MODELS.tetra.glueFlap = { x: 4, y: 0 }; // Extension at the upper-right endpoint.
 MODELS.tetra.traversal = [1, 2, 3, 4, 1];
 MODELS.tetra.orientationStatus = 'unverified';
+// Glue closure keeps artwork on its original print side. `first` refers to the
+// first original pat and `cap` is the added endpoint pat. Moving F1 to the cap
+// leaves a front flap at the start and a back flap at the added endpoint.
+MODELS.tetra.glueMoves = [
+  { from: { at: 'first', side: 'front' }, to: { at: 'cap', side: 'front' } },
+];
+MODELS.trihexa.glueMoves = [
+  // Move 1B to the added front endpoint. The front sheet then contains
+  // 1F–9F followed by 1B; the back sheet has blank endpoints around 9B–2B.
+  { from: { at: 'first', side: 'back' }, to: { at: 'cap', side: 'front' } },
+];
+MODELS.hexahexa.glueMoves = [
+  { from: { at: 'first', side: 'front' }, to: { at: 'cap', side: 'front' } },
+];
+// The 18-pat hexahexaflexagon prints as two balanced strips. When glue is
+// enabled, a separate overlapping tab reconnects the strips before folding.
+MODELS.hexahexa.printSplit = { after: 9, rowGap: .5 };
 
 // Print polygons in units of one pat edge. Base ordering is shared by both
 // closure modes; the optional glue step below never mutates model.printOrder.
@@ -208,7 +226,7 @@ function trianglePrintPoints(index) {
 }
 function basePrintLayout(model) {
   return model.printOrder.map((cell, index) => ({
-    ...cell,
+    ...cell, chainIndex: index,
     points: model.shape === 'square'
       ? SQUARE.map(([x, y]) => [x + cell.x, y + cell.y])
       : trianglePrintPoints(index),
@@ -217,17 +235,16 @@ function basePrintLayout(model) {
 function endCap(model) {
   if (model.shape === 'square') {
     return {
-      ...model.glueFlap,
+      ...model.glueFlap, chainIndex: model.printOrder.length,
       points: SQUARE.map(([x, y]) => [x + model.glueFlap.x, y + model.glueFlap.y]),
     };
   }
-  return { points: trianglePrintPoints(model.printOrder.length) };
+  return { chainIndex: model.printOrder.length, points: trianglePrintPoints(model.printOrder.length) };
 }
 
-// Stagger the two blank glue surfaces across opposite ends and opposite sides:
-// front: [blank, F2, ..., Fn, F1]; back: [B1, B2, ..., Bn, blank].
-// The outline is identical for both sheets. Only the first FRONT artwork moves.
-export function applyGlueEndShift(baseLayout, cap) {
+// Apply declared surface moves simultaneously without mutating printOrder.
+// The generic form keeps closure geometry editable if a model changes later.
+export function applyGlueEndShift(baseLayout, cap, moves = []) {
   if (!baseLayout.length) return [];
   const first = baseLayout[0];
   let points = cap.points;
@@ -238,20 +255,57 @@ export function applyGlueEndShift(baseLayout, cap) {
     // artwork handedness: rotate it into that triangle rather than mirror it.
     if (winding(points) * winding(first.points) < 0) points = [points[1], points[0], points[2]];
   }
+  const result = [...baseLayout.map(entry => ({ ...entry })), { ...cap, points }];
+  const indexFor = at => at === 'first' ? 0 : at === 'last' ? baseLayout.length - 1 : result.length - 1;
+  const captured = moves.map(move => result[indexFor(move.from.at)][move.from.side]);
+  moves.forEach(move => { result[indexFor(move.from.at)][move.from.side] = undefined; });
+  moves.forEach((move, index) => { result[indexFor(move.to.at)][move.to.side] = captured[index]; });
+  return result.map(entry => ({
+    ...entry,
+    glueSides: ['front', 'back'].filter(side => !entry[side]),
+  }));
+}
+
+function splitTriangleLayout(layout, { after, rowGap }, addGlueFlap) {
+  const firstRow = layout.filter(entry => entry.chainIndex < after);
+  const secondRow = layout.filter(entry => entry.chainIndex >= after);
+  if (addGlueFlap) {
+    // This blank triangle overlaps the first pat of row two when the two strips
+    // are joined. It is one physical tab with a blank front and back surface.
+    firstRow.push({
+      chainIndex: after,
+      points: trianglePrintPoints(after),
+      glueSides: ['front', 'back'],
+      splitGlue: true,
+    });
+  }
+  const h = Math.sqrt(3) / 2;
+  const placeRow = (entries, y) => {
+    const minX = Math.min(...entries.flatMap(entry => entry.points.map(point => point[0])));
+    return entries.map(entry => ({
+      ...entry,
+      points: entry.points.map(([x, py]) => [x - minX, py + y]),
+    }));
+  };
   return [
-    { ...first, front: undefined, glueSides: ['front'] },
-    ...baseLayout.slice(1),
-    { ...cap, points, pat: first.pat, front: first.front, back: undefined, glueSides: ['back'] },
+    ...placeRow(firstRow, 0),
+    ...placeRow(secondRow, h + rowGap),
   ];
 }
+
 export function printLayout(model, { addGlueFlap = false } = {}) {
   const base = basePrintLayout(model);
-  return addGlueFlap ? applyGlueEndShift(base, endCap(model)) : base;
+  const layout = addGlueFlap
+    ? applyGlueEndShift(base, endCap(model), model.glueMoves)
+    : base;
+  return model.printSplit
+    ? splitTriangleLayout(layout, model.printSplit, addGlueFlap)
+    : layout;
 }
 
 export function slotPolygon(shape, slot) {
   if (shape === 'square') { const x = 180 + (slot % 2) * 180, y = 180 + Math.floor(slot / 2) * 180; return [[x, y], [x + 180, y], [x + 180, y + 180], [x, y + 180]]; }
-  const a = -Math.PI / 2 + slot * TAU / 6, b = a + TAU / 6; return [[360, 360], [360 + 270 * Math.cos(a), 360 + 270 * Math.sin(a)], [360 + 270 * Math.cos(b), 360 + 270 * Math.sin(b)]];
+  const a = HEXAGON_START_ANGLE + slot * TAU / 6, b = a + TAU / 6; return [[360, 360], [360 + 270 * Math.cos(a), 360 + 270 * Math.sin(a)], [360 + 270 * Math.cos(b), 360 + 270 * Math.sin(b)]];
 }
 // Affine transform from a canonical square/triangle to its face slot.
 export function placementMatrix(shape, placement) {

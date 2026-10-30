@@ -104,7 +104,11 @@ remain provisional in `FACE_MAPS.tetra` and the net's rotation fields. The user
 can replace these manually. Older 32-surface square projects are rejected with
 a specific message rather than silently losing or misassigning their artwork.
 Trihexaflexagon uses 9 pats, 3 faces, and 2 draft orientations per face.
-Hexahexaflexagon uses 18 pats, 6 faces, and orientation counts 2/2/2/4/4/4.
+Hexahexaflexagon uses 18 pats, 6 faces, and orientation counts 4/4/4/2/2/2.
+Its printable net is split after pat 9 into two balanced rows so the pats can
+print substantially larger. With glue flaps enabled, one additional overlapping
+triangle reconnects the rows before folding; the original closure flap remains.
+With glue flaps disabled, the two rows are rejoined with flexible tape.
 
 The renderer uses a 512×512 transparent canonical canvas per pat side. Face-space
 brush marks are transformed back to these canvases with inverse affine mappings.
@@ -128,13 +132,15 @@ unverified. Brush behavior and exports should also be checked in a real browser.
 
 ## Export closure options
 
-US Letter landscape is the default. “Add glue flap” is off by default: the
+US Letter landscape is the default. “Include glue flaps” is on by default. With it
+off, the
 base template has no extra pat and its ends are joined with tape as a flexible
-joint. When enabled, `applyGlueEndShift` moves only the first front-side image
-to an added far-end pat. The original front start is blank and the new back end
-is blank. Thus the two glue surfaces are on opposite sides at opposite ends,
-with the same extended outline on both sheets. This shared transformation is
-applied to every model after reading its single `printOrder`; do not maintain
+joint. Tetraflexagon and hexahexaflexagon move the first front image to the
+added front endpoint without crossing print sides. Trihexaflexagon instead
+moves 1B to the added front endpoint. This keeps every front position filled
+while leaving the first and added back positions blank. These relocations are declared in each
+model's `glueMoves` table and run after reading each model's
+single `printOrder`; do not maintain
 separate glue and tape orders. The moved artwork retains its configured local
 rotation. Triangle end placement preserves handedness when its direction flips.
 

@@ -55,18 +55,18 @@ for(const model of Object.values(MODELS))test(`${model.name}: tape layout has ev
 
 for(const model of Object.values(MODELS))test(`${model.name}: glue end shift preserves all artwork, separates flaps and leaves the base order unchanged`,()=>{
  const before=JSON.stringify(model.printOrder),tape=printLayout(model),glue=printLayout(model,{addGlueFlap:true});
- assert.equal(glue.length,tape.length+1);
- assert.equal(glue[0].front,undefined);assert.equal(glue.at(-1).back,undefined);
- assert.deepEqual(glue.at(-1).front,tape[0].front);
- assert.deepEqual(glue.slice(1,-1),tape.slice(1));
- assert.deepEqual(glue.slice(0,-1).map(p=>p.back),tape.map(p=>p.back));
- for(const side of ['front','back'])assert.deepEqual(glue.filter(p=>p[side]).map(p=>p[side].side).sort((a,b)=>a-b),tape.map(p=>p[side].side).sort((a,b)=>a-b));
- assert.equal(glue.filter(p=>!p.front).length,1);assert.equal(glue.filter(p=>!p.back).length,1);
+ const core=glue.filter(p=>!p.splitGlue);
+ assert.equal(glue.length,tape.length+1+(model.printSplit?1:0));
+ const find=(layout,at)=>at==='first'?layout.find(p=>p.chainIndex===0):at==='last'?layout.find(p=>p.chainIndex===model.patCount-1):layout.find(p=>p.chainIndex===model.patCount);
+ for(const move of model.glueMoves)assert.deepEqual(find(core,move.to.at)[move.to.side],find(tape,move.from.at)[move.from.side]);
+ assert.deepEqual(core.flatMap(p=>[p.front,p.back]).filter(Boolean).map(p=>p.side).sort((a,b)=>a-b),tape.flatMap(p=>[p.front,p.back]).map(p=>p.side).sort((a,b)=>a-b));
+ assert.equal(glue.reduce((count,p)=>count+!p.front+!p.back,0),2+(model.printSplit?2:0));
  assert.equal(JSON.stringify(model.printOrder),before);
  // Editing the single base order propagates to both closure modes.
  const changed={...model,printOrder:model.printOrder.map((p,i)=>i? p:{...p,front:{...p.front,rotation:Math.PI}})};
  assert.equal(printLayout(changed)[0].front.rotation,Math.PI);
- assert.equal(printLayout(changed,{addGlueFlap:true}).at(-1).front.rotation,Math.PI);
+ const changedGlue=printLayout(changed,{addGlueFlap:true}).filter(p=>!p.splitGlue),move=model.glueMoves.find(m=>m.from.at==='first'&&m.from.side==='front');
+ assert.equal(find(changedGlue,move.to.at)[move.to.side].rotation,Math.PI);
 });
 
 test('renamed model IDs support legacy project names without duplicating models',()=>{
