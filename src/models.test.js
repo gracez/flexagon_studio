@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {MODELS,placementMatrix,inverse} from './models.js';
+import {MODELS,placementMatrix,inverse,printLayout,TETRA_NET,canonicalModelId} from './models.js';
 for(const m of Object.values(MODELS)){
  test(`${m.name}: orientation maps preserve sides and transforms`,()=>{
   for(const f of m.faces){assert.equal(new Set(f.orientations.map(o=>JSON.stringify(o.placements))).size,f.orientations.length);const expected=f.orientations[0].placements.map(p=>p.side).sort((a,b)=>a-b);
@@ -13,8 +13,8 @@ for(const m of Object.values(MODELS)){
 }
 
 test('hexahexaflexagon has three two-orientation and three four-orientation faces',()=>{
- assert.deepEqual(MODELS.hexa.faces.map(f=>f.orientations.length).sort(),[2,2,2,4,4,4]);
- assert.equal(MODELS.hexa.faces.reduce((n,f)=>n+f.orientations.length,0),18);
+ assert.deepEqual(MODELS.hexahexa.faces.map(f=>f.orientations.length).sort(),[2,2,2,4,4,4]);
+ assert.equal(MODELS.hexahexa.faces.reduce((n,f)=>n+f.orientations.length,0),18);
 });
 test('faces and models own independent placements with complete destination slots',()=>{
  const seen=new Set();
@@ -23,4 +23,55 @@ test('faces and models own independent placements with complete destination slot
   assert.deepEqual(orientation.placements.map(p=>p.slot).sort(),Array.from({length:count},(_,i)=>i));
   for(const placement of orientation.placements){assert.ok(!seen.has(placement));seen.add(placement);assert.ok(Number.isFinite(placement.rotation));}
  }
+});
+
+test('square net matches the reference top/underneath labels and covers all 16 sides',()=>{
+ assert.equal(MODELS.tetra.patCount,8);
+ assert.deepEqual(TETRA_NET.map(p=>[p.x,p.y]),[[0,4],[0,3],[1,3],[1,2],[2,2],[2,1],[3,1],[3,0]]);
+ assert.deepEqual(TETRA_NET.map(p=>[p.topFace,p.underneathFace]),[[1,2],[3,2],[3,4],[1,4],[1,2],[3,2],[3,4],[1,4]]);
+ for(let f=1;f<=4;f++){
+  const expected=MODELS.tetra.printOrder.flatMap(p=>[p.front,p.back]).filter(p=>p.face===f).map(p=>p.side).sort((a,b)=>a-b);
+  assert.equal(expected.length,4);
+  for(const o of MODELS.tetra.faces[f-1].orientations)assert.deepEqual(o.placements.map(p=>p.side).sort((a,b)=>a-b),expected);
+ }
+ assert.deepEqual(MODELS.tetra.traversal,[1,2,3,4,1]);
+ assert.equal(MODELS.tetra.orientationStatus,'unverified');
+});
+test('square glue net has a connected staircase with staggered blank surfaces',()=>{
+ const layout=printLayout(MODELS.tetra,{addGlueFlap:true});
+ assert.equal(layout.length,9);
+ assert.equal(new Set(layout.map(p=>`${p.x},${p.y}`)).size,9);
+ for(let i=1;i<layout.length;i++)assert.equal(Math.abs(layout[i].x-layout[i-1].x)+Math.abs(layout[i].y-layout[i-1].y),1);
+ assert.deepEqual(layout[8].points,[[4,0],[5,0],[5,1],[4,1]]);
+ assert.equal(layout[0].front,undefined);assert.equal(layout[8].front.side,0);assert.equal(layout[8].back,undefined);assert.deepEqual(layout[0].glueSides,['front']);assert.deepEqual(layout[8].glueSides,['back']);
+});
+
+for(const model of Object.values(MODELS))test(`${model.name}: tape layout has every pat and no glue flap`,()=>{
+ const layout=printLayout(model,{addGlueFlap:false});
+ assert.equal(layout.length,model.patCount);
+ assert.ok(layout.every(cell=>!cell.flap));
+ assert.deepEqual(layout.map(cell=>cell.pat).sort((a,b)=>a-b),Array.from({length:model.patCount},(_,i)=>i));
+});
+
+for(const model of Object.values(MODELS))test(`${model.name}: glue end shift preserves all artwork, separates flaps and leaves the base order unchanged`,()=>{
+ const before=JSON.stringify(model.printOrder),tape=printLayout(model),glue=printLayout(model,{addGlueFlap:true});
+ assert.equal(glue.length,tape.length+1);
+ assert.equal(glue[0].front,undefined);assert.equal(glue.at(-1).back,undefined);
+ assert.deepEqual(glue.at(-1).front,tape[0].front);
+ assert.deepEqual(glue.slice(1,-1),tape.slice(1));
+ assert.deepEqual(glue.slice(0,-1).map(p=>p.back),tape.map(p=>p.back));
+ for(const side of ['front','back'])assert.deepEqual(glue.filter(p=>p[side]).map(p=>p[side].side).sort((a,b)=>a-b),tape.map(p=>p[side].side).sort((a,b)=>a-b));
+ assert.equal(glue.filter(p=>!p.front).length,1);assert.equal(glue.filter(p=>!p.back).length,1);
+ assert.equal(JSON.stringify(model.printOrder),before);
+ // Editing the single base order propagates to both closure modes.
+ const changed={...model,printOrder:model.printOrder.map((p,i)=>i? p:{...p,front:{...p.front,rotation:Math.PI}})};
+ assert.equal(printLayout(changed)[0].front.rotation,Math.PI);
+ assert.equal(printLayout(changed,{addGlueFlap:true}).at(-1).front.rotation,Math.PI);
+});
+
+test('renamed model IDs support legacy project names without duplicating models',()=>{
+ assert.deepEqual(Object.keys(MODELS),['tetra','trihexa','hexahexa']);
+ assert.equal(MODELS.trihexa.id,'trihexa');assert.equal(MODELS.hexahexa.id,'hexahexa');
+ assert.equal(canonicalModelId('tri'),'trihexa');assert.equal(canonicalModelId('hexa'),'hexahexa');
+ for(const id of Object.keys(MODELS))assert.equal(canonicalModelId(id),id);
 });
