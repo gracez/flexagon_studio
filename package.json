@@ -1,0 +1,20 @@
+{
+  "name": "flexagon-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "test": "node --test",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1",
+    "lucide": "^0.468.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "vite": "^7.1.0"
+  }
+}
