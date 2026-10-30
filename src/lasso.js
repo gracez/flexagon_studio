@@ -1,6 +1,6 @@
 // Raster selection in face coordinates. Samples/guides are never captured.
 export function createLasso({size,readArtwork,remember,snapshot,restorePixels,applyLayer,previewLayer,commitEdit,redraw,onChange}) {
-  let points=[],selection=null,clipboard=null,gesture=null,transformState=null;
+  let points=[],selection=null,clipboard=null,gesture=null,transformState=null,selectionMode='freeform';
   const canvas=()=>{const c=document.createElement('canvas');c.width=c.height=size;return c;};
   function path(ctx,ps){ctx.beginPath();ps.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();}
   function shifted(source,dx,dy){const c=canvas();c.getContext('2d').drawImage(source,dx,dy);return c;}
@@ -15,11 +15,16 @@ export function createLasso({size,readArtwork,remember,snapshot,restorePixels,ap
   function down(p){
     commitTransform();
     if(hit(p)){gesture={type:'move',start:p,moved:false};}
-    else{selection=null;points=[p];gesture={type:'select'};notify();}
+    else{selection=null;points=[p];gesture={type:'select',start:p};notify();}
   }
   function move(p){
     if(!gesture)return;
-    if(gesture.type==='select'){points.push(p);redraw();return;}
+    if(gesture.type==='select'){
+      points=selectionMode==='rectangle'
+        ? [gesture.start,{x:p.x,y:gesture.start.y},p,{x:gesture.start.x,y:p.y}]
+        : [...points,p];
+      redraw();return;
+    }
     const dx=Math.round(p.x-gesture.start.x),dy=Math.round(p.y-gesture.start.y);
     if(!gesture.moved){if(Math.hypot(dx,dy)<2)return;remember();applyLayer(selection.mask,true);gesture.erased=snapshot();gesture.moved=true;}
     restorePixels(gesture.erased);applyLayer(shifted(selection.pixels,dx,dy));gesture.dx=dx;gesture.dy=dy;redraw();
@@ -61,10 +66,14 @@ export function createLasso({size,readArtwork,remember,snapshot,restorePixels,ap
     if(!transformState)return;
     restorePixels(transformState.original);selection=transformState.source;transformState=null;notify();
   }
+  function setMode(mode){
+    if(!['freeform','rectangle'].includes(mode)||mode===selectionMode)return;
+    commitTransform();points=[];selection=null;gesture=null;selectionMode=mode;notify();
+  }
   function draw(ctx){
     let ps=gesture?.type==='select'?points:selection?.points;if(!ps?.length)return;
     if(gesture?.type==='move'&&gesture.moved)ps=ps.map(p=>({x:p.x+gesture.dx,y:p.y+gesture.dy}));
     ctx.save();path(ctx,ps);ctx.lineWidth=2;ctx.strokeStyle='white';ctx.stroke();ctx.setLineDash([5,5]);ctx.strokeStyle='#304e40';ctx.stroke();ctx.restore();
   }
-  return {down,move,up,clear,copy,cut,paste,remove,draw,transform,commitTransform,cancelTransform,get transforming(){return !!transformState;},get busy(){return !!gesture||!!transformState;}};
+  return {down,move,up,clear,copy,cut,paste,remove,draw,transform,commitTransform,cancelTransform,setMode,get mode(){return selectionMode;},get transforming(){return !!transformState;},get busy(){return !!gesture||!!transformState;}};
 }

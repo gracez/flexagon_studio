@@ -16,9 +16,9 @@ export function printArtworkMatrix(shape, points, rotation = 0) {
     p[0][0]+a*(cx-cos*cx+sin*cy)+c*(cy-sin*cx-cos*cy),
     p[0][1]+b*(cx-cos*cx+sin*cy)+d*(cy-sin*cx-cos*cy)];
 }
-export function drawPrintArtwork(ctx, shape, points, artwork, rotation=0) {
+export function drawPrintArtwork(ctx, shape, points, artwork, rotation=0, background='#fffef9') {
   ctx.save();ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.clip();
-  ctx.fillStyle='#fffef9';ctx.fill();
+  if(background){ctx.fillStyle=background;ctx.fill();}
   ctx.transform(...printArtworkMatrix(shape,points,rotation));
   ctx.drawImage(artwork,0,0,1,1);ctx.restore();
 }

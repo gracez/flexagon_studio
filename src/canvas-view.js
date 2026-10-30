@@ -8,7 +8,7 @@ export function setupCanvasView({canvas,wrap,viewport,size,isHandTool,onChange})
   const rect=wrap.getBoundingClientRect(),dx=e.clientX-(rect.left+rect.width/2),dy=e.clientY-(rect.top+rect.height/2),r=angle*Math.PI/180;
   return {x:size/2+(dx*Math.cos(r)+dy*Math.sin(r))*size/(wrap.clientWidth*zoom),y:size/2+(-dx*Math.sin(r)+dy*Math.cos(r))*size/(wrap.clientWidth*zoom)};
  }
- function fit(){const available=Math.min(viewport.clientWidth-24,viewport.clientHeight-24);zoom=Math.max(.02,Math.min(1,available/wrap.clientWidth));panX=panY=0;apply();}
+ function fit(){const available=Math.min(viewport.clientWidth-2,viewport.clientHeight-2);zoom=Math.max(.02,Math.min(1,available/wrap.clientWidth));panX=panY=0;apply();}
  function setZoom(value,anchor){
   fitMode=false;
   const before=anchor?toCanvas(anchor):null;zoom=clamp(value,.25,8);apply();
