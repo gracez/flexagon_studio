@@ -68,8 +68,8 @@ export async function createMyPaintEngine(layer, surface) {
   return {
     configure,
     begin(x,y){module._reset_brush();module._stroke_to(x,y,0,0,0,1);},
+    clearLayer(){ctx.clearRect(0,0,layer.width,layer.height);},
     stroke(x,y,pressure,tiltX=0,tiltY=0,seconds=1/60){
-      ctx.clearRect(0,0,layer.width,layer.height);
       module._stroke_to(x,y,clamp(pressure,0,1),clamp(tiltX/90,-1,1),clamp(tiltY/90,-1,1),clamp(seconds,.001,.1));
     },
     preview(preset){

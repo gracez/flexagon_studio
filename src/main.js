@@ -15,7 +15,7 @@ let autosave=null,activity=0;
 document.addEventListener('pointerdown',()=>activity++,true);document.addEventListener('keydown',()=>activity++,true);document.addEventListener('input',()=>activity++,true);
 let presetId='ink',lastPaintPreset='ink';
 const presetPreviews=new Map();
-let banks={},faceBackgrounds={},history=[],future=[],drawing=false,last=null,frame=0,pendingImage=null,dragging=false,imageX=360,imageY=360,imageScale=1,imageRotation=0;
+let banks={},faceBackgrounds={},history=[],future=[],drawing=false,last=null,frame=0,previewCursor=0,pendingImage=null,dragging=false,imageX=360,imageY=360,imageScale=1,imageRotation=0;
 const palette=['#cf6d4d','#d59a70','#e1c789','#8d9d78','#587f72','#7184a3','#a489a8','#e8d7bd','#6b6258','#334b40','#f9f7ed','#232823'];
 $('#app').innerHTML=`
 <header><div class="brandmark"><img src="./hexaflexagon.svg" alt="" aria-hidden="true"></div><div class="brand">flexagon studio</div><div class="header-actions"><span class="save-status" id="saveStatus">New project</span><button class="btn" id="openProject"><i data-lucide="folder-open"></i> Open</button><button class="btn" id="saveProject"><i data-lucide="save"></i> Save project</button><button class="btn primary" id="export"><i data-lucide="download"></i> Export PDF</button></div></header>
@@ -97,7 +97,7 @@ function placements(){return model.faces[face].orientations[orientation].placeme
 function polygon(ctx,points){ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();}
 function patPath(ctx){polygon(ctx,(model.shape==='square'?SQUARE:TRIANGLE).map(([x,y])=>[x*N,y*N]));}
 function renderFace(target,f,o,withGuides=false,labels=false){
- const ctx=target.getContext('2d'),scale=target.width/SIZE,isPreview=target.classList.contains('orientation-preview');ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,target.width,target.height);ctx.scale(scale,scale);
+ const isPreview=target.classList.contains('orientation-preview'),ctx=target.getContext('2d',isPreview?undefined:{desynchronized:true}),scale=target.width/SIZE;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,target.width,target.height);ctx.scale(scale,scale);
  if(isPreview){const previewScale=model.shape==='square'?1.72:1.2;ctx.translate(SIZE/2,SIZE/2);ctx.scale(previewScale,previewScale);ctx.translate(-SIZE/2,-SIZE/2);}
  model.faces[f].orientations[o].placements.forEach(p=>{
   const m=placementMatrix(model.shape,p);ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);patPath(ctx);ctx.clip();const background=backgrounds()[f];if(background){ctx.fillStyle=background;ctx.fillRect(0,0,N,N);}ctx.drawImage(bank()[p.side],0,0);if(sampleDesign){ctx.globalAlpha=.85;ctx.drawImage(samplePat(p.side),0,0);}ctx.restore();
@@ -105,7 +105,15 @@ function renderFace(target,f,o,withGuides=false,labels=false){
   if(labels){const cy=model.shape==='square'?.5:Math.sqrt(3)/6,x=m[0]*.5+m[2]*cy+m[4],y=m[1]*.5+m[3]*cy+m[5];ctx.fillStyle='#617450';ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText(`${Math.floor(p.side/2)+1}${p.side%2?'B':'F'}`,x,y);}
  });
 }
-function draw(){frame=0;renderFace($('#canvas'),face,orientation,guides,patLabels);if(pendingImage){const ctx=$('#canvas').getContext('2d');ctx.save();clipFace(ctx);drawImageLayer(ctx);ctx.restore();}if(tool==='lasso')lasso.draw($('#canvas').getContext('2d'));document.querySelectorAll('.preview canvas').forEach(c=>renderFace(c,+c.dataset.face,+c.dataset.orientation));$('#undo').disabled=!history.length;$('#redo').disabled=!future.length;}
+function renderPreviews(live=false){
+ const previews=[...document.querySelectorAll('.preview canvas')];
+ if(!live){previews.forEach(c=>renderFace(c,+c.dataset.face,+c.dataset.orientation));previewCursor=0;return;}
+ // Spread expensive preview work across frames while keeping every card live.
+ for(let i=0;i<Math.min(3,previews.length);i++){
+  const c=previews[previewCursor++%previews.length];renderFace(c,+c.dataset.face,+c.dataset.orientation);
+ }
+}
+function draw(){frame=0;renderFace($('#canvas'),face,orientation,guides,patLabels);if(pendingImage){const ctx=$('#canvas').getContext('2d');ctx.save();clipFace(ctx);drawImageLayer(ctx);ctx.restore();}if(tool==='lasso')lasso.draw($('#canvas').getContext('2d'));renderPreviews(drawing);$('#undo').disabled=!history.length;$('#redo').disabled=!future.length;}
 function requestDraw(){if(!frame)frame=requestAnimationFrame(draw);}
 function updateUI(){
  const orientationCount=model.faces.reduce((total,currentFace)=>total+currentFace.orientations.length,0);
@@ -165,16 +173,26 @@ function updateSelectionTransform(){lasso.transform({scale:Math.max(.1,Math.min(
 $('#selectionScale').oninput=$('#selectionRotation').oninput=updateSelectionTransform;
 for(const id of ['flipSelectionX','flipSelectionY'])$('#'+id).onclick=()=>{$('#'+id).setAttribute('aria-pressed',String($('#'+id).getAttribute('aria-pressed')!=='true'));updateSelectionTransform();};
 $('#applySelectionTransform').onclick=()=>lasso.commitTransform();$('#cancelSelectionTransform').onclick=()=>lasso.cancelTransform();
+function paintSamples(events){
+ brushEngine.clearLayer();
+ for(const event of events){
+  const to=point(event),now=event.timeStamp??performance.now(),pressure=event.pointerType==='pen'?event.pressure:.75;
+  brushEngine.stroke(to.x,to.y,pressure,event.tiltX,event.tiltY,(now-lastEngineTime)/1000||1/60);
+  lastEngineTime=now;last=to;
+ }
+ applyLayer(brushLayer,tool==='eraser',true);
+}
 function segment(from,to,pressure,event={}){
  const now=event.timeStamp??performance.now();
+ brushEngine.clearLayer();
  brushEngine.stroke(to.x,to.y,pressure,event.tiltX,event.tiltY,(now-lastEngineTime)/1000||1/60);
- lastEngineTime=now;applyLayer(brushLayer,tool==='eraser');
+ lastEngineTime=now;applyLayer(brushLayer,tool==='eraser',true);
 }
 function point(e){return view.toCanvas(e);}
 function inside(p){return placements().some(pl=>{const [x,y]=inverse(placementMatrix(model.shape,pl),p.x,p.y);return model.shape==='square'?x>=0&&x<=1&&y>=0&&y<=1:y>=0&&y<=Math.sqrt(3)/2&&x>=y/Math.sqrt(3)&&x<=1-y/Math.sqrt(3);});}
 $('#canvas').addEventListener('pointerdown',e=>{if(e.button!==0)return;const p=point(e);$('#canvas').setPointerCapture(e.pointerId);if((e.altKey||tool==='eyedropper')&&!pendingImage){pickColor(p);if(tool==='eyedropper')selectTool('ink');return;}if(pendingImage){dragging=true;last=p;return;}if(tool==='lasso'){lasso.down(p);return;}if(!inside(p))return;if(!brushEngine){toast('MyPaint is still loading. Please wait.');return;}remember();prepareBrush(e);brushEngine.begin(p.x,p.y);drawing=true;last=p;segment(p,p,e.pointerType==='pen'?e.pressure:.75,e);});
-$('#canvas').addEventListener('pointermove',e=>{const p=point(e);if(tool==='lasso'&&!pendingImage){lasso.move(p);return;}if(dragging){imageX+=p.x-last.x;imageY+=p.y-last.y;last=p;requestDraw();}if(!drawing)return;for(const event of (e.getCoalescedEvents?.().length?e.getCoalescedEvents():[e])){const next=point(event);segment(last,next,event.pointerType==='pen'?event.pressure:.75,event);last=next;}});
-function stop(){if(tool==='lasso')lasso.up();if(drawing&&tool!=='eraser')setColor(color);drawing=false;dragging=false;last=null;}$('#canvas').addEventListener('pointerup',stop);$('#canvas').addEventListener('pointercancel',stop);$('#canvas').addEventListener('lostpointercapture',stop);
+$('#canvas').addEventListener('pointermove',e=>{const p=point(e);if(tool==='lasso'&&!pendingImage){lasso.move(p);return;}if(dragging){imageX+=p.x-last.x;imageY+=p.y-last.y;last=p;requestDraw();}if(!drawing)return;paintSamples(e.getCoalescedEvents?.().length?e.getCoalescedEvents():[e]);});
+function stop(){if(tool==='lasso')lasso.up();if(drawing&&tool!=='eraser')setColor(color);const finishedStroke=drawing;drawing=false;dragging=false;last=null;if(finishedStroke){markDirty();requestDraw();}}$('#canvas').addEventListener('pointerup',stop);$('#canvas').addEventListener('pointercancel',stop);$('#canvas').addEventListener('lostpointercapture',stop);
 $('#previews').addEventListener('click',e=>{const b=e.target.closest('.preview');if(!b)return;if(pendingImage){toast('Place or cancel your image before switching views.');return;}lasso.clear();face=+b.dataset.face;orientation=+b.dataset.orientation;updateUI();autosave?.markChanged({warn:false});});
 $('#model').onchange=e=>{if(pendingImage){e.target.value=model.id;toast('Place or cancel your image first.');return;}lasso.clear();model=MODELS[e.target.value];face=orientation=0;history=[];future=[];updateUI();view.reset();autosave?.markChanged({warn:false});};
 function updateToolUI(){
