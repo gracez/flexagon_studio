@@ -83,44 +83,44 @@ export const FACE_MAPS = {
   hexahexa: [
     {
       name: 'Face 01', orientations: [
-        orientation('A', [0, 1, 2, 3, 4, 5], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [2, 3, 4, 5, 0, 1], [0, 0, 0, 0, 0, 0]),
-        orientation('C', [4, 5, 0, 1, 2, 3], [0, 0, 0, 0, 0, 0]),
-        orientation('D', [1, 0, 3, 2, 5, 4], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [0, 30, 24, 18, 12, 6], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
+        orientation('B', [18, 12, 6, 0, 30, 24], [2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3]),
+        orientation('C', [6, 12, 18, 24, 30, 0], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
+        orientation('D', [6, 0, 30, 24, 18, 12], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
       ]
     },
     {
       name: 'Face 02', orientations: [
-        orientation('A', [6, 7, 8, 9, 10, 11], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [8, 9, 10, 11, 6, 7], [0, 0, 0, 0, 0, 0]),
-        orientation('C', [10, 11, 6, 7, 8, 9], [0, 0, 0, 0, 0, 0]),
-        orientation('D', [7, 6, 9, 8, 11, 10], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [4, 34, 28, 22, 16, 10], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
+        orientation('B', [22, 16, 10, 4, 34, 28], [2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3]),
+        orientation('C', [10, 16, 22, 28, 34, 4], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
+        orientation('D', [10, 4, 34, 28, 22, 16], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
       ]
     },
     {
       name: 'Face 03', orientations: [
-        orientation('A', [12, 13, 14, 15, 16, 17], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [14, 15, 16, 17, 12, 13], [0, 0, 0, 0, 0, 0]),
-        orientation('C', [16, 17, 12, 13, 14, 15], [0, 0, 0, 0, 0, 0]),
-        orientation('D', [13, 12, 15, 14, 17, 16], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [8, 2, 32, 26, 20, 14], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
+        orientation('B', [26, 20, 14, 8, 2, 32], [2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3]),
+        orientation('C', [14, 20, 26, 32, 2, 8], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
+        orientation('D', [14, 8, 2, 32, 26, 20], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
       ]
     },
     {
       name: 'Face 04', orientations: [
-        orientation('A', [18, 19, 20, 21, 22, 23], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [20, 21, 22, 23, 18, 19], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [13, 11, 1, 35, 25, 23], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+        orientation('B', [11, 13, 23, 25, 35, 1], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
       name: 'Face 05', orientations: [
-        orientation('A', [24, 25, 26, 27, 28, 29], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [26, 27, 28, 29, 24, 25], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [17, 15, 5, 3, 29, 27], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+        orientation('B', [15, 17, 27, 29, 3, 5], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
       name: 'Face 06', orientations: [
-        orientation('A', [30, 31, 32, 33, 34, 35], [0, 0, 0, 0, 0, 0]),
-        orientation('B', [32, 33, 34, 35, 30, 31], [0, 0, 0, 0, 0, 0]),
+        orientation('A', [9, 7, 33, 31, 21, 19], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+        orientation('B', [7, 9, 19, 21, 31, 33], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
   ],
@@ -214,7 +214,16 @@ MODELS.hexahexa.glueMoves = [
 ];
 // The 18-pat hexahexaflexagon prints as two balanced strips. When glue is
 // enabled, a separate overlapping tab reconnects the strips before folding.
-MODELS.hexahexa.printSplit = { after: 9, rowGap: .5 };
+// On the back sheet, 10B moves to that upper tab and its original position
+// becomes the corresponding glue panel. This move remains model-specific;
+// triangular-strip parity is deliberately not inferred by shared code.
+MODELS.hexahexa.printSplit = {
+  after: 9,
+  rowGap: .5,
+  surfaceMoves: [
+    { from: { at: 'chain', index: 9, side: 'back' }, to: { at: 'splitTab', side: 'back' } },
+  ],
+};
 
 // Print polygons in units of one pat edge. Base ordering is shared by both
 // closure modes; the optional glue step below never mutates model.printOrder.
@@ -242,8 +251,19 @@ function endCap(model) {
   return { chainIndex: model.printOrder.length, points: trianglePrintPoints(model.printOrder.length) };
 }
 
-// Apply declared surface moves simultaneously without mutating printOrder.
-// The generic form keeps closure geometry editable if a model changes later.
+// Move artwork between already-created physical panels. The caller owns the
+// topology and resolves model-specific location names to concrete panels.
+function applySurfaceMoves(entries, moves, resolve) {
+  const result = entries.map(entry => ({ ...entry }));
+  const resolved = moves.map(move => ({ move, from: resolve(result, move.from), to: resolve(result, move.to) }));
+  if (resolved.some(({ from, to }) => !from || !to)) throw Error('Invalid printable surface move.');
+  const captured = resolved.map(({ from, move }) => from[move.from.side]);
+  resolved.forEach(({ from, move }) => { from[move.from.side] = undefined; });
+  resolved.forEach(({ to, move }, index) => { to[move.to.side] = captured[index]; });
+  return result.map(entry => ({ ...entry, glueSides: ['front', 'back'].filter(side => !entry[side]) }));
+}
+
+// Add the closure cap, then apply only the moves declared by this model.
 export function applyGlueEndShift(baseLayout, cap, moves = []) {
   if (!baseLayout.length) return [];
   const first = baseLayout[0];
@@ -255,30 +275,28 @@ export function applyGlueEndShift(baseLayout, cap, moves = []) {
     // artwork handedness: rotate it into that triangle rather than mirror it.
     if (winding(points) * winding(first.points) < 0) points = [points[1], points[0], points[2]];
   }
-  const result = [...baseLayout.map(entry => ({ ...entry })), { ...cap, points }];
-  const indexFor = at => at === 'first' ? 0 : at === 'last' ? baseLayout.length - 1 : result.length - 1;
-  const captured = moves.map(move => result[indexFor(move.from.at)][move.from.side]);
-  moves.forEach(move => { result[indexFor(move.from.at)][move.from.side] = undefined; });
-  moves.forEach((move, index) => { result[indexFor(move.to.at)][move.to.side] = captured[index]; });
-  return result.map(entry => ({
-    ...entry,
-    glueSides: ['front', 'back'].filter(side => !entry[side]),
-  }));
+  const entries = [...baseLayout, { ...cap, points }];
+  return applySurfaceMoves(entries, moves, (result, location) =>
+    location.at === 'first' ? result[0]
+      : location.at === 'last' ? result[baseLayout.length - 1]
+        : location.at === 'cap' ? result.at(-1) : undefined);
 }
 
-function splitTriangleLayout(layout, { after, rowGap }, addGlueFlap) {
-  const firstRow = layout.filter(entry => entry.chainIndex < after);
-  const secondRow = layout.filter(entry => entry.chainIndex >= after);
+function splitTriangleLayout(layout, { after, rowGap, surfaceMoves = [] }, addGlueFlap) {
+  let entries = layout;
   if (addGlueFlap) {
-    // This blank triangle overlaps the first pat of row two when the two strips
-    // are joined. It is one physical tab with a blank front and back surface.
-    firstRow.push({
+    // This triangle overlaps the first pat of row two when the strips join.
+    const splitTab = {
       chainIndex: after,
       points: trianglePrintPoints(after),
-      glueSides: ['front', 'back'],
       splitGlue: true,
-    });
+    };
+    entries = applySurfaceMoves([...layout, splitTab], surfaceMoves, (result, location) =>
+      location.at === 'splitTab' ? result.find(entry => entry.splitGlue)
+        : location.at === 'chain' ? result.find(entry => !entry.splitGlue && entry.chainIndex === location.index) : undefined);
   }
+  const firstRow = entries.filter(entry => entry.splitGlue || entry.chainIndex < after);
+  const secondRow = entries.filter(entry => !entry.splitGlue && entry.chainIndex >= after);
   const h = Math.sqrt(3) / 2;
   const placeRow = (entries, y) => {
     const minX = Math.min(...entries.flatMap(entry => entry.points.map(point => point[0])));
