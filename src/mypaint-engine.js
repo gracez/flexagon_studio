@@ -52,7 +52,7 @@ export async function createMyPaintEngine(layer, surface) {
   function configure({tool,color,size,opacity,softness,preset}) {
     module._new_brush();
     const settings={opaque:opacity,opaque_multiply:0,opaque_linearize:.9,radius_logarithmic:Math.log(size/2),hardness:1-softness,
-      dabs_per_actual_radius:2,dabs_per_basic_radius:3,dabs_per_second:120,elliptical_dab_ratio:1,anti_aliasing:1,
+      dabs_per_actual_radius:2,dabs_per_basic_radius:3,dabs_per_second:0,elliptical_dab_ratio:1,anti_aliasing:1,
       speed1_gamma:4,speed2_gamma:4,speed1_slowness:.04,speed2_slowness:.8,
       smudge_length:.5,stroke_duration_logarithmic:4,eraser:tool==='eraser'?1:0};
     if(tool==='pencil')Object.assign(settings,{opaque:opacity*.65,dabs_per_basic_radius:5,radius_by_random:.25,offset_by_random:.22,tracking_noise:.12,hardness:.65*(1-softness)+.2});

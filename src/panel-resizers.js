@@ -18,7 +18,7 @@ export function setupPanelResizers() {
 
   function applyOrder() {
     workspace.classList.toggle('panels-swapped', swapped);
-    swapToggle.checked = swapped;
+    swapToggle.setAttribute('aria-pressed', String(swapped));
   }
 
   function defaults() {
@@ -93,8 +93,8 @@ export function setupPanelResizers() {
       }
     });
   }
-  swapToggle.addEventListener('change', () => {
-    swapped = swapToggle.checked;applyOrder();apply();
+  swapToggle.addEventListener('click', () => {
+    swapped = !swapped;applyOrder();apply();
     try { localStorage.setItem(swapStorageKey, String(swapped)); } catch { /* Optional preference. */ }
   });
   window.addEventListener('resize', apply);

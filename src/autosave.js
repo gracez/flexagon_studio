@@ -61,6 +61,10 @@ export function createAutosave({capture,isBusy,chooseRecovery,onStatus,onReady,d
  }
  void initialize();
  return {markChanged,flush,
+  async beginProject(){
+   clearTimeout(timer);if(running)await running;clearTimeout(timer);
+   revision=1;savedRevision=downloadedRevision=warningRevision=0;recoveryPending=false;queue(0);
+  },
   continueCurrent(){recoveryPending=false;if(revision>savedRevision)queue();},
   async acceptRecovery(record){clearTimeout(timer);if(running)await running;clearTimeout(timer);revision=savedRevision=downloadedRevision=warningRevision=0;recoveryPending=false;hasCopy=true;status('recovered',{timestamp:record.timestamp});markChanged({warn:false});},
   async copies(){return db?readCopies(db):[];},
