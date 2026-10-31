@@ -17,12 +17,16 @@ Cloudflare Pages, Netlify, or another static host. Vite uses relative asset URLs
 so repository subpaths work. Streamlit needs a Python server and cannot itself
 be hosted on GitHub Pages; the canvas-based app avoids that limitation.
 
+Pushes to `main` deploy automatically through
+`.github/workflows/deploy-pages.yml`. The published site is available at
+`https://gracez.github.io/flexagon_studio/`.
+
 ## Painting and projects
 
 Choose a flexagon, click a face orientation, and draw. The Sample design toggle
-shows colored, numbered pat references with directional marks in the canvas and
-all previews. The sample is a separate reference overlay, excluded from
-project saves, undo history, and PDF exports.
+shows symmetric reference artwork in the canvas and all previews. The sample is
+a separate overlay excluded from project saves and undo history; PDF exports
+include it only while the toggle is on.
 
 Painting uses the actual **libmypaint 1.3.0 C engine compiled to WebAssembly**,
 through the pinned brushlib-wasm port. The locally served WASM engine computes
