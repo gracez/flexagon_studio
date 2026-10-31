@@ -59,13 +59,14 @@ for(const model of Object.values(MODELS))test(`${model.name}: glue end shift pre
  assert.equal(glue.length,tape.length+1+(model.printSplit?1:0));
  const find=(layout,at)=>at==='first'?layout.find(p=>p.chainIndex===0):at==='last'?layout.find(p=>p.chainIndex===model.patCount-1):layout.find(p=>p.chainIndex===model.patCount);
  for(const move of model.glueMoves)assert.deepEqual(find(core,move.to.at)[move.to.side],find(tape,move.from.at)[move.from.side]);
- assert.deepEqual(core.flatMap(p=>[p.front,p.back]).filter(Boolean).map(p=>p.side).sort((a,b)=>a-b),tape.flatMap(p=>[p.front,p.back]).map(p=>p.side).sort((a,b)=>a-b));
+ assert.deepEqual(glue.flatMap(p=>[p.front,p.back]).filter(Boolean).map(p=>p.side).sort((a,b)=>a-b),tape.flatMap(p=>[p.front,p.back]).map(p=>p.side).sort((a,b)=>a-b));
  assert.equal(glue.reduce((count,p)=>count+!p.front+!p.back,0),2+(model.printSplit?2:0));
  assert.equal(JSON.stringify(model.printOrder),before);
  // Editing the single base order propagates to both closure modes.
- const changed={...model,printOrder:model.printOrder.map((p,i)=>i? p:{...p,front:{...p.front,rotation:Math.PI}})};
- assert.equal(printLayout(changed)[0].front.rotation,Math.PI);
- const changedGlue=printLayout(changed,{addGlueFlap:true}).filter(p=>!p.splitGlue),move=model.glueMoves.find(m=>m.from.at==='first'&&m.from.side==='front');
+ const move=model.glueMoves[0],sourceIndex=move.from.at==='first'?0:model.patCount-1,sourceSide=move.from.side;
+ const changed={...model,printOrder:model.printOrder.map((p,i)=>i!==sourceIndex?p:{...p,[sourceSide]:{...p[sourceSide],rotation:Math.PI}})};
+ assert.equal(printLayout(changed)[sourceIndex][sourceSide].rotation,Math.PI);
+ const changedGlue=printLayout(changed,{addGlueFlap:true}).filter(p=>!p.splitGlue);
  assert.equal(find(changedGlue,move.to.at)[move.to.side].rotation,Math.PI);
 });
 
