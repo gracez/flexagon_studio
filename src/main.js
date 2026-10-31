@@ -56,24 +56,18 @@ function sampleFaceArtwork(faceIndex){
   ctx.fillStyle=gold;for(let i=0;i<8;i++){const a=i*Math.PI/4;ctx.beginPath();ctx.arc(Math.cos(a)*38,Math.sin(a)*38,9,0,Math.PI*2);ctx.fill();}
   ctx.fillStyle=ink;ctx.beginPath();ctx.arc(0,0,13,0,Math.PI*2);ctx.fill();
  }else if(model.id==='hexahexa'){
-  const schemes=[
-   ['#28564f','#d26f57','#edc66f','#4c8170','#aa5451','#f0d99d'],
-   ['#394f78','#bc7185','#e7ba62','#6e78a0','#92536f','#efd79a'],
-   ['#42623f','#ca8654','#e6c675','#729060','#a85f48','#f0dda5'],
-   ['#654d68','#d17b62','#e8c77d','#654d68','#d17b62','#e8c77d'],
-   ['#31666b','#75a080','#e2b868','#31666b','#75a080','#e2b868'],
-   ['#665b45','#aa7658','#ddbd78','#665b45','#aa7658','#ddbd78'],
-  ];
-  const colors=schemes[faceIndex];
+  // The asymmetric two-color order makes pat rearrangements visible without
+  // adding more ornament than the trihexa mandala.
+  const colors=[accent,accent,gold,accent,gold,gold];
+  ctx.strokeStyle=ink;ctx.lineWidth=8;
   for(let i=0;i<6;i++){
-   const a=HEXAGON_START_ANGLE+i*Math.PI/3,b=a+Math.PI/3,mid=(a+b)/2;
-   ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(270*Math.cos(a),270*Math.sin(a));ctx.lineTo(270*Math.cos(b),270*Math.sin(b));ctx.closePath();ctx.fillStyle=colors[i];ctx.fill();ctx.strokeStyle=paper;ctx.lineWidth=5;ctx.stroke();
-   ctx.save();ctx.rotate(mid);ctx.globalAlpha=.88;ctx.fillStyle=paper;ctx.beginPath();ctx.moveTo(48,0);ctx.bezierCurveTo(92,-33,176,-36,230,0);ctx.bezierCurveTo(176,36,92,33,48,0);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle=ink;ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(75,0);ctx.lineTo(213,0);ctx.stroke();ctx.fillStyle=gold;ctx.beginPath();ctx.arc(185,0,12,0,Math.PI*2);ctx.fill();ctx.restore();
+   ctx.save();ctx.rotate(i*Math.PI/3);ctx.fillStyle=colors[i];ctx.beginPath();ctx.moveTo(0,-28);ctx.bezierCurveTo(64,-58,76,-145,0,-224);ctx.bezierCurveTo(-76,-145,-64,-58,0,-28);ctx.fill();ctx.stroke();
+   ctx.fillStyle=ink;ctx.beginPath();ctx.arc(0,-243,12,0,Math.PI*2);ctx.fill();ctx.restore();
   }
-  ctx.strokeStyle=paper;ctx.lineWidth=8;for(const radius of [82,148,252]){ctx.beginPath();ctx.arc(0,0,radius,0,Math.PI*2);ctx.stroke();}
-  ctx.fillStyle=ink;ctx.beginPath();ctx.arc(0,0,59,0,Math.PI*2);ctx.fill();ctx.strokeStyle=paper;ctx.lineWidth=6;ctx.stroke();
-  ctx.fillStyle=gold;for(let i=0;i<6;i++){const a=i*Math.PI/3;ctx.beginPath();ctx.arc(Math.cos(a)*34,Math.sin(a)*34,9,0,Math.PI*2);ctx.fill();}
-  ctx.fillStyle=paper;ctx.beginPath();ctx.arc(0,0,9,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=accent;ctx.lineWidth=11;ctx.beginPath();ctx.arc(0,0,151,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle=paper;ctx.beginPath();ctx.arc(0,0,74,0,Math.PI*2);ctx.fill();ctx.strokeStyle=ink;ctx.lineWidth=8;ctx.stroke();
+  ctx.fillStyle=accent;for(let i=0;i<6;i++){const a=i*Math.PI/3;ctx.beginPath();ctx.arc(Math.cos(a)*42,Math.sin(a)*42,13,0,Math.PI*2);ctx.fill();}
+  ctx.fillStyle=gold;ctx.beginPath();ctx.arc(0,0,16,0,Math.PI*2);ctx.fill();
  }else{
   ctx.rotate(faceIndex*Math.PI/18);ctx.strokeStyle=ink;ctx.lineWidth=8;
   for(let i=0;i<6;i++){
