@@ -36,25 +36,25 @@ export const FACE_MAPS = {
   // below are PROVISIONAL: the net alone does not verify their slot or rotation.
   tetra: [
     {
-      name: 'Face 01', orientations: [
+      name: 'Face 1', orientations: [
         orientation('A', [0, 6, 14, 8], [-Math.PI / 2, Math.PI / 2, -Math.PI / 2, Math.PI / 2]),
         orientation('B', [6, 0, 8, 14], [Math.PI / 2, -Math.PI / 2, Math.PI / 2, -Math.PI / 2]),
       ]
     },
     {
-      name: 'Face 02', orientations: [
+      name: 'Face 2', orientations: [
         orientation('A', [3, 9, 1, 11], [0, Math.PI, 0, Math.PI]),
         orientation('B', [9, 3, 11, 1], [Math.PI, 0, Math.PI, 0]),
       ]
     },
     {
-      name: 'Face 03', orientations: [
+      name: 'Face 3', orientations: [
         orientation('A', [12, 2, 10, 4], [-Math.PI / 2, Math.PI / 2, -Math.PI / 2, Math.PI / 2]),
         orientation('B', [2, 12, 4, 10], [Math.PI / 2, -Math.PI / 2, Math.PI / 2, -Math.PI / 2]),
       ]
     },
     {
-      name: 'Face 04', orientations: [
+      name: 'Face 4', orientations: [
         orientation('A', [7, 13, 5, 15], [0, Math.PI, 0, Math.PI]),
         orientation('B', [13, 7, 15, 5], [Math.PI, 0, Math.PI, 0]),
       ]
@@ -62,19 +62,19 @@ export const FACE_MAPS = {
   ],
   trihexa: [
     {
-      name: 'Face 01', orientations: [
+      name: 'Face 1', orientations: [
         orientation('A', [0, 2, 7, 9, 12, 14], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [14, 12, 9, 7, 2, 0], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
-      name: 'Face 02', orientations: [
+      name: 'Face 2', orientations: [
         orientation('A', [16, 1, 4, 6, 11, 13], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [13, 11, 6, 4, 1, 16], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
-      name: 'Face 03', orientations: [
+      name: 'Face 3', orientations: [
         orientation('A', [15, 17, 3, 5, 8, 10], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [10, 8, 5, 3, 17, 15], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
@@ -82,7 +82,7 @@ export const FACE_MAPS = {
   ],
   hexahexa: [
     {
-      name: 'Face 01', orientations: [
+      name: 'Face 1', orientations: [
         orientation('A', [0, 30, 24, 18, 12, 6], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
         orientation('B', [18, 12, 6, 0, 30, 24], [2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3]),
         orientation('C', [6, 12, 18, 24, 30, 0], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
@@ -90,7 +90,7 @@ export const FACE_MAPS = {
       ]
     },
     {
-      name: 'Face 02', orientations: [
+      name: 'Face 2', orientations: [
         orientation('A', [4, 34, 28, 22, 16, 10], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
         orientation('B', [22, 16, 10, 4, 34, 28], [2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3]),
         orientation('C', [10, 16, 22, 28, 34, 4], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
@@ -98,7 +98,7 @@ export const FACE_MAPS = {
       ]
     },
     {
-      name: 'Face 03', orientations: [
+      name: 'Face 3', orientations: [
         orientation('A', [8, 2, 32, 26, 20, 14], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
         orientation('B', [26, 20, 14, 8, 2, 32], [2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3, 2 * Math.PI / 3]),
         orientation('C', [14, 20, 26, 32, 2, 8], [-2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0, -2 * Math.PI / 3, 0]),
@@ -106,19 +106,19 @@ export const FACE_MAPS = {
       ]
     },
     {
-      name: 'Face 04', orientations: [
+      name: 'Face 4', orientations: [
         orientation('A', [13, 11, 1, 35, 25, 23], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [11, 13, 23, 25, 35, 1], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
-      name: 'Face 05', orientations: [
+      name: 'Face 5', orientations: [
         orientation('A', [17, 15, 5, 3, 29, 27], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [15, 17, 27, 29, 3, 5], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
-      name: 'Face 06', orientations: [
+      name: 'Face 6', orientations: [
         orientation('A', [9, 7, 33, 31, 21, 19], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [7, 9, 19, 21, 31, 33], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]

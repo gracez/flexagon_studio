@@ -5,12 +5,21 @@ export function setupPanelResizers() {
   const previewPanel = document.querySelector('#previewPanel');
   const toolsDivider = document.querySelector('#toolsDivider');
   const previewDivider = document.querySelector('#previewDivider');
+  const swapToggle = document.querySelector('#swapPanels');
   const storageKey = 'flexagon-studio-panel-widths';
+  const swapStorageKey = 'flexagon-studio-panels-swapped';
   let preferred = null;
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
     if (Number.isFinite(saved?.tools) && Number.isFinite(saved?.preview)) preferred = saved;
   } catch { /* Storage can be unavailable in private browsing. */ }
+  let swapped = false;
+  try { swapped = localStorage.getItem(swapStorageKey) === 'true'; } catch { /* Optional preference. */ }
+
+  function applyOrder() {
+    workspace.classList.toggle('panels-swapped', swapped);
+    swapToggle.checked = swapped;
+  }
 
   function defaults() {
     const css = getComputedStyle(workspace);
@@ -47,8 +56,9 @@ export function setupPanelResizers() {
     preferred = { ...start, [panel]: Math.min(Math.max(panel === 'tools' ? 180 : 220, width), max) };
     apply();
   }
-  for (const [divider, panel, direction] of [[toolsDivider, 'tools', 1], [previewDivider, 'preview', -1]]) {
+  for (const [divider, panel] of [[toolsDivider, 'tools'], [previewDivider, 'preview']]) {
     let drag = null;
+    const direction = () => panel === 'tools' ? (swapped ? -1 : 1) : (swapped ? 1 : -1);
     divider.addEventListener('pointerdown', event => {
       if (event.button !== 0) return;
       event.preventDefault();
@@ -60,7 +70,7 @@ export function setupPanelResizers() {
     });
     divider.addEventListener('pointermove', event => {
       if (!drag) return;
-      change(panel, drag.widths[panel] + direction * (event.clientX - drag.x), drag.widths);
+      change(panel, drag.widths[panel] + direction() * (event.clientX - drag.x), drag.widths);
     });
     const stop = () => {
       if (!drag) return;
@@ -76,13 +86,18 @@ export function setupPanelResizers() {
     divider.addEventListener('keydown', event => {
         if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
         event.preventDefault();
-        change(panel, current()[panel] + (event.key === 'ArrowRight' ? 1 : -1) * direction * (event.shiftKey ? 48 : 16));
+        change(panel, current()[panel] + (event.key === 'ArrowRight' ? 1 : -1) * direction() * (event.shiftKey ? 48 : 16));
         save();
       } else if (event.key === 'Home') {
         event.preventDefault(); change(panel, defaults()[panel]); save();
       }
     });
   }
+  swapToggle.addEventListener('change', () => {
+    swapped = swapToggle.checked;applyOrder();apply();
+    try { localStorage.setItem(swapStorageKey, String(swapped)); } catch { /* Optional preference. */ }
+  });
   window.addEventListener('resize', apply);
+  applyOrder();
   apply();
 }
