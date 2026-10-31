@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import {stat} from 'node:fs/promises';
 test('back-sheet square artwork keeps its left and right pixels instead of mirroring',async({page})=>{
  await page.goto('/');
  const result=await page.evaluate(async()=>{
@@ -10,4 +11,22 @@ test('back-sheet square artwork keeps its left and right pixels instead of mirro
   return {left:Array.from(ctx.getImageData(20,50,1,1).data),right:Array.from(ctx.getImageData(80,50,1,1).data)};
  });
  expect(result.left).toEqual([255,0,0,255]);expect(result.right).toEqual([0,0,255,255]);
+});
+
+test('tetraflexagon tape export downloads the illustrated assembly guide',async({page})=>{
+ await page.goto('/');
+ await page.selectOption('#model','tetra');
+ const confirm=page.locator('#confirmModelChange');
+ if(await confirm.isVisible())await confirm.click();
+ await expect(page.locator('#model')).toHaveValue('tetra');
+ await page.locator('#export').click();
+ const guide=page.locator('#downloadAssemblyGuide');
+ await expect(guide).toBeDisabled();
+ await page.locator('#addGlueFlap').uncheck();
+ await expect(guide).toBeEnabled();
+ const downloadPromise=page.waitForEvent('download');
+ await guide.click();
+ const download=await downloadPromise;
+ expect(download.suggestedFilename()).toBe('flexagon-studio-tetraflexagon-assembly-no-glue.pdf');
+ expect((await stat(await download.path())).size).toBeGreaterThan(100000);
 });

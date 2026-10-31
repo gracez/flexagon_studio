@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
+  <style>
+    .paper{fill:#faf9f4}.ink{stroke:#304e40;stroke-width:4;stroke-linejoin:round}.creaseUnder{stroke:#fffefa;stroke-width:7;stroke-dasharray:10 9;fill:none}.crease{stroke:#758572;stroke-width:3;stroke-dasharray:10 9;fill:none}.arrow{stroke:#c76c4b;stroke-width:4;fill:none;marker-end:url(#arrow)}.tape{fill:#d9d7ba;stroke:#766f52;stroke-width:3}.heading{font:500 47px Georgia,serif;fill:#304e40}.sub{font:22px Arial,sans-serif;fill:#72806e}.stepNumber{font:600 23px Arial,sans-serif;fill:#c76c4b}.step{font:600 20px Arial,sans-serif;letter-spacing:2px;fill:#c76c4b}.caption{font:25px Arial,sans-serif;fill:#3e4e42}.small{font:20px Arial,sans-serif;fill:#697667}.micro{font:600 14px Arial,sans-serif;letter-spacing:.4px;fill:#697667}.label{font:600 26px Arial,sans-serif;fill:#304e40}.f{fill:#e7eee1}.b{fill:#e8edf1}.panel{fill:#fffefa;stroke:#d9ded2;stroke-width:2}
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c76c4b"/></marker>
+    <linearGradient id="pageCurl" gradientUnits="userSpaceOnUse" x1="89" y1="60" x2="153" y2="108"><stop offset="0" stop-color="#fffefa"/><stop offset=".26" stop-color="#f7f7f3"/><stop offset=".55" stop-color="#dde1db"/><stop offset=".8" stop-color="#aeb7ad"/><stop offset="1" stop-color="#68746b"/></linearGradient>
+    <linearGradient id="pageCurlRotated" gradientUnits="userSpaceOnUse" x1="77" y1="85" x2="13" y2="37"><stop offset="0" stop-color="#fffefa"/><stop offset=".26" stop-color="#f7f7f3"/><stop offset=".55" stop-color="#dde1db"/><stop offset=".8" stop-color="#aeb7ad"/><stop offset="1" stop-color="#68746b"/></linearGradient>
+    <radialGradient id="curlSheen" gradientUnits="userSpaceOnUse" cx="95" cy="59" r="65"><stop offset="0" stop-color="#ffffff" stop-opacity=".78"/><stop offset=".46" stop-color="#ffffff" stop-opacity=".2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="curlSheenRotated" gradientUnits="userSpaceOnUse" cx="71" cy="86" r="65"><stop offset="0" stop-color="#ffffff" stop-opacity=".78"/><stop offset=".46" stop-color="#ffffff" stop-opacity=".2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="curlEdgeShade" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#344138" stop-opacity="0"/><stop offset=".2" stop-color="#344138" stop-opacity=".2"/><stop offset=".8" stop-color="#344138" stop-opacity=".2"/><stop offset="1" stop-color="#344138" stop-opacity="0"/></linearGradient>
+    <linearGradient id="curlJoinRightTop" gradientUnits="userSpaceOnUse" x1="156" y1="36" x2="145" y2="61"><stop offset="0" stop-color="#304e40"/><stop offset="1" stop-color="#304e40" stop-opacity="0"/></linearGradient>
+    <linearGradient id="curlJoinRightBottom" gradientUnits="userSpaceOnUse" x1="78" y1="112" x2="103" y2="101"><stop offset="0" stop-color="#304e40"/><stop offset="1" stop-color="#304e40" stop-opacity="0"/></linearGradient>
+    <linearGradient id="curlJoinLeftTop" gradientUnits="userSpaceOnUse" x1="88" y1="33" x2="63" y2="44"><stop offset="0" stop-color="#304e40"/><stop offset="1" stop-color="#304e40" stop-opacity="0"/></linearGradient>
+    <linearGradient id="curlJoinLeftBottom" gradientUnits="userSpaceOnUse" x1="10" y1="109" x2="21" y2="84"><stop offset="0" stop-color="#304e40"/><stop offset="1" stop-color="#304e40" stop-opacity="0"/></linearGradient>
+    <clipPath id="underCurlRight"><path d="M156 36C156 52 145 61 134 71L114 90C103 101 89 112 78 112H156Z"/></clipPath>
+    <clipPath id="underCurlLeft"><path d="M10 109C10 93 21 84 32 74L52 55C63 44 77 33 88 33H10Z"/></clipPath>
+    <clipPath id="greenSideRight">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H166V145H0ZM156 36V112H78C89 112 105 101 105 90V63H124C138 63 156 52 156 36Z"/>
+      <rect x="156" y="33" width="4" height="82" rx="2" ry="2"/>
+      <rect x="75" y="112" width="84" height="4" rx="2" ry="2"/>
+    </clipPath>
+    <clipPath id="greenSideLeft">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H176V145H0ZM10 109V33H88C77 33 61 44 61 55V82H42C28 82 10 93 10 109Z"/>
+      <rect x="6" y="29" width="4" height="84" rx="2" ry="2"/>
+      <rect x="6" y="29" width="86" height="4" rx="2" ry="2"/>
+    </clipPath>
+    <filter id="edgeBlur" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="2.2"/></filter>
+    <filter id="curlShadow" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/><feOffset in="blur" dx="2" dy="3" result="offsetBlur"/><feColorMatrix in="offsetBlur" type="matrix" values="0 0 0 0 0.12 0 0 0 0 0.18 0 0 0 0 0.14 0 0 0 .34 0" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="curlShadowRotated" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/><feOffset in="blur" dx="-2" dy="-3" result="offsetBlur"/><feColorMatrix in="offsetBlur" type="matrix" values="0 0 0 0 0.12 0 0 0 0 0.18 0 0 0 0 0.14 0 0 0 .34 0" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect class="paper" width="1600" height="1120"/>
+  <text x="90" y="94" class="heading">Tetraflexagon assembly</text>
+  <text x="90" y="133" class="sub">No glue flaps · tape closure</text>
+  <line x1="90" y1="165" x2="1510" y2="165" stroke="#d7ddd0" stroke-width="2"/>
+
+  <g transform="translate(70 215)">
+    <rect class="panel" width="700" height="760" rx="18"/>
+    <text class="stepNumber" x="40" y="43">1</text>
+    <text class="step" x="70" y="43">PRE-FOLD THE STAIRCASE</text>
+    <text class="caption" x="40" y="99">Back side up.</text>
+    <!-- Actual eight-pat staircase, numbered from lower left to upper right. -->
+    <g transform="translate(138 185)">
+      <rect class="b ink" x="276" y="320" width="92" height="92"/><text class="label" x="322" y="374" text-anchor="middle">1B</text>
+      <rect class="b ink" x="276" y="228" width="92" height="92"/><text class="label" x="322" y="282" text-anchor="middle">2B</text>
+      <rect class="b ink" x="184" y="228" width="92" height="92"/><text class="label" x="230" y="282" text-anchor="middle">3B</text>
+      <rect class="b ink" x="184" y="136" width="92" height="92"/><text class="label" x="230" y="190" text-anchor="middle">4B</text>
+      <rect class="b ink" x="92" y="136" width="92" height="92"/><text class="label" x="138" y="190" text-anchor="middle">5B</text>
+      <rect class="b ink" x="92" y="44" width="92" height="92"/><text class="label" x="138" y="98" text-anchor="middle">6B</text>
+      <rect class="b ink" x="0" y="44" width="92" height="92"/><text class="label" x="46" y="98" text-anchor="middle">7B</text>
+      <rect class="b ink" x="0" y="-48" width="92" height="92"/><text class="label" x="46" y="6" text-anchor="middle">8B</text>
+      <!-- Creases between the four pairs that will be pre-folded. -->
+      <path class="creaseUnder" d="M276 320H390M184 228H276M92 136H184M-22 44H92"/>
+      <path class="crease" d="M276 320H390M184 228H276M92 136H184M-22 44H92"/>
+      <!-- Each equivalent pair uses the same curved fold arrow. -->
+<g transform="translate(350 0) scale(-1 1)">
+  <path class="arrow" d="M-30 360 C-62 350,-62 311,-36 280"/>
+  <path class="arrow" d="M62 268 C30 258,30 219,56 188"/>
+  <path class="arrow" d="M154 176 C122 166,122 127,148 96"/>
+  <path class="arrow" d="M246 84 C214 74,214 35,240 4"/>
+</g>
+
+    </g>
+    <text class="small" x="45" y="690">Fold together: 1B–2B · 3B–4B · 5B–6B · 7B–8B</text>
+  </g>
+
+  <g transform="translate(830 215)">
+    <rect class="panel" width="700" height="400" rx="18"/>
+    <text class="stepNumber" x="40" y="43">2</text>
+    <text class="step" x="70" y="43">FOLD IN HALF</text>
+    <text class="caption" x="40" y="90">Face 1 up.</text>
+    <text class="caption" x="40" y="120">Bring 5F to 4F and 8F to 1F.</text>
+    <g transform="translate(126 180)">
+      <rect class="f ink" x="0" y="0" width="112" height="112"/><rect class="f ink" x="112" y="0" width="112" height="112"/><rect class="f ink" x="224" y="0" width="112" height="112"/><rect class="f ink" x="336" y="0" width="112" height="112"/>
+      <text class="label" x="56" y="66" text-anchor="middle">8F</text><text class="label" x="168" y="66" text-anchor="middle">5F</text><text class="label" x="280" y="66" text-anchor="middle">4F</text><text class="label" x="392" y="66" text-anchor="middle">1F</text>
+      <path class="creaseUnder" d="M224 -22V134"/><path class="crease" d="M224 -22V134"/><path class="arrow" d="M196 142 C230 182,270 182,304 142"/>
+    </g>
+  </g>
+
+  <g transform="translate(830 655)">
+    <rect class="panel" width="700" height="320" rx="18"/>
+    <text class="stepNumber" x="40" y="43">3</text>
+    <text class="step" x="70" y="43">TAPE THE HINGE</text>
+    <text class="caption" x="40" y="100">Tape the red edges of 8B and 1B together.</text>
+    <!-- Right end: lift 7F at its lower-right corner to reach 8B. -->
+    <g transform="translate(22 122) scale(1.32)">
+    <rect class="f ink" x="0" y="36" width="78" height="76"/><text class="label" x="39" y="80" text-anchor="middle" style="font-size:20px">6F</text>
+    <rect class="b ink" x="78" y="36" width="78" height="76"/>
+    <!-- The red edge belongs to the lower pat, behind the curl and upper surface. -->
+    <line x1="156" y1="36" x2="156" y2="112" stroke="#c76c4b" stroke-width="4" stroke-linecap="round"/>
+    <!-- 7F remains flat except for a conventional lift at its bottom-right corner. -->
+    <path d="M78 36H156C156 52 145 61 134 71L114 90C103 101 89 112 78 112Z" fill="#e7eee1"/>
+    <path d="M156 36C156 52 145 61 134 71L114 90C103 101 89 112 78 112" fill="none" stroke="url(#curlEdgeShade)" stroke-width="9" clip-path="url(#underCurlRight)" filter="url(#edgeBlur)"/>
+    <!-- The folded underside sits over 8B and beneath 7F's outer outline. -->
+    <path d="M156 36C156 52 145 61 134 71L114 90C103 101 89 112 78 112C89 112 105 101 105 90V63H124C138 63 156 52 156 36Z" fill="url(#pageCurl)"/>
+    <path d="M156 36C156 52 145 61 134 71L114 90C103 101 89 112 78 112C89 112 105 101 105 90V63H124C138 63 156 52 156 36Z" fill="url(#curlSheen)"/>
+    <path d="M78 112C89 112 105 101 105 90V63H124C138 63 156 52 156 36" fill="none" stroke="#304e40" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".8" clip-path="url(#greenSideRight)"/>
+    <path d="M78 112V36H156" fill="none" stroke="#304e40" stroke-width="4" stroke-linecap="semi-round" stroke-linejoin="round"/>
+    <text class="label" x="101" y="57" text-anchor="middle" style="font-size:20px">7F</text>
+    <text class="label" x="140" y="106" text-anchor="middle" style="font-size:20px">8B</text>
+    <text class="small" x="80" y="128" text-anchor="middle" style="font-size:15px">Lift 7F to reveal 8B.</text>
+  </g>
+    <!-- Left end: mirrored handling exposes 1B beneath the lifted 2F. -->
+    <g transform="translate(450 122) scale(1.32)">
+    <rect class="b ink" x="10" y="33" width="78" height="76"/>
+    <!-- The red edge belongs to the lower pat, behind the curl and upper surface. -->
+    <line x1="10" y1="33" x2="10" y2="109" stroke="#c76c4b" stroke-width="4" stroke-linecap="round"/>
+    <rect class="f ink" x="88" y="33" width="78" height="76"/><text class="label" x="127" y="77" text-anchor="middle" style="font-size:20px">3F</text>
+    <!-- 2F uses the exact rotated corner lift at its top-left corner. -->
+    <path d="M88 109H10C10 93 21 84 32 74L52 55C63 44 77 33 88 33Z" fill="#e7eee1"/>
+    <path d="M10 109C10 93 21 84 32 74L52 55C63 44 77 33 88 33" fill="none" stroke="url(#curlEdgeShade)" stroke-width="9" clip-path="url(#underCurlLeft)" filter="url(#edgeBlur)"/>
+    <path d="M10 109C10 93 21 84 32 74L52 55C63 44 77 33 88 33C77 33 61 44 61 55V82H42C28 82 10 93 10 109Z" fill="url(#pageCurlRotated)"/>
+    <path d="M10 109C10 93 21 84 32 74L52 55C63 44 77 33 88 33C77 33 61 44 61 55V82H42C28 82 10 93 10 109Z" fill="url(#curlSheenRotated)"/>
+    <path d="M88 33C77 33 61 44 61 55V82H42C28 82 10 93 10 109" fill="none" stroke="#304e40" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".8" clip-path="url(#greenSideLeft)"/>
+    <path d="M10 109H88V33" fill="none" stroke="#304e40" stroke-width="4" stroke-linecap="semi-round" stroke-linejoin="round"/>
+    <text class="label" x="65" y="99" text-anchor="middle" style="font-size:20px">2F</text>
+    <text class="label" x="28" y="53" text-anchor="middle" style="font-size:20px">1B</text>
+    <text class="small" x="91" y="128" text-anchor="middle" style="font-size:15px">Lift 2F to reveal 1B.</text>
+  </g>
+    <g transform="translate(350 188)">
+      <path class="arrow" d="M-40 26C-25 0,5 0,40 23"/>
+      <text class="micro" x="0" y="48" text-anchor="middle">TURN OVER</text>
+    </g>
+  </g>
+</svg>

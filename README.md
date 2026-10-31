@@ -123,6 +123,11 @@ choose short-edge flipping, and use Actual size / 100% with page scaling off.
 As an alternative, print the pages separately at the same scale, cut out both
 sides, and glue them together.
 
+The Tetraflexagon tape-closure export also offers a separate illustrated
+assembly-guide PDF. Its editable source is
+`drafts/tetraflexagon-no-glue-assembly-draft.svg`; the app rasterizes that SVG at
+print quality when the guide is downloaded.
+
 ## Validation
 
 `npm run test:browser` runs Playwright end-to-end checks (install its Chromium
