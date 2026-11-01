@@ -76,7 +76,7 @@
   <g transform="translate(1060 465)">
     <rect class="panel" width="470" height="510" rx="18"/>
     <text class="stepNumber" x="40" y="43">4</text>
-    <text class="step" x="70" y="43">TAPE THE HINGE</text>
+    <text class="step" x="70" y="43">FLIP OVER AND TAPE</text>
     <text class="caption" x="40" y="82">Flip entire hexagon over.</text>
     <text class="caption" x="40" y="112">Tape 9F to 1B along the red edge.</text>
     <g transform="translate(-117.5 75) scale(1.5)">

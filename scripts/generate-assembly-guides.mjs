@@ -13,6 +13,13 @@ const guides = [
     ],
     output: 'hexahexaflexagon-tape-closure.pdf',
   },
+  {
+    sources: [
+      'hexahexaflexagon-glue-assembly-draft-page-1.svg',
+      'hexahexaflexagon-glue-assembly-draft-page-2.svg',
+    ],
+    output: 'hexahexaflexagon-glue-flaps.pdf',
+  },
 ];
 
 await mkdir('public/assembly-guides', {recursive: true});

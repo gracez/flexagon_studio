@@ -102,6 +102,6 @@
     <rect class="panel" width="700" height="140" rx="18"/>
     <text class="stepNumber" x="40" y="43">4</text>
     <text class="step" x="70" y="43">GLUE</text>
-    <text class="caption" x="40" y="90">Join the two end panels.</text>
+    <text class="caption" x="40" y="90">Join the two glue flaps.</text>
   </g>
 </svg>

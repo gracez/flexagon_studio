@@ -24,6 +24,10 @@ const GUIDES = {
       path: 'assembly-guides/hexahexaflexagon-tape-closure.pdf',
       filename: 'flexagon-studio-hexahexaflexagon-assembly-no-glue.pdf',
     },
+    glue: {
+      path: 'assembly-guides/hexahexaflexagon-glue-flaps.pdf',
+      filename: 'flexagon-studio-hexahexaflexagon-assembly-glue-flaps.pdf',
+    },
   },
 };
 
