@@ -2,6 +2,8 @@ import './style.css';
 import {createAutosave} from './autosave.js';
 import {drawPrintArtwork} from './print-artwork.js';
 import {BRUSH_PRESETS} from './brush-presets.js';
+import {strFromU8,strToU8,unzipSync,zipSync} from 'fflate';
+import {shortEdgeBackPoint} from './duplex.js';
 import {setupCanvasView} from './canvas-view.js';
 import {createLasso} from './lasso.js';
 import {createMyPaintEngine} from './mypaint-engine.js';
@@ -11,10 +13,12 @@ import {createIcons, FolderOpen, Save, Download, Paintbrush, Eraser, ImagePlus, 
 const icons={FolderOpen,Save,Download,Paintbrush,Eraser,ImagePlus,Undo2,Redo2,Trash2,LassoSelect,Pipette,Hand,ArrowLeftRight,CircleHelp};
 import {MODELS, PDF_LAYOUTS, SQUARE, TRIANGLE, HEXAGON_START_ANGLE, placementMatrix, inverse, printLayout, canonicalModelId} from './models.js';
 const $=s=>document.querySelector(s), N=512, SIZE=720;
-let model=MODELS.hexahexa,face=0,orientation=0,tool='ink',color='#cf6d4d',size=18,opacity=.85,softness=.15,sampleDesign=false;
+let model=MODELS.hexahexa,face=0,orientation=0,tool='ink',color='#cf6d4d',size=18,opacity=.85,softness=.15,sampleDesign=false,showGrid=false;
 let autosave=null,activity=0,fingerDrawing=true,penActive=false,lastPenAt=-Infinity;
 document.addEventListener('pointerdown',()=>activity++,true);document.addEventListener('keydown',()=>activity++,true);document.addEventListener('input',()=>activity++,true);
 let presetId='ink',lastPaintPreset='ink';
+const activePresetByGroup={paint:'ink',eraser:'eraser'};
+const presetSettings=Object.fromEntries(BRUSH_PRESETS.map(preset=>[preset.id,{size:preset.size,opacity:.85,softness:preset.softness}]));
 const presetPreviews=new Map();
 let banks={},faceBackgrounds={},history=[],future=[],drawing=false,last=null,frame=0,previewCursor=0,pendingImage=null,dragging=false,imageX=360,imageY=360,imageScale=1,imageRotation=0,activePointerId=null,activeInputType=null,touchImageStart=null,touchHistoryLength=0;
 const palette=['#cf6d4d','#d59a70','#e1c789','#8d9d78','#587f72','#7184a3','#a489a8','#e8d7bd','#6b6258','#334b40','#f9f7ed','#232823'];
@@ -22,10 +26,16 @@ $('#app').innerHTML=`
 <header><div class="brandmark"><img src="./hexaflexagon.svg" alt="" aria-hidden="true"></div><div class="brand">flexagon studio</div><div class="header-actions"><span class="save-status" id="saveStatus">New project</span><button class="btn" id="openProject"><i data-lucide="folder-open"></i> Open project</button><button class="btn" id="saveProject"><i data-lucide="save"></i> Download project</button><button class="btn primary" id="export"><i data-lucide="download"></i> Export PDF</button></div></header>
 <div class="projectbar"><select id="model" aria-label="Flexagon type"><option value="tetra">Tetraflexagon</option><option value="trihexa">Trihexaflexagon</option><option value="hexahexa" selected>Hexahexaflexagon</option></select><div class="model-info" id="modelInfo"></div><div class="project-options"><label class="sample-toggle" title="Reference underlay. Included in PDF exports only while this is turned on; never stored in project artwork."><input type="checkbox" id="sampleDesign"> Sample design</label><button class="project-icon" id="swapPanels" aria-label="Swap tools and preview panels" aria-pressed="false" title="Swap tools and preview panels"><i data-lucide="arrow-left-right"></i></button><button class="project-icon" id="mappingInfo" aria-label="Help, shortcuts, and folding-map notes" title="Help, shortcuts, and folding-map notes"><i data-lucide="circle-help"></i></button></div></div>
 <div id="backupNotice" class="hidden" role="status"><span><strong>Browser recovery is temporary.</strong> Download your project for a lasting copy.</span><div><button class="btn" id="downloadFromNotice">Download project</button><button class="btn" id="dismissBackupNotice">Got it</button></div></div><div id="recoveryBanner" class="hidden" role="status"><span id="recoveryBannerText"></span><div><button class="btn" id="restoreSession">Restore</button><button class="btn" id="newSession">Start new</button><button class="iconbtn" id="dismissRecovery" aria-label="Dismiss recovery notice">×</button></div></div><div class="workspace-scroll"><div class="workspace"><aside id="toolsPanel"><div class="section-title">Tools</div><button id="brushPickerButton" class="brush-picker-button" popovertarget="brushPicker" aria-label="Choose brush"><canvas id="currentBrushPreview" width="180" height="48"></canvas><span id="currentBrushName">Round ink</span><span aria-hidden="true">▾</span></button><div class="tools">${[['ink','paintbrush','Brush'],['eraser','eraser','Eraser'],['lasso','lasso-select','Lasso'],['eyedropper','pipette','Eyedropper']].map(([id,icon,name])=>`<button class="tool ${id==='ink'?'active':''}" data-tool="${id}"><i data-lucide="${icon}"></i>${name}</button>`).join('')}</div><div class="labelrow"><label for="size">Brush size</label><span class="value" id="sizeValue">18 px</span></div><input id="size" type="range" min="1" max="120" value="18"><div class="labelrow"><label for="opacity">Opacity</label><span class="value" id="opacityValue">85%</span></div><input id="opacity" type="range" min="1" max="100" value="85"><div class="labelrow"><label for="softness">Softness</label><span class="value" id="softnessValue">15%</span></div><input id="softness" type="range" min="0" max="100" value="15"><div class="divider"></div><div class="section-title">Color palette</div><div class="swatches">${palette.map((c,i)=>`<button class="swatch ${i===0?'active':''}" style="--color:${c}" data-color="${c}" aria-label="Color ${c}"></button>`).join('')}</div><label class="custom-color"><input type="color" id="color" value="${color}"> <span id="hex">${color.toUpperCase()}</span></label><div id="recentColorsSection" hidden><div class="recent-title">Recent</div><div id="recentColors" class="swatches"></div></div><div class="divider"></div><div class="section-title">Assets</div><button class="btn full" id="importImage"><i data-lucide="image-plus"></i> Import image</button><p class="hint asset-formats">PNG · JPEG · WebP</p></aside>
-<div class="panel-resizer" id="toolsDivider" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Tools panel width" aria-controls="toolsPanel" title="Drag to resize tools. Double-click to reset."></div><main class="main" id="canvasPanel"><div class="canvasbar"><span class="face-dot" id="faceDot"></span><strong id="faceTitle"></strong><span class="pill" id="orientationTitle"></span><div class="canvas-view-controls"><div class="view-control-group" aria-label="Zoom controls"><button class="iconbtn" id="zoomOut" aria-label="Zoom out">−</button><label class="zoom-input" title="Type a zoom percentage"><input id="zoomValue" type="number" min="25" max="800" step="5" value="100" aria-label="Zoom percentage"><span>%</span></label><button class="iconbtn" id="zoomIn" aria-label="Zoom in">+</button><button class="btn" id="fitView">Fit</button></div><div class="view-control-group" aria-label="Rotation controls"><button class="iconbtn" id="angleDown" aria-label="Rotate view counterclockwise">−</button><label class="angle-input" title="Type a view angle"><input id="viewRotation" type="number" min="-180" max="180" step="15" value="0" aria-label="Canvas view rotation"><span>°</span></label><button class="iconbtn" id="angleUp" aria-label="Rotate view clockwise">+</button><button class="btn" id="resetAngle">Reset</button></div><button class="btn tool" data-tool="hand" id="handTool" aria-label="Toggle pan tool"><i data-lucide="hand"></i> Pan</button></div><div class="canvas-actions"><button class="iconbtn" id="undo" title="Undo" aria-label="Undo"><i data-lucide="undo-2"></i></button><button class="iconbtn" id="redo" title="Redo" aria-label="Redo"><i data-lucide="redo-2"></i></button><button class="iconbtn" id="clear" title="Clear this face" aria-label="Clear this face"><i data-lucide="trash-2"></i></button></div></div><div id="selectionControls" class="hidden"><div class="selection-mode" role="group" aria-label="Selection shape"><button class="btn" data-selection-mode="freeform" aria-pressed="true">Freeform</button><button class="btn" data-selection-mode="rectangle" aria-pressed="false">Rectangle</button></div><button class="btn" id="copySelection" disabled>Copy</button><button class="btn" id="cutSelection" disabled>Cut</button><button class="btn" id="pasteSelection" disabled>Paste</button><button class="btn" id="deselect" disabled>Deselect</button><details id="selectionTransform"><summary>Transform</summary><div class="transform-options"><label>Scale <input id="selectionScale" type="number" min="10" max="300" step="5" value="100" disabled>%</label><label>Rotate <input id="selectionRotation" type="number" min="-180" max="180" step="15" value="0" disabled>°</label><button class="btn" id="flipSelectionX" aria-pressed="false" disabled>Flip horizontal</button><button class="btn" id="flipSelectionY" aria-pressed="false" disabled>Flip vertical</button><button class="btn primary" id="applySelectionTransform" disabled>Apply</button><button class="btn" id="cancelSelectionTransform" disabled>Cancel</button></div></details></div><div id="imageControls" class="hidden"><span>Drag image to position</span><label>Scale <input id="imageScale" type="range" min="10" max="250" value="100"></label><label>Rotate <input id="imageRotation" type="range" min="-180" max="180" value="0"></label><button class="btn primary" id="placeImage">Place</button><button class="btn" id="cancelImage">Cancel</button></div><div class="canvas-space"><div class="canvas-wrap"><canvas id="canvas" width="720" height="720" aria-label="Paint your selected flexagon face"></canvas></div></div><div class="canvasfooter"><label class="touch-drawing-option"><input type="checkbox" id="fingerDrawing" checked> Draw with finger</label><div class="background-controls"><label>Background <input type="color" id="backgroundColor" value="#fffef9"></label><label><input type="checkbox" id="backgroundTransparent"> Transparent</label><button class="btn" id="applyBackgroundAll">Apply to all faces</button></div><span id="brushEngineStatus" class="visually-hidden" role="status">Loading brush engine…</span></div></main>
+<div class="panel-resizer" id="toolsDivider" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Tools panel width" aria-controls="toolsPanel" title="Drag to resize tools. Double-click to reset."></div><main class="main" id="canvasPanel"><div class="canvasbar"><span class="face-dot" id="faceDot"></span><strong id="faceTitle"></strong><span class="pill" id="orientationTitle"></span><div class="canvas-view-controls"><div class="view-control-group" aria-label="Zoom controls"><button class="iconbtn" id="zoomOut" aria-label="Zoom out">−</button><label class="zoom-input" title="Type a zoom percentage"><input id="zoomValue" type="number" min="25" max="800" step="5" value="100" aria-label="Zoom percentage"><span>%</span></label><button class="iconbtn" id="zoomIn" aria-label="Zoom in">+</button><button class="btn" id="fitView">Fit</button></div><div class="view-control-group" aria-label="Rotation controls"><button class="iconbtn" id="angleDown" aria-label="Rotate view counterclockwise">−</button><label class="angle-input" title="Type a view angle"><input id="viewRotation" type="number" min="-180" max="180" step="15" value="0" aria-label="Canvas view rotation"><span>°</span></label><button class="iconbtn" id="angleUp" aria-label="Rotate view clockwise">+</button><button class="btn" id="resetAngle">Reset</button></div><button class="btn tool" data-tool="hand" id="handTool" aria-label="Toggle pan tool"><i data-lucide="hand"></i> Pan</button></div><div class="canvas-actions"><button class="iconbtn" id="undo" title="Undo" aria-label="Undo"><i data-lucide="undo-2"></i></button><button class="iconbtn" id="redo" title="Redo" aria-label="Redo"><i data-lucide="redo-2"></i></button><button class="iconbtn" id="clear" title="Clear this face" aria-label="Clear this face"><i data-lucide="trash-2"></i></button></div></div><div id="selectionControls" class="hidden"><div class="selection-mode" role="group" aria-label="Selection shape"><button class="btn" data-selection-mode="freeform" aria-pressed="true">Freeform</button><button class="btn" data-selection-mode="rectangle" aria-pressed="false">Rectangle</button></div><button class="btn" id="copySelection" disabled>Copy</button><button class="btn" id="cutSelection" disabled>Cut</button><button class="btn" id="pasteSelection" disabled>Paste</button><button class="btn" id="deselect" disabled>Deselect</button><details id="selectionTransform"><summary>Transform</summary><div class="transform-options"><label>Scale <input id="selectionScale" type="number" min="10" max="300" step="5" value="100" disabled>%</label><label>Rotate <input id="selectionRotation" type="number" min="-180" max="180" step="15" value="0" disabled>°</label><button class="btn" id="flipSelectionX" aria-pressed="false" disabled>Flip horizontal</button><button class="btn" id="flipSelectionY" aria-pressed="false" disabled>Flip vertical</button><button class="btn primary" id="applySelectionTransform" disabled>Apply</button><button class="btn" id="cancelSelectionTransform" disabled>Cancel</button></div></details></div><div id="imageControls" class="hidden"><span>Drag image to position</span><label>Scale <input id="imageScale" type="range" min="10" max="250" value="100"></label><label>Rotate <input id="imageRotation" type="range" min="-180" max="180" value="0"></label><button class="btn primary" id="placeImage">Place</button><button class="btn" id="cancelImage">Cancel</button></div><div class="canvas-space"><div class="canvas-wrap"><canvas id="canvas" width="720" height="720" aria-label="Paint your selected flexagon face"></canvas></div></div><div class="canvasfooter"><label class="touch-drawing-option"><input type="checkbox" id="fingerDrawing" checked> Draw with finger</label><label><input type="checkbox" id="showGrid"> Show grid</label><div class="background-controls"><label>Background <input type="color" id="backgroundColor" value="#fffef9"></label><button class="btn" id="resetBackground">Reset background</button><button class="btn" id="applyBackgroundAll">Apply to all faces</button></div><span id="brushEngineStatus" class="visually-hidden" role="status">Loading brush engine…</span></div></main>
 <div class="panel-resizer" id="previewDivider" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Preview panel width" aria-controls="previewPanel" title="Drag to resize previews. Double-click to reset."></div><section class="preview-panel" id="previewPanel"><div class="preview-head"><h2>Face orientations</h2></div><div class="previews" id="previews"></div></section></div></div>
-<div id="brushPicker" popover><div class="brush-picker-head"><strong>Brushes</strong><button class="btn" popovertarget="brushPicker" popovertargetaction="hide">Close</button></div><label class="brush-category">Category <select id="brushCategory"><option>All</option>${[...new Set(BRUSH_PRESETS.map(p=>p.category))].map(c=>`<option>${c}</option>`).join('')}</select></label><div id="brushList"></div></div><input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp" hidden><input type="file" id="projectFile" accept=".json,application/json" hidden><dialog id="dialog"></dialog><dialog id="recoveryDialog" aria-labelledby="recoveryTitle"><h2 id="recoveryTitle">Browser recovery copies</h2></dialog><div class="toast hidden" role="status" id="toast"></div>`;
+<div id="brushPicker" popover><div class="brush-picker-head"><strong>Brushes</strong><button class="btn" popovertarget="brushPicker" popovertargetaction="hide">Close</button></div><label class="brush-category">Category <select id="brushCategory"><option>All</option>${[...new Set(BRUSH_PRESETS.map(p=>p.category))].map(c=>`<option>${c}</option>`).join('')}</select></label><div id="brushList"></div></div><input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp" hidden><input type="file" id="projectFile" accept=".flexagon,application/octet-stream" hidden><dialog id="dialog"></dialog><dialog id="recoveryDialog" aria-labelledby="recoveryTitle"><h2 id="recoveryTitle">Browser recovery copies</h2></dialog><div class="toast hidden" role="status" id="toast"></div>`;
 createIcons({icons});
+const resetBrushDefaultsButton=document.createElement('button');
+resetBrushDefaultsButton.id='resetBrushDefaults';resetBrushDefaultsButton.className='btn full brush-defaults';resetBrushDefaultsButton.textContent='Reset brush defaults';
+$('#brushPicker').append(resetBrushDefaultsButton);
+const canvasContext=document.createElement('div');
+canvasContext.className='canvas-context';canvasContext.append($('#faceDot'),$('#faceTitle'),$('#orientationTitle'));
+$('.canvasbar').prepend(canvasContext);
 try{fingerDrawing=localStorage.getItem('flexagon-studio-finger-drawing')!=='false';}catch{}
 $('#fingerDrawing').checked=fingerDrawing;
 $('#fingerDrawing').onchange=e=>{fingerDrawing=e.target.checked;try{localStorage.setItem('flexagon-studio-finger-drawing',String(fingerDrawing));}catch{}};
@@ -127,13 +137,29 @@ function renderPreviews(live=false){
   const c=previews[previewCursor++%previews.length];renderFace(c,+c.dataset.face,+c.dataset.orientation);
  }
 }
-function draw(){frame=0;renderFace($('#canvas'),face,orientation,true,false);if(pendingImage){const ctx=$('#canvas').getContext('2d');ctx.save();clipFace(ctx);drawImageLayer(ctx);ctx.restore();}if(tool==='lasso')lasso.draw($('#canvas').getContext('2d'));renderPreviews(drawing);$('#undo').disabled=!history.length;$('#redo').disabled=!future.length;}
+function drawGrid(ctx){
+ const line=(position,limit=SIZE)=>{ctx.beginPath();ctx.moveTo(-limit,position);ctx.lineTo(limit,position);ctx.stroke();};
+ const lattice=(spacing,offset=0)=>{for(const angle of [0,Math.PI/3,2*Math.PI/3]){ctx.save();ctx.translate(SIZE/2,SIZE/2);ctx.rotate(angle);for(let position=-SIZE+offset;position<=SIZE;position+=spacing)line(position);ctx.restore();}};
+ ctx.save();clipFace(ctx);ctx.lineWidth=1;
+ if(model.shape==='square'){
+  const spacing=45,minimum=180,maximum=540;
+  ctx.strokeStyle='#71806a28';ctx.setLineDash([2,4]);
+  for(let position=minimum+spacing/2;position<maximum;position+=spacing){ctx.beginPath();ctx.moveTo(position,minimum);ctx.lineTo(position,maximum);ctx.stroke();ctx.beginPath();ctx.moveTo(minimum,position);ctx.lineTo(maximum,position);ctx.stroke();}
+  ctx.setLineDash([]);ctx.strokeStyle='#71806a32';
+  for(let position=minimum;position<=maximum;position+=spacing){ctx.beginPath();ctx.moveTo(position,minimum);ctx.lineTo(position,maximum);ctx.stroke();ctx.beginPath();ctx.moveTo(minimum,position);ctx.lineTo(maximum,position);ctx.stroke();}
+ }else{
+  ctx.strokeStyle='#71806a28';ctx.setLineDash([2,4]);lattice(48,24);
+  ctx.setLineDash([]);ctx.strokeStyle='#71806a32';lattice(48);
+ }
+ ctx.restore();
+}
+function draw(){frame=0;renderFace($('#canvas'),face,orientation,true,false);const ctx=$('#canvas').getContext('2d');if(showGrid)drawGrid(ctx);if(pendingImage){ctx.save();clipFace(ctx);drawImageLayer(ctx);ctx.restore();}if(tool==='lasso')lasso.draw(ctx);renderPreviews(drawing);$('#undo').disabled=!history.length;$('#redo').disabled=!future.length;}
 function requestDraw(){if(!frame)frame=requestAnimationFrame(draw);}
 function updateUI(){
  const orientationCount=model.faces.reduce((total,currentFace)=>total+currentFace.orientations.length,0);
  $('#model').value=model.id;$('#modelInfo').textContent=`${model.faces.length} faces · ${orientationCount} orientations · ${model.leafCount} double-sided leaves`;
  $('#faceTitle').textContent=model.faces[face].name;$('#faceDot').style.background=model.faces[face].color;$('#orientationTitle').textContent=`Orientation ${model.faces[face].orientations[orientation].name}`;
- const background=backgrounds()[face];$('#backgroundTransparent').checked=!background;$('#backgroundColor').disabled=!background;$('#backgroundColor').value=background||'#fffef9';
+ $('#backgroundColor').value=backgrounds()[face];
  $('#previews').innerHTML=model.faces.map((f,fi)=>`<div class="face-group"><div class="face-label"><span><b class="face-dot" style="background:${f.color}"></b>${f.name}</span><span>${f.orientations.length} orientations</span></div><div class="orientation-grid">${f.orientations.map((o,oi)=>`<button class="preview ${fi===face&&oi===orientation?'selected':''}" data-face="${fi}" data-orientation="${oi}" aria-label="${f.name}, orientation ${o.name}" aria-pressed="${fi===face&&oi===orientation}"><canvas class="orientation-preview" width="360" height="360" data-face="${fi}" data-orientation="${oi}"></canvas>Orientation ${o.name}</button>`).join('')}</div></div>`).join('');draw();
 }
 let toastTimer;function toast(message){$('#toast').textContent=message;$('#toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.add('hidden'),4500);}
@@ -229,7 +255,7 @@ function requestModelChange(modelId){
  const next=MODELS[modelId];$('#model').value=model.id;
  if(pendingImage){toast('Place or cancel your image first.');return;}
  if(projectIsBlank()){void startNewProject(modelId);return;}
- showDialog(`<h2>Switch to ${next.name}?</h2><p>Switching models starts a new project and replaces the current one.</p><div class="actions"><button class="btn" data-close>Cancel</button><button class="btn" id="downloadBeforeModelChange">Download current project</button><button class="btn primary" id="confirmModelChange">Switch model</button></div>`);
+ showDialog(`<h2>Switch to ${next.name}?</h2><p>Switching models starts a new project and deletes the current one.</p><div class="actions"><button class="btn" data-close>Cancel</button><button class="btn" id="downloadBeforeModelChange">Download current project</button><button class="btn primary" id="confirmModelChange">Switch model</button></div>`);
  $('#downloadBeforeModelChange').onclick=()=>{downloadProject();$('#downloadBeforeModelChange').textContent='Downloaded';$('#downloadBeforeModelChange').disabled=true;};
  $('#confirmModelChange').onclick=async()=>{const button=$('#confirmModelChange');button.disabled=true;try{await startNewProject(modelId);$('#dialog').close();}catch(error){button.disabled=false;toast('Could not start the new project: '+error.message);}};
 }
@@ -239,10 +265,12 @@ function updateToolUI(){
  $('#selectionControls').classList.toggle('hidden',tool!=='lasso');$('.canvas-space').dataset.tool=tool;view.refresh();requestDraw();
 }
 function selectTool(t){
+ if(['ink','pencil','wash','eraser'].includes(tool))Object.assign(presetSettings[presetId],{size,opacity,softness});
  lasso.clear();
- if(t==='ink'){presetId=lastPaintPreset;tool=BRUSH_PRESETS.find(p=>p.id===presetId).tool;}
- else if(t==='eraser'){if(BRUSH_PRESETS.find(p=>p.id===presetId).tool!=='eraser')presetId='eraser';tool='eraser';}
+ if(t==='ink'){presetId=activePresetByGroup.paint||lastPaintPreset;tool=BRUSH_PRESETS.find(p=>p.id===presetId).tool;}
+ else if(t==='eraser'){presetId=activePresetByGroup.eraser||'eraser';tool='eraser';}
  else tool=t;
+ if(['ink','pencil','wash','eraser'].includes(tool)){const settings=presetSettings[presetId];size=settings.size;opacity=settings.opacity;softness=settings.softness;syncBrushControls();}
  updateBrushTile();updateToolUI();
 }
 document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>selectTool(b.dataset.tool==='hand'&&tool==='hand'?'ink':b.dataset.tool));
@@ -250,9 +278,20 @@ function updateBrushTile(){
  const preset=BRUSH_PRESETS.find(p=>p.id===presetId);$('#currentBrushName').textContent=preset.name;
  const ctx=$('#currentBrushPreview').getContext('2d');ctx.clearRect(0,0,180,48);if(presetPreviews.has(presetId))ctx.drawImage(presetPreviews.get(presetId),0,0);
 }
+function syncBrushControls(){
+ $('#size').value=size;$('#sizeValue').textContent=size+' px';
+ $('#opacity').value=Math.round(opacity*100);$('#opacityValue').textContent=Math.round(opacity*100)+'%';
+ $('#softness').value=Math.round(softness*100);$('#softnessValue').textContent=Math.round(softness*100)+'%';
+}
+function resetBrushDefaults(){
+ for(const preset of BRUSH_PRESETS)Object.assign(presetSettings[preset.id],{size:preset.size,opacity:.85,softness:preset.softness});
+ const settings=presetSettings[presetId];size=settings.size;opacity=settings.opacity;softness=settings.softness;syncBrushControls();
+ updateBrushTile();renderBrushPicker();toast('Brush settings restored to their defaults.');
+}
 function choosePreset(id){
  const preset=BRUSH_PRESETS.find(p=>p.id===id);lasso.clear();presetId=id;tool=preset.tool;if(tool!=='eraser')lastPaintPreset=id;
- size=preset.size;softness=preset.softness;$('#size').value=size;$('#sizeValue').textContent=size+' px';$('#softness').value=Math.round(softness*100);$('#softnessValue').textContent=Math.round(softness*100)+'%';
+ const settings=presetSettings[id];activePresetByGroup[preset.tool==='eraser'?'eraser':'paint']=id;
+ size=settings.size;opacity=settings.opacity;softness=settings.softness;syncBrushControls();
  updateBrushTile();updateToolUI();renderBrushPicker();$('#brushPicker').hidePopover();
 }
 function renderBrushPicker(){
@@ -261,6 +300,7 @@ function renderBrushPicker(){
  for(const button of $('#brushList').querySelectorAll('button')){const preview=presetPreviews.get(button.dataset.preset);if(preview)button.querySelector('canvas').getContext('2d').drawImage(preview,0,0);button.onclick=()=>choosePreset(button.dataset.preset);}
 }
 $('#brushCategory').onchange=renderBrushPicker;
+$('#resetBrushDefaults').onclick=resetBrushDefaults;
 $('#brushPicker').addEventListener('beforetoggle',e=>{if(e.newState==='open'){const r=$('#brushPickerButton').getBoundingClientRect();$('#brushPicker').style.left=Math.max(8,Math.min(r.left,window.innerWidth-350))+'px';$('#brushPicker').style.top=Math.max(8,Math.min(r.bottom+8,window.innerHeight-460))+'px';}});
 renderBrushPicker();
 let recentColors=[];
@@ -282,13 +322,14 @@ function pickColor(p){
 }
 renderRecentColors();
 document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>setColor(b.dataset.color));$('#color').oninput=e=>setColor(e.target.value,false);$('#color').onchange=e=>setColor(e.target.value);
-$('#size').oninput=e=>{size=+e.target.value;$('#sizeValue').textContent=size+' px';};$('#opacity').oninput=e=>{opacity=+e.target.value/100;$('#opacityValue').textContent=e.target.value+'%';};$('#softness').oninput=e=>{softness=+e.target.value/100;$('#softnessValue').textContent=e.target.value+'%';};
+$('#size').oninput=e=>{size=+e.target.value;presetSettings[presetId].size=size;$('#sizeValue').textContent=size+' px';};$('#opacity').oninput=e=>{opacity=+e.target.value/100;presetSettings[presetId].opacity=opacity;$('#opacityValue').textContent=e.target.value+'%';};$('#softness').oninput=e=>{softness=+e.target.value/100;presetSettings[presetId].softness=softness;$('#softnessValue').textContent=e.target.value+'%';};
 $('#sampleDesign').onchange=e=>{sampleDesign=e.target.checked;requestDraw();};
+$('#showGrid').onchange=e=>{showGrid=e.target.checked;requestDraw();};
 $('#undo').onclick=undo;$('#redo').onclick=redo;
-function selectedBackground(){return $('#backgroundTransparent').checked?null:$('#backgroundColor').value;}
-function setFaceBackground(value){if(backgrounds()[face]===value)return;rememberBackground();backgrounds()[face]=value;$('#backgroundColor').disabled=!value;markDirty();requestDraw();}
+function selectedBackground(){return $('#backgroundColor').value;}
+function setFaceBackground(value){if(backgrounds()[face]===value)return;rememberBackground();backgrounds()[face]=value;$('#backgroundColor').value=value;markDirty();requestDraw();}
 $('#backgroundColor').onchange=e=>setFaceBackground(e.target.value);
-$('#backgroundTransparent').onchange=e=>setFaceBackground(e.target.checked?null:$('#backgroundColor').value);
+$('#resetBackground').onclick=()=>setFaceBackground('#fffef9');
 $('#applyBackgroundAll').onclick=()=>{const value=selectedBackground();if(backgrounds().every(background=>background===value))return;rememberBackground();backgrounds().fill(value);markDirty();requestDraw();toast('Background applied to every face in this flexagon.');};
 function showDialog(html){$('#dialog').innerHTML=html;$('#dialog').showModal();$('#dialog').querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$('#dialog').close());}
 $('#clear').onclick=()=>{lasso.clear();showDialog('<h2>A fresh start?</h2><p>Clear the leaf sides used by this face. Every orientation using those sides will update. You can undo this.</p><div class="actions"><button class="btn" data-close>Keep artwork</button><button class="btn primary" id="confirmClear">Clear face</button></div>');$('#confirmClear').onclick=()=>{remember();placements().forEach(p=>bank()[p.side].getContext('2d').clearRect(0,0,N,N));markDirty();requestDraw();$('#dialog').close();};};
@@ -300,11 +341,17 @@ function download(blob,name){const a=document.createElement('a'),url=URL.createO
 const BACKUP_NOTICE_KEY='flexagon-studio-backup-notice-seen';
 function acknowledgeBackupNotice(){try{localStorage.setItem(BACKUP_NOTICE_KEY,'true');}catch{}$('#backupNotice').classList.add('hidden');}
 function maybeShowBackupNotice(){let seen=false;try{seen=localStorage.getItem(BACKUP_NOTICE_KEY)==='true';}catch{}if(!seen&&$('#recoveryBanner').classList.contains('hidden'))$('#backupNotice').classList.remove('hidden');}
-function projectMetadata(){return {format:'fold-studio',version:2,model:model.id,face,orientation,backgrounds:[...backgrounds()]};}
+function projectMetadata(){return {format:'fold-studio',version:3,model:model.id,face,orientation,backgrounds:[...backgrounds()]};}
+function canvasPngBytes(canvas){
+ const encoded=canvas.toDataURL('image/png').split(',',2)[1],binary=atob(encoded),bytes=new Uint8Array(binary.length);
+ for(let index=0;index<binary.length;index++)bytes[index]=binary.charCodeAt(index);
+ return bytes;
+}
 function downloadProject(){
  lasso.commitTransform();
- const data={...projectMetadata(),artwork:bank().map(c=>c.toDataURL('image/png'))};
- download(new Blob([JSON.stringify(data)],{type:'application/json'}),'flexagon-studio-project.json');
+ const archive={'manifest.json':strToU8(JSON.stringify({...projectMetadata(),artworkFiles:bank().map((_,index)=>`artwork/${index}.png`)}))};
+ bank().forEach((canvas,index)=>archive[`artwork/${index}.png`]=canvasPngBytes(canvas));
+ download(new Blob([zipSync(archive,{level:6})],{type:'application/octet-stream'}),'flexagon-studio-project.flexagon');
  acknowledgeBackupNotice();autosave?.noteDownloaded();$('#saveStatus').textContent='Project backup downloaded';
 }
 async function captureLocalProject(){
@@ -313,29 +360,18 @@ async function captureLocalProject(){
  return {...metadata,artwork};
 }
 async function decodeArtwork(images,modelId){
- if(modelId==='tetra'&&Array.isArray(images)&&images.length===32)throw Error('This project uses the obsolete 16-leaf square template. Keep the original file; it cannot be safely remapped automatically to the corrected eight-leaf net.');
  if(!Array.isArray(images)||images.length!==MODELS[modelId].leafCount*2)throw Error('Invalid leaf artwork.');
  return Promise.all(images.map(async source=>{
-  let image;
-  if(source instanceof Blob&&source.type==='image/png')image=await createImageBitmap(source);
-  else if(typeof source==='string'&&source.startsWith('data:image/png;base64,'))image=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('Invalid image.'));im.src=source;});
-  else throw Error('Invalid leaf image.');
+  if(!(source instanceof Blob)||source.type!=='image/png')throw Error('Invalid leaf image.');
+  const image=await createImageBitmap(source);
   const c=makeCanvas();c.getContext('2d').drawImage(image,0,0,N,N);image.close?.();return c;
  }));
 }
-function validBackgrounds(values,modelId){return Array.isArray(values)&&values.length===MODELS[modelId].faces.length&&values.every(value=>value===null||(typeof value==='string'&&/^#[0-9a-f]{6}$/i.test(value)));}
+function validBackgrounds(values,modelId){return Array.isArray(values)&&values.length===MODELS[modelId].faces.length&&values.every(value=>typeof value==='string'&&/^#[0-9a-f]{6}$/i.test(value));}
 async function restoreProject(data,{canApply=()=>true}={}){
- if(!data||data.format!=='fold-studio'||![1,2].includes(data.version))throw Error('Unsupported project format.');
+ if(!data||data.format!=='fold-studio'||data.version!==3)throw Error('Unsupported project format.');
  const modelId=canonicalModelId(data.model);if(!Object.hasOwn(MODELS,modelId))throw Error('Unknown flexagon model.');
- let images,backgroundValues;
- if(data.version===2){images=data.artwork;backgroundValues=data.backgrounds;}
- else{
-  if(!data.banks||typeof data.banks!=='object'||Array.isArray(data.banks))throw Error('Invalid legacy project.');
-  const selected=Object.entries(data.banks).find(([savedId])=>canonicalModelId(savedId)===modelId);images=selected?.[1];
-  if(data.faceBackgrounds!==undefined){if(!data.faceBackgrounds||typeof data.faceBackgrounds!=='object'||Array.isArray(data.faceBackgrounds))throw Error('Invalid face backgrounds.');backgroundValues=Object.entries(data.faceBackgrounds).find(([savedId])=>canonicalModelId(savedId)===modelId)?.[1];}
- }
- const artwork=await decodeArtwork(images,modelId);
- if(backgroundValues===undefined)backgroundValues=Array(MODELS[modelId].faces.length).fill('#fffef9');
+ const artwork=await decodeArtwork(data.artwork,modelId),backgroundValues=data.backgrounds;
  if(!validBackgrounds(backgroundValues,modelId))throw Error('Invalid face backgrounds.');
  if(!Number.isInteger(data.face)||!Number.isInteger(data.orientation)||!MODELS[modelId].faces[data.face]?.orientations[data.orientation])throw Error('Invalid selected face.');
  if(!canApply())return false;
@@ -345,9 +381,22 @@ async function restoreProject(data,{canApply=()=>true}={}){
 $('#saveProject').onclick=downloadProject;
 $('#downloadFromNotice').onclick=downloadProject;$('#dismissBackupNotice').onclick=acknowledgeBackupNotice;
 $('#openProject').onclick=()=>$('#projectFile').click();
+async function readProjectFile(file){
+ const bytes=new Uint8Array(await file.arrayBuffer());
+ if(bytes[0]===0x50&&bytes[1]===0x4b){
+  try{
+   const files=unzipSync(bytes),manifest=files['manifest.json'];if(!manifest)throw Error('Missing manifest.');
+   const project=JSON.parse(strFromU8(manifest));
+   if(!Array.isArray(project.artworkFiles))throw Error('Missing artwork.');
+   project.artwork=project.artworkFiles.map(name=>{const artwork=files[name];if(!artwork)throw Error(`Missing ${name}.`);return new Blob([artwork],{type:'image/png'});});
+   return project;
+  }catch(error){throw Error(`This .flexagon file is incomplete or damaged (${error.message}).`);}
+ }
+ throw Error('Choose a .flexagon project file.');
+}
 $('#projectFile').onchange=async e=>{
  const file=e.target.files[0];if(!file)return;activity++;
- try{if(file.size>80*1024*1024)throw Error('Project exceeds 80 MB.');await restoreProject(JSON.parse(await file.text()));autosave?.markChanged();$('#saveStatus').textContent='Project opened';toast('Project opened.');}
+ try{if(file.size>80*1024*1024)throw Error('Project exceeds 80 MB.');await restoreProject(await readProjectFile(file));autosave?.markChanged();$('#saveStatus').textContent='Project opened';toast('Project opened.');}
  catch(error){toast('Could not open project: '+error.message);}e.target.value='';
 };
 document.addEventListener('keydown',e=>{
@@ -368,13 +417,25 @@ window.addEventListener('beforeunload',e=>{if(autosave?.hasUnsavedChanges()||pen
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')void autosave?.flush();});
 window.addEventListener('pagehide',()=>{void autosave?.flush();});
 $('#mappingInfo').onclick=()=>showDialog('<h2>Help</h2><h3>Shortcuts</h3><div class="shortcut-grid"><span><kbd>⌘/Ctrl Z</kbd> Undo</span><span><kbd>⇧ ⌘/Ctrl Z</kbd> Redo</span><span><kbd>B</kbd> Brush</span><span><kbd>E</kbd> Eraser</span><span><kbd>L</kbd> Lasso</span><span><kbd>I</kbd> Eyedropper</span><span><kbd>H</kbd> Pan</span><span><kbd>0</kbd> Fit view</span></div><h3>Folding maps</h3><p>Face orientations and print order are defined in <code>src/models.js</code>. Verify templates with a paper prototype before final printing.</p><p>Painting uses the open-source <a href="https://github.com/mypaint/libmypaint" target="_blank" rel="noreferrer">libmypaint</a> brush engine.</p><div class="actions"><button class="btn primary" data-close>Close</button></div>');
+const DUPLEX_CALIBRATION_KEY='flexagon-studio-duplex-calibration-v1';
+function calibrationFor(format){try{const value=JSON.parse(localStorage.getItem(DUPLEX_CALIBRATION_KEY)||'{}')[format];return {x:Number(value?.x)||0,y:Number(value?.y)||0};}catch{return {x:0,y:0};}}
+function saveDuplexCalibration(format,{x,y}){let saved={};try{saved=JSON.parse(localStorage.getItem(DUPLEX_CALIBRATION_KEY)||'{}');}catch{}saved[format]={x:Number(x)||0,y:Number(y)||0};localStorage.setItem(DUPLEX_CALIBRATION_KEY,JSON.stringify(saved));}
+async function exportDuplexCalibration(format){
+ const {jsPDF}=await import('jspdf'),pdf=new jsPDF({orientation:'landscape',unit:'mm',format}),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight(),targets=[[31,48],[w-54,52],[43,h-33],[w-30,h-49]];
+ const target=(x,y,label)=>{pdf.setDrawColor(49,79,64);pdf.setLineWidth(.25);pdf.line(x-12,y,x+12,y);pdf.line(x,y-12,x,y+12);for(let n=-10;n<=10;n++)if(n&&Math.abs(n)>=5){const tick=Math.abs(n)%5===0?2:1;pdf.line(x+n,y-tick,x+n,y+tick);pdf.line(x-tick,y+n,x+tick,y+n);}pdf.setLineWidth(.35);pdf.circle(x,y,4);pdf.setFontSize(7);pdf.text(label,x+9,y-9);};
+ for(let page=0;page<2;page++){if(page)pdf.addPage();pdf.setTextColor(49,79,64);pdf.setFontSize(16);pdf.text(`flexagon studio / duplex calibration — ${page?'BACK':'FRONT'}`,16,16);pdf.setTextColor(105,116,99);pdf.setFontSize(8);pdf.text('Landscape · actual size / 100% · flip on short edge · page scaling off',16,23);targets.forEach((point,index)=>target(...(page?shortEdgeBackPoint(point,w):point),`Target ${index+1}`));pdf.setDrawColor(49,79,64);pdf.line(w-66,h-15,w-16,h-15);pdf.text('50 mm scale check',w-66,h-8);}
+ pdf.save(`flexagon-studio-duplex-calibration-${format}.pdf`);
+}
+function openDuplexCalibration(format='letter'){const {x,y}=calibrationFor(format);showDialog(`<h2>Duplex calibration</h2><p>Print the test double-sided in landscape, flip on short edge, at actual size.</p><label>Paper size <select id="calibrationPaper"><option value="a3">A3 landscape</option><option value="a4">A4 landscape</option><option value="letter">US Letter landscape</option></select></label><div class="actions calibration-download"><button class="btn" id="downloadCalibration">Download calibration PDF</button></div><p>Hold the sheet to light. Enter the back-target offset: right/down is positive.</p><div class="calibration-fields"><label>Horizontal <input id="calibrationX" type="number" step="0.1" value="${x}"> mm</label><label>Vertical <input id="calibrationY" type="number" step="0.1" value="${y}"> mm</label></div><div class="actions"><button class="btn" data-close>Cancel</button><button class="btn" id="resetCalibration">Reset</button><button class="btn primary" id="saveCalibration">Save correction</button></div>`);$('#calibrationPaper').value=format;$('#downloadCalibration').onclick=()=>exportDuplexCalibration($('#calibrationPaper').value);$('#resetCalibration').onclick=()=>{$('#calibrationX').value=0;$('#calibrationY').value=0;};$('#saveCalibration').onclick=()=>{saveDuplexCalibration($('#calibrationPaper').value,{x:$('#calibrationX').value,y:$('#calibrationY').value});$('#dialog').close();toast('Duplex correction saved.');};}
 $('#export').onclick=()=>{
  lasso.commitTransform();
  if(pendingImage){toast('Place or cancel your image before exporting.');return;}
  const guideAction=assemblyGuideFor(model.id,{addGlueFlaps:true})?'<button class="btn" id="downloadAssemblyGuide">Download assembly guide</button>':'';
  const closureHint=model.printSplit?'Off: join the ends and split strips with flexible tape.':'Off: join the ends with flexible tape.';
- showDialog(`<h2>Export PDF</h2><p><strong>Print:</strong> landscape · double-sided · flip on short edge · actual size (100%).</p><label>Paper size <select id="paper"><option value="a3">A3 landscape · larger artwork</option><option value="a4">A4 landscape</option><option value="letter" selected>US Letter landscape</option></select></label><label><input id="addGlueFlap" type="checkbox" checked> Include glue flaps</label><p class="hint">${closureHint}</p><label><input id="exportLabels" type="checkbox"> Include leaf IDs</label><p class="hint">Test the template on plain paper first. You can also print each side separately and glue them together.</p><div class="actions"><button class="btn" data-close>Cancel</button>${guideAction}<button class="btn primary" id="downloadPDF">Download 2-page PDF</button></div>`);
+ showDialog(`<h2>Export PDF</h2><p><strong>Print:</strong> landscape · double-sided · flip on short edge · actual size (100%).</p><label>Paper size <select id="paper"><option value="a3">A3 landscape · larger artwork</option><option value="a4">A4 landscape</option><option value="letter" selected>US Letter landscape</option></select></label><div class="duplex-calibration"><span id="calibrationSummary"></span><button class="btn" id="openDuplexCalibration">Duplex calibration…</button></div><label><input id="addGlueFlap" type="checkbox" checked> Include glue flaps</label><p class="hint">${closureHint}</p><label><input id="exportLabels" type="checkbox"> Include leaf IDs</label><p class="hint">Test the template on plain paper first. You can also print each side separately and glue them together.</p><div class="actions"><button class="btn" data-close>Cancel</button>${guideAction}<button class="btn primary" id="downloadPDF">Download 2-page PDF</button></div>`);
  const glueFlaps=$('#addGlueFlap'),guideButton=$('#downloadAssemblyGuide');
+ const refreshCalibration=()=>{const {x,y}=calibrationFor($('#paper').value);$('#calibrationSummary').textContent=x||y?`Saved correction: ${x.toFixed(1)} mm horizontal, ${y.toFixed(1)} mm vertical.`:'No duplex correction saved.';};
+ $('#paper').onchange=refreshCalibration;refreshCalibration();$('#openDuplexCalibration').onclick=()=>openDuplexCalibration($('#paper').value);
  const updateGuideAction=()=>{
   if(!guideButton)return;
   const available=Boolean(assemblyGuideFor(model.id,{addGlueFlaps:glueFlaps.checked}));
@@ -415,7 +476,7 @@ async function exportPDF(format,labels,addGlueFlap){
    let p=entry.points.map(([x,y])=>[left+(x-minX)*side,top+(y-minY)*side]);
    // Landscape + short-edge duplex: reflect the complete back net across the
    // page width. The printer's duplex flip brings these positions into register.
-   if(page)p=p.map(([x,y])=>[w-x,y]);
+   if(page){const calibration=calibrationFor(format);p=p.map(point=>shortEdgeBackPoint(point,w,{horizontal:calibration.x,vertical:calibration.y}));}
    const item=entry[page?'back':'front'];
    if(item)drawPrintArtwork(ctx,model.shape,p,printArtwork[item.side],item.rotation||0,backgrounds()[faceForSide(item.side)]);
    else{ctx.save();polygon(ctx,p);ctx.fillStyle='#f0f1e9';ctx.fill();ctx.restore();}

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
   <style>
-    .paper{fill:#faf9f4}.panel{fill:#fffefa;stroke:#d9ded2;stroke-width:2}.stackUnder{fill:#d7dfd2;stroke:#304e40;stroke-width:3.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}.stack{fill:#e7eee1;stroke:#304e40;stroke-width:3.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}.stack.glue{fill:#f4e3d8}.back{fill:#e8edf1}.creaseUnder{stroke:#fffefa;stroke-width:7;stroke-dasharray:10 9;fill:none}.crease{stroke:#758572;stroke-width:3;stroke-dasharray:10 9;fill:none}.arrow{stroke:#c76c4b;stroke-width:4;fill:none;marker-end:url(#arrow)}.arrowSmall{stroke:#c76c4b;stroke-width:3.25;fill:none;marker-end:url(#arrowSmall)}.tapeEdge{stroke:#c76c4b;stroke-width:4;stroke-linecap:round}.heading{font:500 47px Georgia,serif;fill:#304e40}.sub{font:22px Arial,sans-serif;fill:#72806e}.stepNumber{font:600 23px Arial,sans-serif;fill:#c76c4b}.step{font:600 20px Arial,sans-serif;letter-spacing:2px;fill:#c76c4b}.caption{font:25px Arial,sans-serif;fill:#3e4e42}.small{font:20px Arial,sans-serif;fill:#697667}.label{font:600 17px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}.mini{font:600 14px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}
+    .paper{fill:#faf9f4}.panel{fill:#fffefa;stroke:#d9ded2;stroke-width:2}.stackUnder{fill:#d7dfd2;stroke:#304e40;stroke-width:2.25;stroke-linejoin:round;vector-effect:non-scaling-stroke}.stack{fill:#e7eee1;stroke:#304e40;stroke-width:2.25;stroke-linejoin:round;vector-effect:non-scaling-stroke}.stack.glue{fill:#f4e3d8}.back{fill:#e8edf1}.creaseUnder{stroke:#fffefa;stroke-width:7;stroke-dasharray:10 9;fill:none}.crease{stroke:#758572;stroke-width:3;stroke-dasharray:10 9;fill:none}.arrow{stroke:#c76c4b;stroke-width:4;fill:none;marker-end:url(#arrow)}.arrowSmall{stroke:#c76c4b;stroke-width:3.25;fill:none;marker-end:url(#arrowSmall)}.tapeEdge{stroke:#c76c4b;stroke-width:4;stroke-linecap:round}.heading{font:500 47px Georgia,serif;fill:#304e40}.sub{font:22px Arial,sans-serif;fill:#72806e}.stepNumber{font:600 23px Arial,sans-serif;fill:#c76c4b}.step{font:600 20px Arial,sans-serif;letter-spacing:2px;fill:#c76c4b}.caption{font:25px Arial,sans-serif;fill:#3e4e42}.small{font:20px Arial,sans-serif;fill:#697667}.label{font:600 17px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}.mini{font:600 14px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}
   </style>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#c76c4b"/></marker>
@@ -37,7 +37,7 @@
   <g transform="translate(800 185)">
     <rect class="panel" width="730" height="415" rx="18"/>
     <text class="stepNumber" x="40" y="43">5</text>
-    <text class="step" x="70" y="43">CLOSE THE HEXAGON</text>
+    <text class="step" x="70" y="43">FOLD</text>
     <text class="caption" x="40" y="82">Fold 2F onto 5F.</text>
     <g transform="translate(145 -55) scale(1.1)">
       <polygon class="stack" points="250,220 200,133.4 300,133.4"/><text class="label" x="250" y="162" text-anchor="middle" transform="rotate(300 250 162)">15F</text>
@@ -91,7 +91,7 @@
     <text class="caption" x="40" y="82">Flip over. Fold down the glue flap and join.</text>
     <text class="small" x="190" y="150" text-anchor="middle">Before</text>
     <text class="small" x="540" y="150" text-anchor="middle">After</text>
-    <g transform="translate(-127.25 50.75) scale(1.35)">
+    <g transform="translate(-127.25 50.75) scale(1.35) rotate(120 235 155)">
       <polygon class="stack" points="235,155 195,85.7 275,85.7"/><text class="mini" x="235" y="109" text-anchor="middle" transform="rotate(120 235 109)">4F</text>
       <polygon class="stack" points="235,155 275,85.7 315,155"/><text class="mini" x="275" y="132" text-anchor="middle" transform="rotate(120 275 132)">7F</text>
       <polygon class="stack" points="235,155 315,155 275,224.3"/><text class="mini" x="275" y="178" text-anchor="middle" transform="rotate(240 275 178)">10F</text>
@@ -102,7 +102,7 @@
       <path class="creaseUnder" d="M201.5,74.4L148.5,166.3"/><path class="crease" d="M201.5,74.4L148.5,166.3"/>
     </g>
     <path class="arrow" d="M335 250H395"/>
-    <g transform="translate(222.75 50.75) scale(1.35)">
+    <g transform="translate(222.75 50.75) scale(1.35) rotate(120 235 155)">
       <polygon class="stack" points="235,155 195,85.7 275,85.7"/><text class="mini" x="235" y="109" text-anchor="middle" transform="rotate(120 235 109)">4F</text>
       <polygon class="stack" points="235,155 275,85.7 315,155"/><text class="mini" x="275" y="132" text-anchor="middle" transform="rotate(120 275 132)">7F</text>
       <polygon class="stack" points="235,155 315,155 275,224.3"/><text class="mini" x="275" y="178" text-anchor="middle" transform="rotate(240 275 178)">10F</text>
