@@ -372,19 +372,18 @@ $('#export').onclick=()=>{
  lasso.commitTransform();
  if(pendingImage){toast('Place or cancel your image before exporting.');return;}
  const guideAction=model.id==='tetra'?'<button class="btn" id="downloadAssemblyGuide">Download assembly guide</button>':'';
- const guideHint=model.id==='tetra'?'<p class="hint" id="assemblyGuideHint"></p>':'';
- showDialog(`<h2>Export PDF</h2><p>Print the two-page PDF <strong>double-sided in landscape orientation</strong>. Select <strong>Flip on short edge</strong> and <strong>Actual size / 100%</strong>; turn off Fit, Shrink, or Scale to page. Alternatively, print the pages separately, cut out both sides, and glue them together. Leave glue flaps off to join the ends with tape as a flexible joint.</p><p><strong>Experimental template:</strong> ${model.note} Make a small plain-paper test before using your final artwork.</p><label>Paper size <select id="paper"><option value="a3">A3 landscape · larger artwork</option><option value="a4">A4 landscape</option><option value="letter" selected>US Letter landscape</option></select></label><label><input id="addGlueFlap" type="checkbox" checked> Include glue flaps</label><p class="hint">${model.printSplit?'Off: join the two strips with flexible tape. On: move the first front artwork to the added front endpoint, leaving one front and one back closure flap, and add an overlapping tab to reconnect the split strips.':model.id==='trihexa'?'Off: join the ends with tape. On: move 1B to the added front endpoint, leaving a glue flap at each end of the back sheet and none on the front.':'Off: join the ends with tape. On: move the first front artwork to the added front endpoint, leaving a front flap at the start and a back flap at the far end.'}</p><label><input id="exportLabels" type="checkbox"> Include pat IDs for checking the folding order</label>${guideHint}<div class="actions"><button class="btn" data-close>Cancel</button>${guideAction}<button class="btn primary" id="downloadPDF">Download 2-page PDF</button></div>`);
- const glueFlaps=$('#addGlueFlap'),guideButton=$('#downloadAssemblyGuide'),guideMessage=$('#assemblyGuideHint');
+ const closureHint=model.printSplit?'Off: join the ends and split strips with flexible tape.':'Off: join the ends with flexible tape.';
+ showDialog(`<h2>Export PDF</h2><p><strong>Print:</strong> landscape · double-sided · flip on short edge · actual size (100%).</p><label>Paper size <select id="paper"><option value="a3">A3 landscape · larger artwork</option><option value="a4">A4 landscape</option><option value="letter" selected>US Letter landscape</option></select></label><label><input id="addGlueFlap" type="checkbox" checked> Include glue flaps</label><p class="hint">${closureHint}</p><label><input id="exportLabels" type="checkbox"> Include pat IDs</label><p class="hint">Test the template on plain paper first. You can also print each side separately and glue them together.</p><div class="actions"><button class="btn" data-close>Cancel</button>${guideAction}<button class="btn primary" id="downloadPDF">Download 2-page PDF</button></div>`);
+ const glueFlaps=$('#addGlueFlap'),guideButton=$('#downloadAssemblyGuide');
  const updateGuideAction=()=>{
   if(!guideButton)return;
   const available=Boolean(assemblyGuideFor(model.id,{addGlueFlaps:glueFlaps.checked}));
   guideButton.disabled=!available;
   guideButton.title=available?'Download the illustrated guide for these settings':'No assembly guide is available for these settings yet';
-  guideMessage.textContent=available?'Illustrated guide for the selected closure.':'No illustrated guide is available for these settings yet.';
  };
  glueFlaps.onchange=updateGuideAction;updateGuideAction();
  if(guideButton)guideButton.onclick=async()=>{
-  guideButton.disabled=true;guideButton.textContent='Generating guide…';
+  guideButton.disabled=true;guideButton.textContent='Downloading…';
   try{await downloadAssemblyGuidePDF(model.id,{addGlueFlaps:glueFlaps.checked});toast('Assembly guide downloaded.');}
   catch(err){toast('Guide export failed: '+err.message);}
   finally{guideButton.textContent='Download assembly guide';updateGuideAction();}
