@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
   <style>
-    .paper{fill:#faf9f4}.panel{fill:#fffefa;stroke:#d9ded2;stroke-width:2}.pat{fill:#e7eee1;stroke:#304e40;stroke-width:4;stroke-linejoin:round}.back{fill:#e8edf1}.creaseUnder{stroke:#fffefa;stroke-width:7;stroke-dasharray:10 9;fill:none}.crease{stroke:#758572;stroke-width:3;stroke-dasharray:10 9;fill:none}.arrow{stroke:#c76c4b;stroke-width:4;fill:none;marker-end:url(#arrow)}.tapeEdge{stroke:#c76c4b;stroke-width:4;stroke-linecap:round}.heading{font:500 47px Georgia,serif;fill:#304e40}.sub{font:22px Arial,sans-serif;fill:#72806e}.stepNumber{font:600 23px Arial,sans-serif;fill:#c76c4b}.step{font:600 20px Arial,sans-serif;letter-spacing:2px;fill:#c76c4b}.caption{font:25px Arial,sans-serif;fill:#3e4e42}.small{font:20px Arial,sans-serif;fill:#697667}.label{font:600 21px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}
+    .paper{fill:#faf9f4}.panel{fill:#fffefa;stroke:#d9ded2;stroke-width:2}.leaf{fill:#e7eee1;stroke:#304e40;stroke-width:4;stroke-linejoin:round}.back{fill:#e8edf1}.creaseUnder{stroke:#fffefa;stroke-width:7;stroke-dasharray:10 9;fill:none}.crease{stroke:#758572;stroke-width:3;stroke-dasharray:10 9;fill:none}.arrow{stroke:#c76c4b;stroke-width:4;fill:none;marker-end:url(#arrow)}.tapeEdge{stroke:#c76c4b;stroke-width:4;stroke-linecap:round}.heading{font:500 47px Georgia,serif;fill:#304e40}.sub{font:22px Arial,sans-serif;fill:#72806e}.stepNumber{font:600 23px Arial,sans-serif;fill:#c76c4b}.step{font:600 20px Arial,sans-serif;letter-spacing:2px;fill:#c76c4b}.caption{font:25px Arial,sans-serif;fill:#3e4e42}.small{font:20px Arial,sans-serif;fill:#697667}.label{font:600 21px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}
   </style>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#c76c4b"/></marker>
@@ -11,22 +11,22 @@
   <text x="90" y="133" class="sub">No glue flaps · tape closure</text>
   <line x1="90" y1="165" x2="1510" y2="165" stroke="#d7ddd0" stroke-width="2"/>
 
-  <!-- Step 1: the nine-pat front strip. -->
+  <!-- Step 1: the nine-leaf front strip. -->
   <g transform="translate(70 215)">
     <rect class="panel" width="1460" height="230" rx="18"/>
     <text class="stepNumber" x="40" y="43">1</text>
     <text class="step" x="70" y="43">FOLD THE STRIP</text>
     <text class="caption" x="40" y="82">Front side up. Fold 2F onto 1F.</text>
     <g transform="translate(440 100)">
-      <polygon class="pat" points="0,100 58,0 116,100"/><text class="label" x="58" y="66.7" text-anchor="middle">1F</text>
-      <polygon class="pat" points="58,0 116,100 174,0"/><text class="label" x="116" y="33.3" text-anchor="middle">2F</text>
-      <polygon class="pat" points="116,100 174,0 232,100"/><text class="label" x="174" y="66.7" text-anchor="middle">3F</text>
-      <polygon class="pat" points="174,0 232,100 290,0"/><text class="label" x="232" y="33.3" text-anchor="middle">4F</text>
-      <polygon class="pat" points="232,100 290,0 348,100"/><text class="label" x="290" y="66.7" text-anchor="middle">5F</text>
-      <polygon class="pat" points="290,0 348,100 406,0"/><text class="label" x="348" y="33.3" text-anchor="middle">6F</text>
-      <polygon class="pat" points="348,100 406,0 464,100"/><text class="label" x="406" y="66.7" text-anchor="middle">7F</text>
-      <polygon class="pat" points="406,0 464,100 522,0"/><text class="label" x="464" y="33.3" text-anchor="middle">8F</text>
-      <polygon class="pat" points="464,100 522,0 580,100"/><text class="label" x="522" y="66.7" text-anchor="middle">9F</text>
+      <polygon class="leaf" points="0,100 58,0 116,100"/><text class="label" x="58" y="66.7" text-anchor="middle">1F</text>
+      <polygon class="leaf" points="58,0 116,100 174,0"/><text class="label" x="116" y="33.3" text-anchor="middle">2F</text>
+      <polygon class="leaf" points="116,100 174,0 232,100"/><text class="label" x="174" y="66.7" text-anchor="middle">3F</text>
+      <polygon class="leaf" points="174,0 232,100 290,0"/><text class="label" x="232" y="33.3" text-anchor="middle">4F</text>
+      <polygon class="leaf" points="232,100 290,0 348,100"/><text class="label" x="290" y="66.7" text-anchor="middle">5F</text>
+      <polygon class="leaf" points="290,0 348,100 406,0"/><text class="label" x="348" y="33.3" text-anchor="middle">6F</text>
+      <polygon class="leaf" points="348,100 406,0 464,100"/><text class="label" x="406" y="66.7" text-anchor="middle">7F</text>
+      <polygon class="leaf" points="406,0 464,100 522,0"/><text class="label" x="464" y="33.3" text-anchor="middle">8F</text>
+      <polygon class="leaf" points="464,100 522,0 580,100"/><text class="label" x="522" y="66.7" text-anchor="middle">9F</text>
       <path class="creaseUnder" d="M50.5 -13L123.5 113"/><path class="crease" d="M50.5 -13L123.5 113"/>
       <path class="arrow" d="M88.2 -34.8C64 -57 29 -38 12.8 8.8"/>
     </g>
@@ -39,33 +39,33 @@
     <text class="step" x="70" y="43">FOLD THE STRIP</text>
     <text class="caption" x="40" y="82">Fold 5B onto 4B.</text>
     <g transform="translate(250 105) rotate(90)">
-      <polygon class="pat back" points="0,64 37,0 74,64"/><text class="label" x="37" y="42.7" text-anchor="middle" transform="rotate(180 37 42.7)">2B</text>
-      <polygon class="pat back" points="37,0 74,64 111,0"/><text class="label" x="74" y="21.3" text-anchor="middle" transform="rotate(180 74 21.3)">3B</text>
-      <polygon class="pat back" points="74,64 111,0 148,64"/><text class="label" x="111" y="42.7" text-anchor="middle" transform="rotate(180 111 42.7)">4B</text>
-      <polygon class="pat back" points="111,0 148,64 185,0"/><text class="label" x="148" y="21.3" text-anchor="middle" transform="rotate(180 148 21.3)">5B</text>
-      <polygon class="pat back" points="148,64 185,0 222,64"/><text class="label" x="185" y="42.7" text-anchor="middle" transform="rotate(180 185 42.7)">6B</text>
-      <polygon class="pat back" points="185,0 222,64 259,0"/><text class="label" x="222" y="21.3" text-anchor="middle" transform="rotate(180 222 21.3)">7B</text>
-      <polygon class="pat back" points="222,64 259,0 296,64"/><text class="label" x="259" y="42.7" text-anchor="middle" transform="rotate(180 259 42.7)">8B</text>
-      <polygon class="pat back" points="259,0 296,64 333,0"/><text class="label" x="296" y="21.3" text-anchor="middle" transform="rotate(180 296 21.3)">9B</text>
+      <polygon class="leaf back" points="0,64 37,0 74,64"/><text class="label" x="37" y="42.7" text-anchor="middle" transform="rotate(180 37 42.7)">2B</text>
+      <polygon class="leaf back" points="37,0 74,64 111,0"/><text class="label" x="74" y="21.3" text-anchor="middle" transform="rotate(180 74 21.3)">3B</text>
+      <polygon class="leaf back" points="74,64 111,0 148,64"/><text class="label" x="111" y="42.7" text-anchor="middle" transform="rotate(180 111 42.7)">4B</text>
+      <polygon class="leaf back" points="111,0 148,64 185,0"/><text class="label" x="148" y="21.3" text-anchor="middle" transform="rotate(180 148 21.3)">5B</text>
+      <polygon class="leaf back" points="148,64 185,0 222,64"/><text class="label" x="185" y="42.7" text-anchor="middle" transform="rotate(180 185 42.7)">6B</text>
+      <polygon class="leaf back" points="185,0 222,64 259,0"/><text class="label" x="222" y="21.3" text-anchor="middle" transform="rotate(180 222 21.3)">7B</text>
+      <polygon class="leaf back" points="222,64 259,0 296,64"/><text class="label" x="259" y="42.7" text-anchor="middle" transform="rotate(180 259 42.7)">8B</text>
+      <polygon class="leaf back" points="259,0 296,64 333,0"/><text class="label" x="296" y="21.3" text-anchor="middle" transform="rotate(180 296 21.3)">9B</text>
       <path class="creaseUnder" d="M105 -10L154 74"/><path class="crease" d="M105 -10L154 74"/>
       <path class="arrow" d="M139.4 -42C129 -57.2 96 -48.1 86.2 -11"/>
     </g>
   </g>
 
-  <!-- Step 3: five pats form the partial hexagon; 8F and 9F continue left. -->
+  <!-- Step 3: five leaves form the partial hexagon; 8F and 9F continue left. -->
   <g transform="translate(540 465)">
     <rect class="panel" width="500" height="510" rx="18"/>
     <text class="stepNumber" x="40" y="43">3</text>
     <text class="step" x="70" y="43">CLOSE THE HEXAGON</text>
     <text class="caption" x="40" y="82">Fold 8F onto 7F.</text>
     <g transform="translate(50 76)">
-      <polygon class="pat back" points="250,220 200,133.4 300,133.4"/><text class="label" x="250" y="162.3" text-anchor="middle" transform="rotate(240 250 162.3)">2B</text>
-      <polygon class="pat back" points="250,220 300,133.4 350,220"/><text class="label" x="300" y="191.1" text-anchor="middle" transform="rotate(240 300 191.1)">3B</text>
-      <polygon class="pat" points="250,220 350,220 300,306.6"/><text class="label" x="300" y="248.9" text-anchor="middle" transform="rotate(180 300 248.9)">5F</text>
-      <polygon class="pat" points="250,220 300,306.6 200,306.6"/><text class="label" x="250" y="277.7" text-anchor="middle" transform="rotate(180 250 277.7)">6F</text>
-      <polygon class="pat" points="250,220 200,306.6 150,220"/><text class="label" x="200" y="248.9" text-anchor="middle" transform="rotate(180 200 248.9)">7F</text>
-      <polygon class="pat" points="150,220 200,306.6 100,306.6"/><text class="label" x="150" y="277.7" text-anchor="middle" transform="rotate(180 150 277.7)">8F</text>
-      <polygon class="pat" points="150,220 100,306.6 50,220"/><text class="label" x="100" y="248.9" text-anchor="middle" transform="rotate(180 100 248.9)">9F</text>
+      <polygon class="leaf back" points="250,220 200,133.4 300,133.4"/><text class="label" x="250" y="162.3" text-anchor="middle" transform="rotate(240 250 162.3)">2B</text>
+      <polygon class="leaf back" points="250,220 300,133.4 350,220"/><text class="label" x="300" y="191.1" text-anchor="middle" transform="rotate(240 300 191.1)">3B</text>
+      <polygon class="leaf" points="250,220 350,220 300,306.6"/><text class="label" x="300" y="248.9" text-anchor="middle" transform="rotate(180 300 248.9)">5F</text>
+      <polygon class="leaf" points="250,220 300,306.6 200,306.6"/><text class="label" x="250" y="277.7" text-anchor="middle" transform="rotate(180 250 277.7)">6F</text>
+      <polygon class="leaf" points="250,220 200,306.6 150,220"/><text class="label" x="200" y="248.9" text-anchor="middle" transform="rotate(180 200 248.9)">7F</text>
+      <polygon class="leaf" points="150,220 200,306.6 100,306.6"/><text class="label" x="150" y="277.7" text-anchor="middle" transform="rotate(180 150 277.7)">8F</text>
+      <polygon class="leaf" points="150,220 100,306.6 50,220"/><text class="label" x="100" y="248.9" text-anchor="middle" transform="rotate(180 100 248.9)">9F</text>
       <path class="creaseUnder" d="M143 207.9L207 318.7"/><path class="crease" d="M143 207.9L207 318.7"/>
       <path class="arrow" d="M173.9 344.9C196.1 367.9 237 354.3 234 318" style="marker-end:url(#arrowStep3)"/>
     </g>
@@ -79,12 +79,12 @@
     <text class="caption" x="40" y="82">Flip entire hexagon over.</text>
     <text class="caption" x="40" y="112">Tape 9F to 1B along the red edge.</text>
     <g transform="translate(-117.5 10) scale(1.5)">
-      <polygon class="pat" points="235,155 195,85.7 275,85.7"/><text class="label" x="235" y="108.8" text-anchor="middle" transform="rotate(180 235 108.8)" style="font-size:14px">9F</text>
-      <polygon class="pat back" points="235,155 275,85.7 315,155"/><text class="label" x="275" y="131.9" text-anchor="middle" transform="rotate(120 275 131.9)" style="font-size:14px">7B</text>
-      <polygon class="pat back" points="235,155 315,155 275,224.3"/><text class="label" x="275" y="178.1" text-anchor="middle" transform="rotate(120 275 178.1)" style="font-size:14px">6B</text>
-      <polygon class="pat" points="235,155 275,224.3 195,224.3"/><text class="label" x="235" y="201.2" text-anchor="middle" transform="rotate(60 235 201.2)" style="font-size:14px">4F</text>
-      <polygon class="pat" points="235,155 195,224.3 155,155"/><text class="label" x="195" y="178.1" text-anchor="middle" transform="rotate(60 195 178.1)" style="font-size:14px">3F</text>
-      <polygon class="pat back" points="235,155 155,155 195,85.7"/><text class="label" x="195" y="131.9" text-anchor="middle" transform="rotate(0 195 131.9)" style="font-size:14px">1B</text>
+      <polygon class="leaf" points="235,155 195,85.7 275,85.7"/><text class="label" x="235" y="108.8" text-anchor="middle" transform="rotate(180 235 108.8)" style="font-size:14px">9F</text>
+      <polygon class="leaf back" points="235,155 275,85.7 315,155"/><text class="label" x="275" y="131.9" text-anchor="middle" transform="rotate(120 275 131.9)" style="font-size:14px">7B</text>
+      <polygon class="leaf back" points="235,155 315,155 275,224.3"/><text class="label" x="275" y="178.1" text-anchor="middle" transform="rotate(120 275 178.1)" style="font-size:14px">6B</text>
+      <polygon class="leaf" points="235,155 275,224.3 195,224.3"/><text class="label" x="235" y="201.2" text-anchor="middle" transform="rotate(60 235 201.2)" style="font-size:14px">4F</text>
+      <polygon class="leaf" points="235,155 195,224.3 155,155"/><text class="label" x="195" y="178.1" text-anchor="middle" transform="rotate(60 195 178.1)" style="font-size:14px">3F</text>
+      <polygon class="leaf back" points="235,155 155,155 195,85.7"/><text class="label" x="195" y="131.9" text-anchor="middle" transform="rotate(0 195 131.9)" style="font-size:14px">1B</text>
       <line class="tapeEdge" x1="235" y1="155" x2="195" y2="85.7"/>
     </g>
   </g>

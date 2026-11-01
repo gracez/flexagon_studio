@@ -5,11 +5,11 @@ for(const m of Object.values(MODELS)){
  test(`${m.name}: orientation maps preserve sides and transforms`,()=>{
   for(const f of m.faces){assert.equal(new Set(f.orientations.map(o=>JSON.stringify(o.placements))).size,f.orientations.length);const expected=f.orientations[0].placements.map(p=>p.side).sort((a,b)=>a-b);
    for(const o of f.orientations){assert.deepEqual(o.placements.map(p=>p.side).sort((a,b)=>a-b),expected);assert.equal(new Set(o.placements.map(p=>p.side)).size,o.placements.length);
-    for(const p of o.placements){assert.ok(p.side>=0&&p.side<m.patCount*2);const a=placementMatrix(m.shape,p),x=.4,y=.2,X=a[0]*x+a[2]*y+a[4],Y=a[1]*x+a[3]*y+a[5],back=inverse(a,X,Y);assert.ok(Math.abs(back[0]-x)<1e-10);assert.ok(Math.abs(back[1]-y)<1e-10);}
+    for(const p of o.placements){assert.ok(p.side>=0&&p.side<m.leafCount*2);const a=placementMatrix(m.shape,p),x=.4,y=.2,X=a[0]*x+a[2]*y+a[4],Y=a[1]*x+a[3]*y+a[5],back=inverse(a,X,Y);assert.ok(Math.abs(back[0]-x)<1e-10);assert.ok(Math.abs(back[1]-y)<1e-10);}
    }
   }
  });
- test(`${m.name}: print table covers every physical side exactly once`,()=>{const ids=m.printOrder.flatMap(p=>[p.front.side,p.back.side]);assert.equal(ids.length,m.patCount*2);assert.deepEqual([...ids].sort((a,b)=>a-b),Array.from({length:m.patCount*2},(_,i)=>i));});
+ test(`${m.name}: print table covers every physical side exactly once`,()=>{const ids=m.printOrder.flatMap(p=>[p.front.side,p.back.side]);assert.equal(ids.length,m.leafCount*2);assert.deepEqual([...ids].sort((a,b)=>a-b),Array.from({length:m.leafCount*2},(_,i)=>i));});
 }
 
 test('hexahexaflexagon has three two-orientation and three four-orientation faces',()=>{
@@ -26,7 +26,7 @@ test('faces and models own independent placements with complete destination slot
 });
 
 test('square net matches the reference top/underneath labels and covers all 16 sides',()=>{
- assert.equal(MODELS.tetra.patCount,8);
+ assert.equal(MODELS.tetra.leafCount,8);
  assert.deepEqual(TETRA_NET.map(p=>[p.x,p.y]),[[0,4],[0,3],[1,3],[1,2],[2,2],[2,1],[3,1],[3,0]]);
  assert.deepEqual(TETRA_NET.map(p=>[p.topFace,p.underneathFace]),[[1,2],[3,2],[3,4],[1,4],[1,2],[3,2],[3,4],[1,4]]);
  for(let f=1;f<=4;f++){
@@ -46,24 +46,24 @@ test('square glue net has a connected staircase with staggered blank surfaces',(
  assert.equal(layout[0].front,undefined);assert.equal(layout[8].front.side,0);assert.equal(layout[8].back,undefined);assert.deepEqual(layout[0].glueSides,['front']);assert.deepEqual(layout[8].glueSides,['back']);
 });
 
-for(const model of Object.values(MODELS))test(`${model.name}: tape layout has every pat and no glue flap`,()=>{
+for(const model of Object.values(MODELS))test(`${model.name}: tape layout has every leaf and no glue flap`,()=>{
  const layout=printLayout(model,{addGlueFlap:false});
- assert.equal(layout.length,model.patCount);
+ assert.equal(layout.length,model.leafCount);
  assert.ok(layout.every(cell=>!cell.flap));
- assert.deepEqual(layout.map(cell=>cell.pat).sort((a,b)=>a-b),Array.from({length:model.patCount},(_,i)=>i));
+ assert.deepEqual(layout.map(cell=>cell.leaf).sort((a,b)=>a-b),Array.from({length:model.leafCount},(_,i)=>i));
 });
 
 for(const model of Object.values(MODELS))test(`${model.name}: glue end shift preserves all artwork, separates flaps and leaves the base order unchanged`,()=>{
  const before=JSON.stringify(model.printOrder),tape=printLayout(model),glue=printLayout(model,{addGlueFlap:true});
  const core=glue.filter(p=>!p.splitGlue);
  assert.equal(glue.length,tape.length+1+(model.printSplit?1:0));
- const find=(layout,at)=>at==='first'?layout.find(p=>p.chainIndex===0):at==='last'?layout.find(p=>p.chainIndex===model.patCount-1):layout.find(p=>p.chainIndex===model.patCount);
+ const find=(layout,at)=>at==='first'?layout.find(p=>p.chainIndex===0):at==='last'?layout.find(p=>p.chainIndex===model.leafCount-1):layout.find(p=>p.chainIndex===model.leafCount);
  for(const move of model.glueMoves)assert.deepEqual(find(core,move.to.at)[move.to.side],find(tape,move.from.at)[move.from.side]);
  assert.deepEqual(glue.flatMap(p=>[p.front,p.back]).filter(Boolean).map(p=>p.side).sort((a,b)=>a-b),tape.flatMap(p=>[p.front,p.back]).map(p=>p.side).sort((a,b)=>a-b));
  assert.equal(glue.reduce((count,p)=>count+!p.front+!p.back,0),2+(model.printSplit?2:0));
  assert.equal(JSON.stringify(model.printOrder),before);
  // Editing the single base order propagates to both closure modes.
- const move=model.glueMoves[0],sourceIndex=move.from.at==='first'?0:model.patCount-1,sourceSide=move.from.side;
+ const move=model.glueMoves[0],sourceIndex=move.from.at==='first'?0:model.leafCount-1,sourceSide=move.from.side;
  const changed={...model,printOrder:model.printOrder.map((p,i)=>i!==sourceIndex?p:{...p,[sourceSide]:{...p[sourceSide],rotation:Math.PI}})};
  assert.equal(printLayout(changed)[sourceIndex][sourceSide].rotation,Math.PI);
  const changedGlue=printLayout(changed,{addGlueFlap:true}).filter(p=>!p.splitGlue);

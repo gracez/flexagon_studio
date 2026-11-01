@@ -46,11 +46,11 @@ const view=setupCanvasView({canvas:$('#canvas'),wrap:$('.canvas-wrap'),viewport:
 $('#zoomIn').onclick=()=>view.setZoom(view.zoom*1.25);$('#zoomOut').onclick=()=>view.setZoom(view.zoom/1.25);$('#zoomValue').onchange=e=>{const value=+e.target.value;if(Number.isFinite(value)&&value>0)view.setZoom(value/100);else e.target.value=Math.round(view.zoom*100);};$('#fitView').onclick=()=>view.reset();$('#viewRotation').oninput=e=>view.setAngle(+e.target.value);$('#angleDown').onclick=()=>view.setAngle(+$('#viewRotation').value-15);$('#angleUp').onclick=()=>view.setAngle(+$('#viewRotation').value+15);$('#resetAngle').onclick=()=>view.setAngle(0);
 
 function makeCanvas(w=N,h=N){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
-function bank(){return banks[model.id]??=Array.from({length:model.patCount*2},()=>makeCanvas());}
+function bank(){return banks[model.id]??=Array.from({length:model.leafCount*2},()=>makeCanvas());}
 function backgrounds(id=model.id){return faceBackgrounds[id]??=Array(MODELS[id].faces.length).fill('#fffef9');}
 function faceForSide(side){return model.faces.findIndex(f=>f.orientations.some(o=>o.placements.some(p=>p.side===side)));}
 // Reference canvases stay separate from artwork, history, projects, and PDFs.
-// Each sample starts as one symmetric face and is then projected onto its pats.
+// Each sample starts as one symmetric face and is then projected onto its leaves.
 const sampleBanks={};
 const samplePalettes=[
  ['#315b52','#d77a61','#e8c26a','#f6ecd8'],['#526a46','#c78b52','#ead39a','#f5efe1'],
@@ -70,7 +70,7 @@ function sampleFaceArtwork(faceIndex){
   ctx.fillStyle=gold;for(let i=0;i<8;i++){const a=i*Math.PI/4;ctx.beginPath();ctx.arc(Math.cos(a)*38,Math.sin(a)*38,9,0,Math.PI*2);ctx.fill();}
   ctx.fillStyle=ink;ctx.beginPath();ctx.arc(0,0,13,0,Math.PI*2);ctx.fill();
  }else if(model.id==='hexahexa'){
-  // The asymmetric two-color order makes pat rearrangements visible without
+  // The asymmetric two-color order makes leaf rearrangements visible without
   // adding more ornament than the trihexa mandala.
   const colors=[accent,accent,gold,accent,gold,gold];
   ctx.strokeStyle=ink;ctx.lineWidth=8;
@@ -96,26 +96,26 @@ function sampleFaceArtwork(faceIndex){
  return c;
 }
 function buildSampleBank(){
- const result=Array.from({length:model.patCount*2},()=>makeCanvas());
+ const result=Array.from({length:model.leafCount*2},()=>makeCanvas());
  model.faces.forEach((faceDefinition,faceIndex)=>{
   const artwork=sampleFaceArtwork(faceIndex);
   faceDefinition.orientations[0].placements.forEach(p=>{
    const m=placementMatrix(model.shape,p),det=m[0]*m[3]-m[1]*m[2],ctx=result[p.side].getContext('2d');
-   ctx.save();patPath(ctx);ctx.clip();ctx.setTransform(N*m[3]/det,-N*m[1]/det,-N*m[2]/det,N*m[0]/det,N*(m[2]*m[5]-m[3]*m[4])/det,N*(m[1]*m[4]-m[0]*m[5])/det);ctx.drawImage(artwork,0,0);ctx.restore();
+   ctx.save();leafPath(ctx);ctx.clip();ctx.setTransform(N*m[3]/det,-N*m[1]/det,-N*m[2]/det,N*m[0]/det,N*(m[2]*m[5]-m[3]*m[4])/det,N*(m[1]*m[4]-m[0]*m[5])/det);ctx.drawImage(artwork,0,0);ctx.restore();
   });
  });
  return result;
 }
-function samplePat(side){return (sampleBanks[model.id]??=buildSampleBank())[side];}
+function sampleLeaf(side){return (sampleBanks[model.id]??=buildSampleBank())[side];}
 function placements(){return model.faces[face].orientations[orientation].placements;}
 function polygon(ctx,points){ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();}
-function patPath(ctx){polygon(ctx,(model.shape==='square'?SQUARE:TRIANGLE).map(([x,y])=>[x*N,y*N]));}
+function leafPath(ctx){polygon(ctx,(model.shape==='square'?SQUARE:TRIANGLE).map(([x,y])=>[x*N,y*N]));}
 function renderFace(target,f,o,withGuides=false,labels=false){
  const isPreview=target.classList.contains('orientation-preview'),ctx=target.getContext('2d',isPreview?undefined:{desynchronized:true}),scale=target.width/SIZE;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,target.width,target.height);ctx.scale(scale,scale);
  if(isPreview){const previewScale=model.shape==='square'?1.72:1.2;ctx.translate(SIZE/2,SIZE/2);ctx.scale(previewScale,previewScale);ctx.translate(-SIZE/2,-SIZE/2);}
  model.faces[f].orientations[o].placements.forEach(p=>{
-  const m=placementMatrix(model.shape,p);ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);patPath(ctx);ctx.clip();const background=backgrounds()[f];if(background){ctx.fillStyle=background;ctx.fillRect(0,0,N,N);}if(sampleDesign){ctx.globalAlpha=.85;ctx.drawImage(samplePat(p.side),0,0);ctx.globalAlpha=1;}ctx.drawImage(bank()[p.side],0,0);ctx.restore();
-  if(withGuides){ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);patPath(ctx);ctx.restore();ctx.strokeStyle='#a5ad9660';ctx.lineWidth=1;ctx.setLineDash([4,5]);ctx.stroke();ctx.setLineDash([]);}
+  const m=placementMatrix(model.shape,p);ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);leafPath(ctx);ctx.clip();const background=backgrounds()[f];if(background){ctx.fillStyle=background;ctx.fillRect(0,0,N,N);}if(sampleDesign){ctx.globalAlpha=.85;ctx.drawImage(sampleLeaf(p.side),0,0);ctx.globalAlpha=1;}ctx.drawImage(bank()[p.side],0,0);ctx.restore();
+  if(withGuides){ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);leafPath(ctx);ctx.restore();ctx.strokeStyle='#a5ad9660';ctx.lineWidth=1;ctx.setLineDash([4,5]);ctx.stroke();ctx.setLineDash([]);}
   if(labels){const cy=model.shape==='square'?.5:Math.sqrt(3)/6,x=m[0]*.5+m[2]*cy+m[4],y=m[1]*.5+m[3]*cy+m[5];ctx.fillStyle='#617450';ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText(`${Math.floor(p.side/2)+1}${p.side%2?'B':'F'}`,x,y);}
  });
 }
@@ -131,7 +131,7 @@ function draw(){frame=0;renderFace($('#canvas'),face,orientation,true,false);if(
 function requestDraw(){if(!frame)frame=requestAnimationFrame(draw);}
 function updateUI(){
  const orientationCount=model.faces.reduce((total,currentFace)=>total+currentFace.orientations.length,0);
- $('#model').value=model.id;$('#modelInfo').textContent=`${model.faces.length} faces · ${orientationCount} orientations · ${model.patCount} double-sided pats`;
+ $('#model').value=model.id;$('#modelInfo').textContent=`${model.faces.length} faces · ${orientationCount} orientations · ${model.leafCount} double-sided leaves`;
  $('#faceTitle').textContent=model.faces[face].name;$('#faceDot').style.background=model.faces[face].color;$('#orientationTitle').textContent=`Orientation ${model.faces[face].orientations[orientation].name}`;
  const background=backgrounds()[face];$('#backgroundTransparent').checked=!background;$('#backgroundColor').disabled=!background;$('#backgroundColor').value=background||'#fffef9';
  $('#previews').innerHTML=model.faces.map((f,fi)=>`<div class="face-group"><div class="face-label"><span><b class="face-dot" style="background:${f.color}"></b>${f.name}</span><span>${f.orientations.length} orientations</span></div><div class="orientation-grid">${f.orientations.map((o,oi)=>`<button class="preview ${fi===face&&oi===orientation?'selected':''}" data-face="${fi}" data-orientation="${oi}" aria-label="${f.name}, orientation ${o.name}" aria-pressed="${fi===face&&oi===orientation}"><canvas class="orientation-preview" width="360" height="360" data-face="${fi}" data-orientation="${oi}"></canvas>Orientation ${o.name}</button>`).join('')}</div></div>`).join('');draw();
@@ -152,11 +152,11 @@ function reverseHistory(from,to){
 function undo(){reverseHistory(history,future);}
 function redo(){reverseHistory(future,history);}
 function clipFace(ctx){const pts=model.shape==='square'?[[180,180],[540,180],[540,540],[180,540]]:Array.from({length:6},(_,i)=>[360+270*Math.cos(HEXAGON_START_ANGLE+i*Math.PI/3),360+270*Math.sin(HEXAGON_START_ANGLE+i*Math.PI/3)]);polygon(ctx,pts);ctx.clip();}
-// Project one face-space layer back into every physical pat used by this view.
-function applyLayer(layer,erase=false,transient=false){placements().forEach(p=>{const m=placementMatrix(model.shape,p),det=m[0]*m[3]-m[1]*m[2],a=m[3]/det,b=-m[1]/det,c=-m[2]/det,d=m[0]/det,e=(m[2]*m[5]-m[3]*m[4])/det,f=(m[1]*m[4]-m[0]*m[5])/det,ctx=bank()[p.side].getContext('2d');ctx.save();patPath(ctx);ctx.clip();ctx.globalCompositeOperation=erase?'destination-out':'source-over';ctx.setTransform(N*a,N*b,N*c,N*d,N*e,N*f);ctx.drawImage(layer,0,0);ctx.restore();});if(!transient)markDirty();requestDraw();}
+// Project one face-space layer back into every physical leaf used by this view.
+function applyLayer(layer,erase=false,transient=false){placements().forEach(p=>{const m=placementMatrix(model.shape,p),det=m[0]*m[3]-m[1]*m[2],a=m[3]/det,b=-m[1]/det,c=-m[2]/det,d=m[0]/det,e=(m[2]*m[5]-m[3]*m[4])/det,f=(m[1]*m[4]-m[0]*m[5])/det,ctx=bank()[p.side].getContext('2d');ctx.save();leafPath(ctx);ctx.clip();ctx.globalCompositeOperation=erase?'destination-out':'source-over';ctx.setTransform(N*a,N*b,N*c,N*d,N*e,N*f);ctx.drawImage(layer,0,0);ctx.restore();});if(!transient)markDirty();requestDraw();}
 // Replace the current face from libmypaint's complete stroke surface. Applying
 // individual translucent batches would darken the seams where batches overlap.
-function replaceFaceArtwork(layer,transient=false){placements().forEach(p=>{const m=placementMatrix(model.shape,p),det=m[0]*m[3]-m[1]*m[2],a=m[3]/det,b=-m[1]/det,c=-m[2]/det,d=m[0]/det,e=(m[2]*m[5]-m[3]*m[4])/det,f=(m[1]*m[4]-m[0]*m[5])/det,ctx=bank()[p.side].getContext('2d');ctx.save();patPath(ctx);ctx.clip();ctx.globalCompositeOperation='copy';ctx.setTransform(N*a,N*b,N*c,N*d,N*e,N*f);ctx.drawImage(layer,0,0);ctx.restore();});if(!transient)markDirty();requestDraw();}
+function replaceFaceArtwork(layer,transient=false){placements().forEach(p=>{const m=placementMatrix(model.shape,p),det=m[0]*m[3]-m[1]*m[2],a=m[3]/det,b=-m[1]/det,c=-m[2]/det,d=m[0]/det,e=(m[2]*m[5]-m[3]*m[4])/det,f=(m[1]*m[4]-m[0]*m[5])/det,ctx=bank()[p.side].getContext('2d');ctx.save();leafPath(ctx);ctx.clip();ctx.globalCompositeOperation='copy';ctx.setTransform(N*a,N*b,N*c,N*d,N*e,N*f);ctx.drawImage(layer,0,0);ctx.restore();});if(!transient)markDirty();requestDraw();}
 const brushLayer=makeCanvas(SIZE,SIZE),brushSurface=makeCanvas(SIZE,SIZE);
 let brushEngine=null,lastEngineTime=0;
 createMyPaintEngine(brushLayer,brushSurface).then(engine=>{
@@ -164,7 +164,7 @@ createMyPaintEngine(brushLayer,brushSurface).then(engine=>{
 }).catch(error=>{console.error(error);$('#canvas').dataset.brushEngine='error';$('#brushEngineStatus').textContent='MyPaint failed to load';toast('MyPaint could not load. Reload the page to retry.');});
 function readArtwork(){
  const result=makeCanvas(SIZE,SIZE),ctx=result.getContext('2d');
- for(const p of placements()){const m=placementMatrix(model.shape,p);ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);patPath(ctx);ctx.clip();ctx.drawImage(bank()[p.side],0,0);ctx.restore();}
+ for(const p of placements()){const m=placementMatrix(model.shape,p);ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);leafPath(ctx);ctx.clip();ctx.drawImage(bank()[p.side],0,0);ctx.restore();}
  return result;
 }
 function prepareBrush(e){
@@ -291,7 +291,7 @@ $('#backgroundColor').onchange=e=>setFaceBackground(e.target.value);
 $('#backgroundTransparent').onchange=e=>setFaceBackground(e.target.checked?null:$('#backgroundColor').value);
 $('#applyBackgroundAll').onclick=()=>{const value=selectedBackground();if(backgrounds().every(background=>background===value))return;rememberBackground();backgrounds().fill(value);markDirty();requestDraw();toast('Background applied to every face in this flexagon.');};
 function showDialog(html){$('#dialog').innerHTML=html;$('#dialog').showModal();$('#dialog').querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$('#dialog').close());}
-$('#clear').onclick=()=>{lasso.clear();showDialog('<h2>A fresh start?</h2><p>Clear the pat sides used by this face. Every orientation using those sides will update. You can undo this.</p><div class="actions"><button class="btn" data-close>Keep artwork</button><button class="btn primary" id="confirmClear">Clear face</button></div>');$('#confirmClear').onclick=()=>{remember();placements().forEach(p=>bank()[p.side].getContext('2d').clearRect(0,0,N,N));markDirty();requestDraw();$('#dialog').close();};};
+$('#clear').onclick=()=>{lasso.clear();showDialog('<h2>A fresh start?</h2><p>Clear the leaf sides used by this face. Every orientation using those sides will update. You can undo this.</p><div class="actions"><button class="btn" data-close>Keep artwork</button><button class="btn primary" id="confirmClear">Clear face</button></div>');$('#confirmClear').onclick=()=>{remember();placements().forEach(p=>bank()[p.side].getContext('2d').clearRect(0,0,N,N));markDirty();requestDraw();$('#dialog').close();};};
 $('#importImage').onclick=()=>{selectTool('ink');$('#imageFile').click();};$('#imageFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;activity++;try{if(file.size>30*1024*1024)throw Error('Choose an image under 30 MB.');pendingImage=await createImageBitmap(file);imageX=imageY=360;imageScale=1;imageRotation=0;$('#imageScale').value=100;$('#imageRotation').value=0;$('#imageControls').classList.remove('hidden');requestDraw();}catch(err){toast('Could not import image. '+err.message);}e.target.value='';};
 function drawImageLayer(ctx){ctx.save();ctx.translate(imageX,imageY);ctx.rotate(imageRotation);const s=Math.min(430/pendingImage.width,430/pendingImage.height)*imageScale;ctx.drawImage(pendingImage,-pendingImage.width*s/2,-pendingImage.height*s/2,pendingImage.width*s,pendingImage.height*s);ctx.restore();}
 $('#imageScale').oninput=e=>{imageScale=+e.target.value/100;requestDraw();};$('#imageRotation').oninput=e=>{imageRotation=+e.target.value*Math.PI/180;requestDraw();};
@@ -313,13 +313,13 @@ async function captureLocalProject(){
  return {...metadata,artwork};
 }
 async function decodeArtwork(images,modelId){
- if(modelId==='tetra'&&Array.isArray(images)&&images.length===32)throw Error('This project uses the obsolete 16-pat square template. Keep the original file; it cannot be safely remapped automatically to the corrected eight-pat net.');
- if(!Array.isArray(images)||images.length!==MODELS[modelId].patCount*2)throw Error('Invalid pat artwork.');
+ if(modelId==='tetra'&&Array.isArray(images)&&images.length===32)throw Error('This project uses the obsolete 16-leaf square template. Keep the original file; it cannot be safely remapped automatically to the corrected eight-leaf net.');
+ if(!Array.isArray(images)||images.length!==MODELS[modelId].leafCount*2)throw Error('Invalid leaf artwork.');
  return Promise.all(images.map(async source=>{
   let image;
   if(source instanceof Blob&&source.type==='image/png')image=await createImageBitmap(source);
   else if(typeof source==='string'&&source.startsWith('data:image/png;base64,'))image=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('Invalid image.'));im.src=source;});
-  else throw Error('Invalid pat image.');
+  else throw Error('Invalid leaf image.');
   const c=makeCanvas();c.getContext('2d').drawImage(image,0,0,N,N);image.close?.();return c;
  }));
 }
@@ -373,7 +373,7 @@ $('#export').onclick=()=>{
  if(pendingImage){toast('Place or cancel your image before exporting.');return;}
  const guideAction=assemblyGuideFor(model.id,{addGlueFlaps:true})?'<button class="btn" id="downloadAssemblyGuide">Download assembly guide</button>':'';
  const closureHint=model.printSplit?'Off: join the ends and split strips with flexible tape.':'Off: join the ends with flexible tape.';
- showDialog(`<h2>Export PDF</h2><p><strong>Print:</strong> landscape · double-sided · flip on short edge · actual size (100%).</p><label>Paper size <select id="paper"><option value="a3">A3 landscape · larger artwork</option><option value="a4">A4 landscape</option><option value="letter" selected>US Letter landscape</option></select></label><label><input id="addGlueFlap" type="checkbox" checked> Include glue flaps</label><p class="hint">${closureHint}</p><label><input id="exportLabels" type="checkbox"> Include pat IDs</label><p class="hint">Test the template on plain paper first. You can also print each side separately and glue them together.</p><div class="actions"><button class="btn" data-close>Cancel</button>${guideAction}<button class="btn primary" id="downloadPDF">Download 2-page PDF</button></div>`);
+ showDialog(`<h2>Export PDF</h2><p><strong>Print:</strong> landscape · double-sided · flip on short edge · actual size (100%).</p><label>Paper size <select id="paper"><option value="a3">A3 landscape · larger artwork</option><option value="a4">A4 landscape</option><option value="letter" selected>US Letter landscape</option></select></label><label><input id="addGlueFlap" type="checkbox" checked> Include glue flaps</label><p class="hint">${closureHint}</p><label><input id="exportLabels" type="checkbox"> Include leaf IDs</label><p class="hint">Test the template on plain paper first. You can also print each side separately and glue them together.</p><div class="actions"><button class="btn" data-close>Cancel</button>${guideAction}<button class="btn primary" id="downloadPDF">Download 2-page PDF</button></div>`);
  const glueFlaps=$('#addGlueFlap'),guideButton=$('#downloadAssemblyGuide');
  const updateGuideAction=()=>{
   if(!guideButton)return;
@@ -393,7 +393,7 @@ $('#export').onclick=()=>{
 async function exportPDF(format,labels,addGlueFlap){
  const {jsPDF}=await import('jspdf');
  const pdf=new jsPDF({orientation:'landscape',unit:'mm',format}),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight(),layout=printLayout(model,{addGlueFlap});
- const printArtwork=sampleDesign?bank().map((artwork,side)=>{const c=makeCanvas(),ctx=c.getContext('2d');ctx.globalAlpha=.85;ctx.drawImage(samplePat(side),0,0);ctx.globalAlpha=1;ctx.drawImage(artwork,0,0);return c;}):bank();
+ const printArtwork=sampleDesign?bank().map((artwork,side)=>{const c=makeCanvas(),ctx=c.getContext('2d');ctx.globalAlpha=.85;ctx.drawImage(sampleLeaf(side),0,0);ctx.globalAlpha=1;ctx.drawImage(artwork,0,0);return c;}):bank();
  const points=layout.flatMap(cell=>cell.points),minX=Math.min(...points.map(p=>p[0])),minY=Math.min(...points.map(p=>p[1])),netWidth=Math.max(...points.map(p=>p[0]))-minX,netHeight=Math.max(...points.map(p=>p[1]))-minY;
  // Put the instructions beside the net when that produces a larger template.
  // Very wide nets keep compact top/bottom bands so the text never costs useful scale.
@@ -403,13 +403,13 @@ async function exportPDF(format,labels,addGlueFlap){
  const useRail=pdfLayout.mode==='side'||(pdfLayout.mode==='auto'&&railScale>bandScale),side=useRail?railScale:bandScale;
  const cutting=model.printSplit
   ? addGlueFlap?'Solid lines: cut outline. Dashed lines: crease. Glue the overlapping split tab to make one long strip; use the end flap after folding.':'Solid lines: cut outline. Dashed lines: crease. Join the two strips with flexible tape.'
-  : addGlueFlap?'Solid lines: cut outline. Dashed lines: crease. Blank end pats: glue flaps.':'Solid lines: cut outline. Dashed lines: crease. Join the ends with tape as a flexible joint.';
+  : addGlueFlap?'Solid lines: cut outline. Dashed lines: crease. Blank end leaves: glue flaps.':'Solid lines: cut outline. Dashed lines: crease. Join the ends with tape as a flexible joint.';
  const netAreaWidth=useRail?w-margin*2-railWidth-railGap:w;
  const left=useRail?margin+(netAreaWidth-netWidth*side)/2:(w-netWidth*side)/2;
  const top=useRail?margin+(h-margin*2-netHeight*side)/2:29+(h-58-netHeight*side)/2;
  for(let page=0;page<2;page++){
   if(page)pdf.addPage();
-  if(!useRail){pdf.setTextColor(49,79,64);pdf.setFontSize(14);pdf.text('flexagon studio / '+model.name,12,12);pdf.setFontSize(9);pdf.text(page?'BACK':'FRONT',12,20);pdf.setTextColor(120,125,110);pdf.setFontSize(7);pdf.text(`Print actual size (100%)  |  Pat edge ${side.toFixed(1)} mm`,12,25);}
+  if(!useRail){pdf.setTextColor(49,79,64);pdf.setFontSize(14);pdf.text('flexagon studio / '+model.name,12,12);pdf.setFontSize(9);pdf.text(page?'BACK':'FRONT',12,20);pdf.setTextColor(120,125,110);pdf.setFontSize(7);pdf.text(`Print actual size (100%)  |  Leaf edge ${side.toFixed(1)} mm`,12,25);}
   const resolution=6,c=makeCanvas(Math.round(w*resolution),Math.round(h*resolution)),ctx=c.getContext('2d');ctx.scale(resolution,resolution);const edges=new Map();
   for(const entry of layout){
    let p=entry.points.map(([x,y])=>[left+(x-minX)*side,top+(y-minY)*side]);
@@ -429,7 +429,7 @@ async function exportPDF(format,labels,addGlueFlap){
    const railX=railSide==='left'?margin:w-margin-railWidth,textX=railX+4,textWidth=railWidth-8;
    const showDetails=!page||pdfLayout.repeatInstructionsOnBack!==false;
    pdf.setTextColor(49,79,64);
-   if(showDetails){pdf.setFontSize(10);pdf.text(pdf.splitTextToSize('flexagon studio / '+model.name,textWidth),textX,16);pdf.setFontSize(9);pdf.text(page?'BACK':'FRONT',textX,32);pdf.setTextColor(120,125,110);pdf.setFontSize(7);pdf.text(pdf.splitTextToSize(`Print actual size (100%)\nPat edge ${side.toFixed(1)} mm`,textWidth),textX,42);
+   if(showDetails){pdf.setFontSize(10);pdf.text(pdf.splitTextToSize('flexagon studio / '+model.name,textWidth),textX,16);pdf.setFontSize(9);pdf.text(page?'BACK':'FRONT',textX,32);pdf.setTextColor(120,125,110);pdf.setFontSize(7);pdf.text(pdf.splitTextToSize(`Print actual size (100%)\nLeaf edge ${side.toFixed(1)} mm`,textWidth),textX,42);
     pdf.setDrawColor(85,102,72);pdf.setLineWidth(.25);pdf.line(textX+4,57,textX+4,107);pdf.line(textX+2,57,textX+6,57);pdf.line(textX+2,107,textX+6,107);pdf.text('50 mm scale check',textX+10,84);
     pdf.text(pdf.splitTextToSize(cutting,textWidth),textX,124);pdf.text(pdf.splitTextToSize('Print double-sided in landscape. Flip on short edge. Use Actual size / 100% and turn off page scaling. Alternatively, print separately and glue the sides together after cutting them out.',textWidth),textX,157);
    }else{pdf.setFontSize(9);pdf.text('BACK',textX,16);}

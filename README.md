@@ -1,6 +1,6 @@
 # flexagon studio
 
-A browser-only painting studio with live recombined pat previews, image import,
+A browser-only painting studio with live recombined leaf previews, image import,
 project downloads, and front/back PDF templates. No server or account required.
 
 ## Run
@@ -57,7 +57,7 @@ Moves and pastes update all orientations and support undo/redo. Selection and
 clipboard state are temporary and are not saved with a project.
 
 Import PNG, WebP, or JPEG; alpha is preserved. Drag, scale, and rotate the image,
-then Place to commit it into pat artwork. Image placement becomes rasterized;
+then Place to commit it into leaf artwork. Image placement becomes rasterized;
 there is no editable image layer after placement. Undo restores prior artwork.
 History stores the last 16 edits for the current model and resets on model change.
 Model artwork survives switching models. Save project downloads all model banks;
@@ -75,7 +75,7 @@ against a real paper model before final production.
 
 Edit `src/models.js`, independently of UI and brush code:
 
-- `patCount`: physical double-sided pats, excluding the glue flap.
+- `leafCount`: physical double-sided leaves, excluding the glue flap.
 - `FACE_MAPS`: separate literal tables for `tetra`, `trihexa`, and `hexahexa`, each
   containing its own named faces and orientations.
 - `orientation(name, sideIds, rotations)`: one absolute side ID and one rotation
@@ -83,10 +83,10 @@ Edit `src/models.js`, independently of UI and brush code:
   [0, 0, 0, 0, 0, 0])` places side 2 in slot 0, side 3 in slot 1, etc.
   Change any face independently; models do not share orientation rules.
 - `faces[].orientations[].placements`: the resulting `{side, slot, rotation}` records.
-  `side = patIndex * 2 + (back ? 1 : 0)`. Rotations use radians.
+  `side = leafIndex * 2 + (back ? 1 : 0)`. Rotations use radians.
   All orientations of a face currently reuse its side IDs with draft permutations.
 - `slotPolygon` and `placementMatrix`: geometric face assembly.
-- `printOrder`: ordered physical pats with explicit `front` and `back` side IDs
+- `printOrder`: ordered physical leaves with explicit `front` and `back` side IDs
   and rotations. Replace the generated draft array with literal records as needed.
 - `TETRA_NET`: eight stair-step square coordinates with circled/top and
   uncircled/underneath face numbers from the supplied reference.
@@ -95,10 +95,10 @@ Edit `src/models.js`, independently of UI and brush code:
   reflects the back-sheet positions across the full page for landscape,
   short-edge duplex alignment. Artwork is
   drawn with a positive-orientation local transform so its contents are never
-  mirrored; configured pat rotations still apply.
+  mirrored; configured leaf rotations still apply.
 
 The square model now follows the supplied eight-square reference: eight
-physical double-sided pats (16 surfaces), four faces, and two provisional views
+physical double-sided leaves (16 surfaces), four faces, and two provisional views
 per face. Starting at the bottom-left and moving along the stair-step chain,
 the top/underneath pairs are 1/2, 3/2, 3/4, 1/4, repeated twice. The traversal
 is 1 → 2 → 3 → 4 → 1. When glue is enabled, an extra square extends the upper-right end.
@@ -107,14 +107,14 @@ the exact slot permutations or artwork rotations in the folded views. Those
 remain provisional in `FACE_MAPS.tetra` and the net's rotation fields. The user
 can replace these manually. Older 32-surface square projects are rejected with
 a specific message rather than silently losing or misassigning their artwork.
-Trihexaflexagon uses 9 pats, 3 faces, and 2 draft orientations per face.
-Hexahexaflexagon uses 18 pats, 6 faces, and orientation counts 4/4/4/2/2/2.
-Its printable net is split after pat 9 into two balanced rows so the pats can
+Trihexaflexagon uses 9 leaves, 3 faces, and 2 draft orientations per face.
+Hexahexaflexagon uses 18 leaves, 6 faces, and orientation counts 4/4/4/2/2/2.
+Its printable net is split after leaf 9 into two balanced rows so the leaves can
 print substantially larger. With glue flaps enabled, one additional overlapping
 triangle reconnects the rows before folding; the original closure flap remains.
 With glue flaps disabled, the two rows are rejoined with flexible tape.
 
-The renderer uses a 512×512 transparent canonical canvas per pat side. Face-space
+The renderer uses a 512×512 transparent canonical canvas per leaf side. Face-space
 brush marks are transformed back to these canvases with inverse affine mappings.
 Every preview reads the same bank, so rearrangement is immediate. PDF raster
 artwork is composited at 152 dpi (6 pixels/mm); page labels and the scale check
@@ -143,7 +143,7 @@ unverified. Brush behavior and exports should also be checked in a real browser.
 
 US Letter landscape is the default. “Include glue flaps” is on by default. With it
 off, the
-base template has no extra pat and its ends are joined with tape as a flexible
+base template has no extra leaf and its ends are joined with tape as a flexible
 joint. Tetraflexagon and hexahexaflexagon move the first front image to the
 added front endpoint without crossing print sides. Trihexaflexagon instead
 moves 1B to the added front endpoint. This keeps every front position filled
@@ -166,7 +166,7 @@ project IDs `tri` and `hexa` to the new names; new downloads use the new IDs.
   that fits the available canvas viewport. Fit mode automatically adapts to
   window, toolbar, and divider resizing. Manual zoom/pan/rotation exits Fit mode
   and preserves those settings until Fit is clicked again. These view
-  transforms do not alter any pat artwork or printed output. Pointer positions
+  transforms do not alter any leaf artwork or printed output. Pointer positions
   are inverse-transformed so painting, lasso, image placement, and picking remain
   aligned. Zoom-in/out buttons and +/− shortcuts are also available.
 - Eyedropper (I), or Alt-click with a drawing tool, samples actual artwork under

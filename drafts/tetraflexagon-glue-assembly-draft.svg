@@ -39,7 +39,7 @@
     <text class="stepNumber" x="40" y="43">1</text>
     <text class="step" x="70" y="43">PRE-FOLD THE STAIRCASE</text>
     <text class="caption" x="40" y="99">Back side up.</text>
-    <!-- Actual eight-pat staircase, numbered from lower left to upper right. -->
+    <!-- Actual eight-leaf staircase, numbered from lower left to upper right. -->
     <g transform="translate(212 185)">
       <rect class="b ink" x="276" y="320" width="92" height="92"/><text class="label" x="322" y="374" text-anchor="middle">1B</text>
       <rect class="b ink" x="276" y="228" width="92" height="92"/><text class="label" x="322" y="282" text-anchor="middle">2B</text>

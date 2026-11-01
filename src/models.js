@@ -1,8 +1,8 @@
 /**
  * EXPERIMENTAL FOLDING TABLES — edit this file to correct physical geometry.
- * Each placement identifies a physical pat SIDE, its slot, and local rotation.
+ * Each placement identifies a physical leaf SIDE, its slot, and local rotation.
  * Rotations are in radians. Orientations deliberately reuse the same side IDs.
- * printOrder is independent of face layout: each item is one physical pat,
+ * printOrder is independent of face layout: each item is one physical leaf,
  * with explicit front/back side IDs and rotations. PDF page geometry is kept
  * separately in PDF_LAYOUTS below so each model can be tuned independently.
  * Square net and face memberships transcribed from the supplied eight-square
@@ -127,14 +127,14 @@ export const FACE_MAPS = {
 };
 
 const colors = ['#d76c49', '#598675', '#7183ba', '#cba34e', '#a47797', '#5b9ba5'];
-function model(id, name, shape, patCount) {
+function model(id, name, shape, leafCount) {
   return {
-    id, name, shape, patCount,
+    id, name, shape, leafCount,
     faces: FACE_MAPS[id].map((face, index) => ({ ...face, color: colors[index] })),
     experimental: true,
     // Independent draft print order. Correct against a physical folding template.
-    printOrder: Array.from({ length: patCount }, (_, i) => ({
-      pat: i,
+    printOrder: Array.from({ length: leafCount }, (_, i) => ({
+      leaf: i,
       front: { side: i * 2, rotation: 0 },
       back: { side: i * 2 + 1, rotation: 0 },
     })),
@@ -177,7 +177,7 @@ export const PDF_LAYOUTS = {
   },
 };
 
-// Physical pat indices run from the lower-left end to the upper-right end.
+// Physical leaf indices run from the lower-left end to the upper-right end.
 // front = circled/top numbers; back = uncircled/underneath numbers.
 // Artwork rotation on the net is provisional until folded views are supplied.
 export const TETRA_NET = [
@@ -190,16 +190,16 @@ export const TETRA_NET = [
   { x: 3, y: 1, topFace: 3, underneathFace: 4 },
   { x: 3, y: 0, topFace: 1, underneathFace: 4 },
 ];
-MODELS.tetra.printOrder = TETRA_NET.map((cell, pat) => ({
-  pat, x: cell.x, y: cell.y,
-  front: { side: pat * 2, rotation: 0, face: cell.topFace },
-  back: { side: pat * 2 + 1, rotation: 0, face: cell.underneathFace },
+MODELS.tetra.printOrder = TETRA_NET.map((cell, leaf) => ({
+  leaf, x: cell.x, y: cell.y,
+  front: { side: leaf * 2, rotation: 0, face: cell.topFace },
+  back: { side: leaf * 2 + 1, rotation: 0, face: cell.underneathFace },
 }));
 MODELS.tetra.glueFlap = { x: 4, y: 0 }; // Extension at the upper-right endpoint.
 MODELS.tetra.traversal = [1, 2, 3, 4, 1];
 MODELS.tetra.orientationStatus = 'unverified';
 // Glue closure keeps artwork on its original print side. `first` refers to the
-// first original pat and `cap` is the added endpoint pat. Moving F1 to the cap
+// first original leaf and `cap` is the added endpoint leaf. Moving F1 to the cap
 // leaves a front flap at the start and a back flap at the added endpoint.
 MODELS.tetra.glueMoves = [
   { from: { at: 'first', side: 'front' }, to: { at: 'cap', side: 'front' } },
@@ -212,7 +212,7 @@ MODELS.trihexa.glueMoves = [
 MODELS.hexahexa.glueMoves = [
   { from: { at: 'first', side: 'front' }, to: { at: 'cap', side: 'front' } },
 ];
-// The 18-pat hexahexaflexagon prints as two balanced strips. When glue is
+// The 18-leaf hexahexaflexagon prints as two balanced strips. When glue is
 // enabled, a separate overlapping tab reconnects the strips before folding.
 // On the back sheet, 10B moves to that upper tab and its original position
 // becomes the corresponding glue panel. This move remains model-specific;
@@ -225,7 +225,7 @@ MODELS.hexahexa.printSplit = {
   ],
 };
 
-// Print polygons in units of one pat edge. Base ordering is shared by both
+// Print polygons in units of one leaf edge. Base ordering is shared by both
 // closure modes; the optional glue step below never mutates model.printOrder.
 function trianglePrintPoints(index) {
   const x = index / 2, h = Math.sqrt(3) / 2;
@@ -285,7 +285,7 @@ export function applyGlueEndShift(baseLayout, cap, moves = []) {
 function splitTriangleLayout(layout, { after, rowGap, surfaceMoves = [] }, addGlueFlap) {
   let entries = layout;
   if (addGlueFlap) {
-    // This triangle overlaps the first pat of row two when the strips join.
+    // This triangle overlaps the first leaf of row two when the strips join.
     const splitTab = {
       chainIndex: after,
       points: trianglePrintPoints(after),

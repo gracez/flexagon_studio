@@ -39,7 +39,7 @@
     <text class="stepNumber" x="40" y="43">1</text>
     <text class="step" x="70" y="43">PRE-FOLD THE STAIRCASE</text>
     <text class="caption" x="40" y="99">Back side up.</text>
-    <!-- Actual eight-pat staircase, numbered from lower left to upper right. -->
+    <!-- Actual eight-leaf staircase, numbered from lower left to upper right. -->
     <g transform="translate(138 185)">
       <rect class="b ink" x="276" y="320" width="92" height="92"/><text class="label" x="322" y="374" text-anchor="middle">1B</text>
       <rect class="b ink" x="276" y="228" width="92" height="92"/><text class="label" x="322" y="282" text-anchor="middle">2B</text>
@@ -86,7 +86,7 @@
     <g transform="translate(22 122) scale(1.32)">
     <rect class="f ink" x="0" y="36" width="78" height="76"/><text class="label" x="39" y="80" text-anchor="middle" style="font-size:20px">6F</text>
     <rect class="b ink" x="78" y="36" width="78" height="76"/>
-    <!-- The red edge belongs to the lower pat, behind the curl and upper surface. -->
+    <!-- The red edge belongs to the lower leaf, behind the curl and upper surface. -->
     <line x1="156" y1="36" x2="156" y2="112" stroke="#c76c4b" stroke-width="4" stroke-linecap="round"/>
     <!-- 7F remains flat except for a conventional lift at its bottom-right corner. -->
     <path d="M78 36H156C156 52 145 61 134 71L114 90C103 101 89 112 78 112Z" fill="#e7eee1"/>
@@ -103,7 +103,7 @@
     <!-- Left end: mirrored handling exposes 1B beneath the lifted 2F. -->
     <g transform="translate(450 122) scale(1.32)">
     <rect class="b ink" x="10" y="33" width="78" height="76"/>
-    <!-- The red edge belongs to the lower pat, behind the curl and upper surface. -->
+    <!-- The red edge belongs to the lower leaf, behind the curl and upper surface. -->
     <line x1="10" y1="33" x2="10" y2="109" stroke="#c76c4b" stroke-width="4" stroke-linecap="round"/>
     <rect class="f ink" x="88" y="33" width="78" height="76"/><text class="label" x="127" y="77" text-anchor="middle" style="font-size:20px">3F</text>
     <!-- 2F uses the exact rotated corner lift at its top-left corner. -->

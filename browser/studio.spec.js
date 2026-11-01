@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
-test('paint shares pats, undo works, projects round-trip and PDF has two pages',async({page})=>{
+test('paint shares leaves, undo works, projects round-trip and PDF has two pages',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');
  await expect(page.locator('#canvas')).toHaveAttribute('data-brush-engine','libmypaint');
  await expect(page.locator('.preview')).toHaveCount(18);
@@ -69,7 +69,7 @@ test('glue option exports two sheets for every model',async({page})=>{
   await page.locator('#model').selectOption(model);await page.locator('#export').click();
   await expect(page.locator('#paper')).toHaveValue('letter');await page.locator('#addGlueFlap').check();
   const downloaded=page.waitForEvent('download');await page.locator('#downloadPDF').click();const pdf=await downloaded;
-  const data=(await readFile(await pdf.path())).toString('latin1');expect(data).toContain('/Count 2');expect(data).toContain('Blank end pats: glue flaps');
+  const data=(await readFile(await pdf.path())).toString('latin1');expect(data).toContain('/Count 2');expect(data).toContain('Blank end leaves: glue flaps');
   await expect(page.locator('#dialog')).not.toBeVisible();
  }
 });

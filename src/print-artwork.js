@@ -1,6 +1,6 @@
 // Sheet geometry may be reflected to align front/back cutouts. Artwork must
 // retain its handedness, so choose a positive-orientation local frame before
-// applying the pat's explicitly configured rotation.
+// applying the leaf's explicitly configured rotation.
 export function printArtworkMatrix(shape, points, rotation = 0) {
   let p = points;
   const cross = (p[1][0]-p[0][0])*(p[2][1]-p[0][1])
