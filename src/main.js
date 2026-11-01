@@ -371,7 +371,7 @@ $('#mappingInfo').onclick=()=>showDialog('<h2>Help</h2><h3>Shortcuts</h3><div cl
 $('#export').onclick=()=>{
  lasso.commitTransform();
  if(pendingImage){toast('Place or cancel your image before exporting.');return;}
- const guideAction=model.id==='tetra'?'<button class="btn" id="downloadAssemblyGuide">Download assembly guide</button>':'';
+ const guideAction=assemblyGuideFor(model.id,{addGlueFlaps:true})?'<button class="btn" id="downloadAssemblyGuide">Download assembly guide</button>':'';
  const closureHint=model.printSplit?'Off: join the ends and split strips with flexible tape.':'Off: join the ends with flexible tape.';
  showDialog(`<h2>Export PDF</h2><p><strong>Print:</strong> landscape · double-sided · flip on short edge · actual size (100%).</p><label>Paper size <select id="paper"><option value="a3">A3 landscape · larger artwork</option><option value="a4">A4 landscape</option><option value="letter" selected>US Letter landscape</option></select></label><label><input id="addGlueFlap" type="checkbox" checked> Include glue flaps</label><p class="hint">${closureHint}</p><label><input id="exportLabels" type="checkbox"> Include pat IDs</label><p class="hint">Test the template on plain paper first. You can also print each side separately and glue them together.</p><div class="actions"><button class="btn" data-close>Cancel</button>${guideAction}<button class="btn primary" id="downloadPDF">Download 2-page PDF</button></div>`);
  const glueFlaps=$('#addGlueFlap'),guideButton=$('#downloadAssemblyGuide');

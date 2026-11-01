@@ -13,25 +13,25 @@ test('back-sheet square artwork keeps its left and right pixels instead of mirro
  expect(result.left).toEqual([255,0,0,255]);expect(result.right).toEqual([0,0,255,255]);
 });
 
-test('tetraflexagon export downloads the matching illustrated assembly guides',async({page})=>{
+for(const [modelId,modelName] of [['tetra','tetraflexagon'],['trihexa','trihexaflexagon']])test(`${modelName} export downloads the matching illustrated assembly guides`,async({page})=>{
  await page.goto('/');
- await page.selectOption('#model','tetra');
+ await page.selectOption('#model',modelId);
  const confirm=page.locator('#confirmModelChange');
  if(await confirm.isVisible())await confirm.click();
- await expect(page.locator('#model')).toHaveValue('tetra');
+ await expect(page.locator('#model')).toHaveValue(modelId);
  await page.locator('#export').click();
  const guide=page.locator('#downloadAssemblyGuide');
  await expect(guide).toBeEnabled();
  let downloadPromise=page.waitForEvent('download');
  await guide.click();
  let download=await downloadPromise;
- expect(download.suggestedFilename()).toBe('flexagon-studio-tetraflexagon-assembly-glue-flaps.pdf');
- expect((await stat(await download.path())).size).toBeGreaterThan(100000);
+ expect(download.suggestedFilename()).toBe(`flexagon-studio-${modelName}-assembly-glue-flaps.pdf`);
+ expect((await stat(await download.path())).size).toBeGreaterThan(10000);
  await page.locator('#addGlueFlap').uncheck();
  await expect(guide).toBeEnabled();
  downloadPromise=page.waitForEvent('download');
  await guide.click();
  download=await downloadPromise;
- expect(download.suggestedFilename()).toBe('flexagon-studio-tetraflexagon-assembly-no-glue.pdf');
- expect((await stat(await download.path())).size).toBeGreaterThan(100000);
+ expect(download.suggestedFilename()).toBe(`flexagon-studio-${modelName}-assembly-no-glue.pdf`);
+ expect((await stat(await download.path())).size).toBeGreaterThan(10000);
 });

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
+    "build:assembly-guides": "node scripts/generate-assembly-guides.mjs",
     "test": "node --test",
     "test:browser": "playwright test"
   },
