@@ -1,10 +1,15 @@
 import tetraflexagonNoGlueSvg from '../drafts/tetraflexagon-no-glue-assembly-draft.svg?raw';
+import tetraflexagonGlueSvg from '../drafts/tetraflexagon-glue-assembly-draft.svg?raw';
 
 const GUIDES = {
   tetra: {
     tape: {
       svg: tetraflexagonNoGlueSvg,
       filename: 'flexagon-studio-tetraflexagon-assembly-no-glue.pdf',
+    },
+    glue: {
+      svg: tetraflexagonGlueSvg,
+      filename: 'flexagon-studio-tetraflexagon-assembly-glue-flaps.pdf',
     },
   },
 };

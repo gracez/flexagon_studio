@@ -379,8 +379,8 @@ $('#export').onclick=()=>{
   if(!guideButton)return;
   const available=Boolean(assemblyGuideFor(model.id,{addGlueFlaps:glueFlaps.checked}));
   guideButton.disabled=!available;
-  guideButton.title=available?'Download the illustrated tape-closure guide':'Turn off glue flaps to use the available assembly guide';
-  guideMessage.textContent=available?'Illustrated guide for folding and closing this version with tape.':'The illustrated guide currently covers the tape closure, with glue flaps off.';
+  guideButton.title=available?'Download the illustrated guide for these settings':'No assembly guide is available for these settings yet';
+  guideMessage.textContent=available?'Illustrated guide for the selected closure.':'No illustrated guide is available for these settings yet.';
  };
  glueFlaps.onchange=updateGuideAction;updateGuideAction();
  if(guideButton)guideButton.onclick=async()=>{

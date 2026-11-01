@@ -72,7 +72,7 @@
     <text class="caption" x="40" y="120">Bring 5F to 4F and 8F to 1F.</text>
     <g transform="translate(126 180)">
       <rect class="f ink" x="0" y="0" width="112" height="112"/><rect class="f ink" x="112" y="0" width="112" height="112"/><rect class="f ink" x="224" y="0" width="112" height="112"/><rect class="f ink" x="336" y="0" width="112" height="112"/>
-      <text class="label" x="56" y="66" text-anchor="middle">8F</text><text class="label" x="168" y="66" text-anchor="middle">5F</text><text class="label" x="280" y="66" text-anchor="middle">4F</text><text class="label" x="392" y="66" text-anchor="middle">1F</text>
+      <text class="label" x="56" y="66" text-anchor="middle">1F</text><text class="label" x="168" y="66" text-anchor="middle">4F</text><text class="label" x="280" y="66" text-anchor="middle">5F</text><text class="label" x="392" y="66" text-anchor="middle">8F</text>
       <path class="creaseUnder" d="M224 -22V134"/><path class="crease" d="M224 -22V134"/><path class="arrow" d="M196 142 C230 182,270 182,304 142"/>
     </g>
   </g>
