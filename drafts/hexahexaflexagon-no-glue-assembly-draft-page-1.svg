@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
+  <style>
+    .paper{fill:#faf9f4}.panel{fill:#fffefa;stroke:#d9ded2;stroke-width:2}.leaf{fill:#e7eee1;stroke:#304e40;stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}.back{fill:#e8edf1}.creaseUnder{stroke:#fffefa;stroke-width:7;stroke-dasharray:10 9;fill:none}.crease{stroke:#758572;stroke-width:3;stroke-dasharray:10 9;fill:none}.arrow{stroke:#c76c4b;stroke-width:4;fill:none;marker-end:url(#arrow)}.step2Arrow{stroke:#c76c4b;stroke-width:3;fill:none;marker-end:url(#arrow)}.joinEdge{stroke:#c76c4b;stroke-width:5;stroke-linecap:round}.heading{font:500 47px Georgia,serif;fill:#304e40}.sub{font:22px Arial,sans-serif;fill:#72806e}.stepNumber{font:600 23px Arial,sans-serif;fill:#c76c4b}.step{font:600 20px Arial,sans-serif;letter-spacing:2px;fill:#c76c4b}.caption{font:25px Arial,sans-serif;fill:#3e4e42}.small{font:20px Arial,sans-serif;fill:#697667}.label{font:600 17px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}.micro{font:600 12px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}.tiny{font:600 13px Arial,sans-serif;fill:#304e40;dominant-baseline:middle;transform-box:fill-box;transform-origin:center;transform:scaleX(-1)}
+    .stack{fill:#e7eee1;stroke:#304e40;stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}.step1 .leaf{stroke-width:1.75}
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#c76c4b"/></marker>
+    <marker id="arrowBoth" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#c76c4b"/></marker>
+  </defs>
+  <rect class="paper" width="1600" height="1120"/>
+  <text x="90" y="94" class="heading">Hexahexaflexagon assembly</text>
+  <text x="90" y="133" class="sub">No glue flaps · tape closure · 1 of 2</text>
+  <text x="90" y="158" class="small">Before beginning, pre-fold every crease both ways.</text>
+  <line x1="90" y1="180" x2="1510" y2="180" stroke="#d7ddd0" stroke-width="2"/>
+
+  <!-- Step 1: reconnect the two nine-leaf print strips. -->
+  <g class="step1" transform="translate(70 205)">
+    <rect class="panel" width="1460" height="245" rx="18"/>
+    <text class="stepNumber" x="40" y="43">1</text>
+    <text class="step" x="70" y="43">JOIN THE STRIPS</text>
+    <text class="caption" x="40" y="82">Back side up. Align 10B and 9B edge-to-edge. Join with tape.</text>
+    <g transform="translate(220 125) scale(1.452)">
+      <polygon class="leaf back" points="0,0 62,0 31,53.7"/><text class="micro" x="31" y="18" text-anchor="middle">18B</text>
+      <polygon class="leaf back" points="31,53.7 93,53.7 62,0"/><text class="micro" x="62" y="36" text-anchor="middle">17B</text>
+      <polygon class="leaf back" points="62,0 124,0 93,53.7"/><text class="micro" x="93" y="18" text-anchor="middle">16B</text>
+      <polygon class="leaf back" points="93,53.7 155,53.7 124,0"/><text class="micro" x="124" y="36" text-anchor="middle">15B</text>
+      <polygon class="leaf back" points="124,0 186,0 155,53.7"/><text class="micro" x="155" y="18" text-anchor="middle">14B</text>
+      <polygon class="leaf back" points="155,53.7 217,53.7 186,0"/><text class="micro" x="186" y="36" text-anchor="middle">13B</text>
+      <polygon class="leaf back" points="186,0 248,0 217,53.7"/><text class="micro" x="217" y="18" text-anchor="middle">12B</text>
+      <polygon class="leaf back" points="217,53.7 279,53.7 248,0"/><text class="micro" x="248" y="36" text-anchor="middle">11B</text>
+      <polygon class="leaf back" points="248,0 310,0 279,53.7"/><text class="micro" x="279" y="18" text-anchor="middle">10B</text>
+      <line class="joinEdge" x1="279" y1="53.7" x2="310" y2="0"/>
+    </g>
+    <path class="arrow" d="M695 162H765"/>
+    <g transform="translate(790 125) scale(1.452)">
+      <polygon class="leaf back" points="0,53.7 62,53.7 31,0"/><text class="micro" x="31" y="36" text-anchor="middle">9B</text>
+      <polygon class="leaf back" points="31,0 93,0 62,53.7"/><text class="micro" x="62" y="18" text-anchor="middle">8B</text>
+      <polygon class="leaf back" points="62,53.7 124,53.7 93,0"/><text class="micro" x="93" y="36" text-anchor="middle">7B</text>
+      <polygon class="leaf back" points="93,0 155,0 124,53.7"/><text class="micro" x="124" y="18" text-anchor="middle">6B</text>
+      <polygon class="leaf back" points="124,53.7 186,53.7 155,0"/><text class="micro" x="155" y="36" text-anchor="middle">5B</text>
+      <polygon class="leaf back" points="155,0 217,0 186,53.7"/><text class="micro" x="186" y="18" text-anchor="middle">4B</text>
+      <polygon class="leaf back" points="186,53.7 248,53.7 217,0"/><text class="micro" x="217" y="36" text-anchor="middle">3B</text>
+      <polygon class="leaf back" points="217,0 279,0 248,53.7"/><text class="micro" x="248" y="18" text-anchor="middle">2B</text>
+      <polygon class="leaf back" points="248,53.7 310,53.7 279,0"/><text class="micro" x="279" y="36" text-anchor="middle">1B</text>
+      <line class="joinEdge" x1="0" y1="53.7" x2="31" y2="0"/>
+    </g>
+  </g>
+
+  <!-- Step 2: published construction method—fold adjacent same-face back pairs. -->
+  <g transform="translate(70 470)">
+    <rect class="panel" width="1460" height="330" rx="18"/>
+    <text class="stepNumber" x="40" y="43">2</text>
+    <text class="step" x="70" y="43">ROLL UP THE STRIP</text>
+    <text class="caption" x="40" y="82">Fold each marked pair face-to-face, wrapping in the same direction.</text>
+    <text class="small" x="40" y="116">2B–3B · 4B–5B · 6B–7B · 8B–9B · 10B–11B · 12B–13B · 14B–15B · 16B–17B</text>
+    <g transform="translate(1175 185) scale(-1.286 1.286)">
+      <polygon class="leaf back" points="0,60.6 70,60.6 35,0"/><text class="tiny" x="35" y="40" text-anchor="middle">1B</text>
+      <polygon class="leaf back" points="35,0 105,0 70,60.6"/><text class="tiny" x="70" y="20" text-anchor="middle">2B</text>
+      <polygon class="leaf back" points="70,60.6 140,60.6 105,0"/><text class="tiny" x="105" y="40" text-anchor="middle">3B</text>
+      <polygon class="leaf back" points="105,0 175,0 140,60.6"/><text class="tiny" x="140" y="20" text-anchor="middle">4B</text>
+      <polygon class="leaf back" points="140,60.6 210,60.6 175,0"/><text class="tiny" x="175" y="40" text-anchor="middle">5B</text>
+      <polygon class="leaf back" points="175,0 245,0 210,60.6"/><text class="tiny" x="210" y="20" text-anchor="middle">6B</text>
+      <polygon class="leaf back" points="210,60.6 280,60.6 245,0"/><text class="tiny" x="245" y="40" text-anchor="middle">7B</text>
+      <polygon class="leaf back" points="245,0 315,0 280,60.6"/><text class="tiny" x="280" y="20" text-anchor="middle">8B</text>
+      <polygon class="leaf back" points="280,60.6 350,60.6 315,0"/><text class="tiny" x="315" y="40" text-anchor="middle">9B</text>
+      <polygon class="leaf back" points="315,0 385,0 350,60.6"/><text class="tiny" x="350" y="20" text-anchor="middle">10B</text>
+      <polygon class="leaf back" points="350,60.6 420,60.6 385,0"/><text class="tiny" x="385" y="40" text-anchor="middle">11B</text>
+      <polygon class="leaf back" points="385,0 455,0 420,60.6"/><text class="tiny" x="420" y="20" text-anchor="middle">12B</text>
+      <polygon class="leaf back" points="420,60.6 490,60.6 455,0"/><text class="tiny" x="455" y="40" text-anchor="middle">13B</text>
+      <polygon class="leaf back" points="455,0 525,0 490,60.6"/><text class="tiny" x="490" y="20" text-anchor="middle">14B</text>
+      <polygon class="leaf back" points="490,60.6 560,60.6 525,0"/><text class="tiny" x="525" y="40" text-anchor="middle">15B</text>
+      <polygon class="leaf back" points="525,0 595,0 560,60.6"/><text class="tiny" x="560" y="20" text-anchor="middle">16B</text>
+      <polygon class="leaf back" points="560,60.6 630,60.6 595,0"/><text class="tiny" x="595" y="40" text-anchor="middle">17B</text>
+      <polygon class="leaf back" points="595,0 665,0 630,60.6"/><text class="tiny" x="630" y="20" text-anchor="middle">18B</text>
+      <path class="creaseUnder" d="M111,-10L65,70M181,-10L135,70M251,-10L205,70M321,-10L275,70M391,-10L345,70M461,-10L415,70M531,-10L485,70M601,-10L555,70"/>
+      <path class="crease" d="M111,-10L65,70M181,-10L135,70M251,-10L205,70M321,-10L275,70M391,-10L345,70M461,-10L415,70M531,-10L485,70M601,-10L555,70"/>
+      <path class="step2Arrow" d="M88.3 -23.1C103.5 -38.5 118.5 -29.7 130.9 -8.2"/>
+      <path class="step2Arrow" d="M298.3 -23.1C313.5 -38.5 328.5 -29.7 340.9 -8.2"/>
+      <path class="step2Arrow" d="M508.3 -23.1C523.5 -38.5 538.5 -29.7 550.9 -8.2"/>
+    </g>
+  </g>
+  <!-- Step 3: the rolled strip is turned over to expose faces 1, 2, and 3. -->
+  <g transform="translate(70 820)">
+    <rect class="panel" width="1460" height="245" rx="18"/>
+    <text class="stepNumber" x="40" y="43">3</text>
+    <text class="step" x="70" y="43">TURN OVER AND FOLD</text>
+    <text class="caption" x="40" y="82">Turn the strip over. Fold 14F onto 17F.</text>
+    <g transform="translate(481.5 140) scale(.95745)">
+      <polygon class="stack" points="0,0 94,0 47,81.4"/><text class="label" x="47" y="27" text-anchor="middle" transform="rotate(-120 47 27)">18F</text>
+      <polygon class="stack" points="47,81.4 141,81.4 94,0"/><text class="label" x="94" y="55" text-anchor="middle" transform="rotate(-120 94 55)">17F</text>
+      <polygon class="stack" points="94,0 188,0 141,81.4"/><text class="label" x="141" y="27" text-anchor="middle" transform="rotate(-120 141 27)">14F</text>
+      <polygon class="stack" points="141,81.4 235,81.4 188,0"/><text class="label" x="188" y="55" text-anchor="middle" transform="rotate(-120 188 55)">13F</text>
+      <polygon class="stack" points="188,0 282,0 235,81.4"/><text class="label" x="235" y="27" text-anchor="middle" transform="rotate(-120 235 27)">10F</text>
+      <polygon class="stack" points="235,81.4 329,81.4 282,0"/><text class="label" x="282" y="55" text-anchor="middle" transform="rotate(-120 282 55)">9F</text>
+      <polygon class="stack" points="282,0 376,0 329,81.4"/><text class="label" x="329" y="27" text-anchor="middle" transform="rotate(-120 329 27)">6F</text>
+      <polygon class="stack" points="329,81.4 423,81.4 376,0"/><text class="label" x="376" y="55" text-anchor="middle" transform="rotate(-120 376 55)">5F</text>
+      <polygon class="stack" points="376,0 470,0 423,81.4"/><text class="label" x="423" y="27" text-anchor="middle" transform="rotate(-120 423 27)">2F</text>
+      <polygon class="stack" points="423,81.4 517,81.4 470,0"/><text class="label" x="470" y="55" text-anchor="middle" transform="rotate(-120 470 55)">1F</text>
+      <path class="creaseUnder" d="M86,-13L149,94"/><path class="crease" d="M86,-13L149,94"/>
+      <path class="arrow" d="M120.5 -33.3C102 -62 70 -35 58 -10.4"/>
+    </g>
+  </g>
+
+</svg>

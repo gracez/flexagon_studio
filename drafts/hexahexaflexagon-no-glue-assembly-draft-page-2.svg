@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
+  <style>
+    .paper{fill:#faf9f4}.panel{fill:#fffefa;stroke:#d9ded2;stroke-width:2}.stackUnder{fill:#d7dfd2;stroke:#304e40;stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}.stack{fill:#e7eee1;stroke:#304e40;stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}.back{fill:#e8edf1}.creaseUnder{stroke:#fffefa;stroke-width:7;stroke-dasharray:10 9;fill:none}.crease{stroke:#758572;stroke-width:3;stroke-dasharray:10 9;fill:none}.arrow{stroke:#c76c4b;stroke-width:4;fill:none;marker-end:url(#arrow)}.tapeEdge{stroke:#c76c4b;stroke-width:4;stroke-linecap:round}.heading{font:500 47px Georgia,serif;fill:#304e40}.sub{font:22px Arial,sans-serif;fill:#72806e}.stepNumber{font:600 23px Arial,sans-serif;fill:#c76c4b}.step{font:600 20px Arial,sans-serif;letter-spacing:2px;fill:#c76c4b}.caption{font:25px Arial,sans-serif;fill:#3e4e42}.small{font:20px Arial,sans-serif;fill:#697667}.label{font:600 17px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}.mini{font:600 14px Arial,sans-serif;fill:#304e40;dominant-baseline:middle}
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#c76c4b"/></marker>
+  </defs>
+  <rect class="paper" width="1600" height="1120"/>
+  <text x="90" y="94" class="heading">Hexahexaflexagon assembly</text>
+  <text x="90" y="133" class="sub">No glue flaps · tape closure · 2 of 2</text>
+  <line x1="90" y1="165" x2="1510" y2="165" stroke="#d7ddd0" stroke-width="2"/>
+
+  <!-- Steps 4–7: the final folds, tuck, and tape closure. -->
+  <g transform="translate(70 205)">
+    <rect class="panel" width="700" height="385" rx="18"/>
+    <text class="stepNumber" x="40" y="43">4</text>
+    <text class="step" x="70" y="43">FOLD</text>
+    <text class="caption" x="40" y="82">Fold 8F onto 11F.</text>
+    <g transform="translate(414 40) scale(1) rotate(90)">
+      <polygon class="stack" points="0,64 74,64 37,0"/><text class="mini" x="37" y="43" text-anchor="middle" transform="rotate(-150 37 43)">15F</text>
+      <polygon class="stack" points="0,64 74,64 37,128"/><text class="mini" x="37" y="85.3" text-anchor="middle" transform="rotate(-210 37 85.3)">18F</text>
+      <polygon class="stack" points="37,0 111,0 74,64"/><text class="mini" x="74" y="21" text-anchor="middle" transform="rotate(-150 74 21)">12F</text>
+      <polygon class="stack" points="74,64 148,64 111,0"/><text class="mini" x="111" y="43" text-anchor="middle" transform="rotate(-150 111 43)">11F</text>
+      <polygon class="stack" points="111,0 185,0 148,64"/><text class="mini" x="148" y="21" text-anchor="middle" transform="rotate(-150 148 21)">8F</text>
+      <polygon class="stack" points="148,64 222,64 185,0"/><text class="mini" x="185" y="43" text-anchor="middle" transform="rotate(-150 185 43)">7F</text>
+      <polygon class="stack" points="185,0 259,0 222,64"/><text class="mini" x="222" y="21" text-anchor="middle" transform="rotate(-150 222 21)">4F</text>
+      <polygon class="stack" points="222,64 296,64 259,0"/><text class="mini" x="259" y="43" text-anchor="middle" transform="rotate(-150 259 43)">3F</text>
+      <polygon class="stack back" points="259,0 333,0 296,64"/><text class="mini" x="296" y="21" text-anchor="middle" transform="rotate(-150 296 21)">1B</text>
+      <path class="creaseUnder" d="M105,-10L154,74"/><path class="crease" d="M105,-10L154,74"/>
+      <path class="arrow" d="M130,-24.5C129.6,-50.9 92.5,-24.5 82.9,-10.1"/>
+    </g>
+  </g>
+
+  <!-- Step 5: third trihexaflexagon-style fold. -->
+  <g transform="translate(800 205)">
+    <rect class="panel" width="730" height="385" rx="18"/>
+    <text class="stepNumber" x="40" y="43">5</text>
+    <text class="step" x="70" y="43">CLOSE THE HEXAGON</text>
+    <text class="caption" x="40" y="82">Fold 2F onto 5F.</text>
+    <g transform="translate(145 -38) scale(1.1)">
+      <polygon class="stack" points="250,220 200,133.4 300,133.4"/><text class="label" x="250" y="162" text-anchor="middle" transform="rotate(300 250 162)">15F</text>
+      <polygon class="stack" points="250,220 150,220 200,133.4"/><text class="label" x="200" y="191" text-anchor="middle" transform="rotate(180 200 191)">18F</text>
+      <polygon class="stack" points="250,220 300,133.4 350,220"/><text class="label" x="300" y="191" text-anchor="middle" transform="rotate(300 300 191)">12F</text>
+      <polygon class="stack" points="250,220 350,220 300,306.6"/><text class="label" x="300" y="249" text-anchor="middle" transform="rotate(60 300 249)">9F</text>
+      <polygon class="stack" points="250,220 300,306.6 200,306.6"/><text class="label" x="250" y="278" text-anchor="middle" transform="rotate(60 250 278)">6F</text>
+      <polygon class="stack" points="250,220 200,306.6 150,220"/><text class="label" x="200" y="249" text-anchor="middle" transform="rotate(60 200 249)">5F</text>
+      <polygon class="stack" points="150,220 200,306.6 100,306.6"/><text class="label" x="150" y="278" text-anchor="middle" transform="rotate(60 150 278)">2F</text>
+      <polygon class="stack" points="150,220 100,306.6 50,220"/><text class="label" x="100" y="249" text-anchor="middle" transform="rotate(60 100 249)">1F</text>
+      <path class="creaseUnder" d="M143 207.9L207 318.7"/><path class="crease" d="M143 207.9L207 318.7"/>
+      <path class="arrow" d="M178 341C185 365 217 348 240.4 320"/>
+    </g>
+  </g>
+
+  <!-- Step 6: tuck the final loose flap behind the hexagon. -->
+  <g transform="translate(70 620)">
+    <rect class="panel" width="700" height="435" rx="18"/>
+    <text class="stepNumber" x="40" y="43">6</text>
+    <text class="step" x="70" y="43">TUCK THE FLAP</text>
+    <text class="caption" x="40" y="82">Tuck the 1B behind to reveal 18F.</text>
+    <text class="small" x="190" y="150" text-anchor="middle">Before</text>
+    <text class="small" x="510" y="150" text-anchor="middle">After</text>
+    <g transform="translate(-127.25 50.75) scale(1.35)">
+      <polygon class="stack" points="235,155 195,85.7 275,85.7"/><text class="mini" x="235" y="109" text-anchor="middle" transform="rotate(300 235 109)">15F</text>
+      <polygon class="stack" points="235,155 275,85.7 315,155"/><text class="mini" x="275" y="132" text-anchor="middle" transform="rotate(300 275 132)">12F</text>
+      <polygon class="stack" points="235,155 315,155 275,224.3"/><text class="mini" x="275" y="178" text-anchor="middle" transform="rotate(60 275 178)">9F</text>
+      <polygon class="stack" points="235,155 275,224.3 195,224.3"/><text class="mini" x="235" y="201" text-anchor="middle" transform="rotate(60 235 201)">6F</text>
+      <polygon class="stack" points="235,155 195,224.3 155,155"/><text class="mini" x="195" y="178" text-anchor="middle" transform="rotate(180 195 178)">3F</text>
+      <polygon class="stack back" points="235,155 155,155 195,85.7"/><text class="mini" x="195" y="132" text-anchor="middle" transform="rotate(180 195 132)">1B</text>
+    </g>
+    <path class="arrow" d="M320 250H380"/>
+    <g transform="translate(192.75 50.75) scale(1.35)">
+      <polygon class="stack" points="235,155 195,85.7 275,85.7"/><text class="mini" x="235" y="109" text-anchor="middle" transform="rotate(300 235 109)">15F</text>
+      <polygon class="stack" points="235,155 275,85.7 315,155"/><text class="mini" x="275" y="132" text-anchor="middle" transform="rotate(300 275 132)">12F</text>
+      <polygon class="stack" points="235,155 315,155 275,224.3"/><text class="mini" x="275" y="178" text-anchor="middle" transform="rotate(60 275 178)">9F</text>
+      <polygon class="stack" points="235,155 275,224.3 195,224.3"/><text class="mini" x="235" y="201" text-anchor="middle" transform="rotate(60 235 201)">6F</text>
+      <polygon class="stack" points="235,155 195,224.3 155,155"/><text class="mini" x="195" y="178" text-anchor="middle" transform="rotate(180 195 178)">3F</text>
+      <polygon class="stack" points="235,155 155,155 195,85.7"/><text class="mini" x="195" y="132" text-anchor="middle" transform="rotate(120 195 132)">18F</text>
+    </g>
+  </g>
+
+  <!-- Step 7: show both exposed outer faces and their matching tape edges. -->
+  <g transform="translate(800 620)">
+    <rect class="panel" width="730" height="435" rx="18"/>
+    <text class="stepNumber" x="40" y="43">7</text>
+    <text class="step" x="70" y="43">TAPE THE HINGE</text>
+    <text class="caption" x="40" y="82">Tape the red edge of 18B to the red edge of 1F.</text>
+    <text class="small" x="190" y="150" text-anchor="middle">18B edge</text>
+    <text class="small" x="540" y="150" text-anchor="middle">1B edge</text>
+    <g transform="translate(-127.25 50.75) scale(1.35)">
+      <polygon class="stack" points="235,155 195,85.7 275,85.7"/><text class="mini" x="235" y="109" text-anchor="middle" transform="rotate(300 235 109)">15F</text>
+      <polygon class="stack" points="235,155 275,85.7 315,155"/><text class="mini" x="275" y="132" text-anchor="middle" transform="rotate(300 275 132)">12F</text>
+      <polygon class="stack" points="235,155 315,155 275,224.3"/><text class="mini" x="275" y="178" text-anchor="middle" transform="rotate(60 275 178)">9F</text>
+      <polygon class="stack" points="235,155 275,224.3 195,224.3"/><text class="mini" x="235" y="201" text-anchor="middle" transform="rotate(60 235 201)">6F</text>
+      <polygon class="stack" points="235,155 195,224.3 155,155"/><text class="mini" x="195" y="178" text-anchor="middle" transform="rotate(180 195 178)">3F</text>
+      <polygon class="stack" points="235,155 155,155 195,85.7"/><text class="mini" x="195" y="132" text-anchor="middle" transform="rotate(120 195 132)">18F</text>
+      <line class="tapeEdge" x1="195" y1="85.7" x2="155" y2="155"/>
+    </g>
+    <path class="arrow" d="M335 250H395"/>
+    <text class="small" x="365" y="300" text-anchor="middle">Turn over</text>
+    <g transform="translate(222.75 50.75) scale(1.35)">
+      <polygon class="stack" points="235,155 195,85.7 275,85.7"/><text class="mini" x="235" y="109" text-anchor="middle" transform="rotate(129 235 109)">4F</text>
+      <polygon class="stack" points="235,155 275,85.7 315,155"/><text class="mini" x="275" y="132" text-anchor="middle" transform="rotate(129 275 132)">7F</text>
+      <polygon class="stack" points="235,155 315,155 275,224.3"/><text class="mini" x="275" y="178" text-anchor="middle" transform="rotate(300 275 178)">10F</text>
+      <polygon class="stack" points="235,155 275,224.3 195,224.3"/><text class="mini" x="235" y="201" text-anchor="middle" transform="rotate(300 235 201)">13F</text>
+      <polygon class="stack" points="235,155 195,224.3 155,155"/><text class="mini" x="195" y="178" text-anchor="middle">16F</text>
+      <polygon class="stack" points="235,155 155,155 195,85.7"/><text class="mini" x="195" y="132" text-anchor="middle">1F</text>
+      <line class="tapeEdge" x1="195" y1="85.7" x2="155" y2="155"/>
+    </g>
+  </g>
+
+</svg>

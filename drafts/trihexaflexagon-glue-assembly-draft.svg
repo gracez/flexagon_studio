@@ -5,19 +5,20 @@
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#c76c4b"/></marker>
     <marker id="arrowStep3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" overflow="visible"><path d="M0 0L10 5L0 10Z" fill="#c76c4b" transform="rotate(15 8 5)"/></marker>
-    <marker id="arrowStep4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" overflow="visible"><path d="M0 0L10 5L0 10Z" fill="#c76c4b" transform="rotate(20 8 5)"/></marker>
+    <marker id="arrowStep4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" overflow="visible"><path d="M0 0L10 5L0 10Z" fill="#c76c4b"/></marker>
   </defs>
   <rect class="paper" width="1600" height="1120"/>
   <text x="90" y="94" class="heading">Trihexaflexagon assembly</text>
   <text x="90" y="133" class="sub">Glue-flap closure</text>
-  <line x1="90" y1="165" x2="1510" y2="165" stroke="#d7ddd0" stroke-width="2"/>
+  <text x="90" y="158" class="small">Before beginning, pre-fold every crease both ways.</text>
+  <line x1="90" y1="180" x2="1510" y2="180" stroke="#d7ddd0" stroke-width="2"/>
 
   <!-- Step 1: the front strip with its added 1B end leaf. -->
   <g transform="translate(70 215)">
     <rect class="panel" width="1460" height="230" rx="18"/>
     <text class="stepNumber" x="40" y="43">1</text>
-    <text class="step" x="70" y="43">FOLD THE STRIP</text>
-    <text class="caption" x="40" y="82">Front side up. Fold 2F onto 1F.</text>
+    <text class="step" x="70" y="43">FOLD</text>
+    <text class="caption" x="40" y="82">Front side up; fold 2F onto 1F.</text>
     <g transform="translate(411 100)">
       <polygon class="leaf" points="0,100 58,0 116,100"/><text class="label" x="58" y="66.7" text-anchor="middle">1F</text>
       <polygon class="leaf" points="58,0 116,100 174,0"/><text class="label" x="116" y="33.3" text-anchor="middle">2F</text>
@@ -38,7 +39,7 @@
   <g transform="translate(70 465)">
     <rect class="panel" width="450" height="510" rx="18"/>
     <text class="stepNumber" x="40" y="43">2</text>
-    <text class="step" x="70" y="43">FOLD THE STRIP</text>
+    <text class="step" x="70" y="43">FOLD</text>
     <text class="caption" x="40" y="82">Fold 5B onto 4B.</text>
     <g transform="translate(250 105) rotate(90)">
       <polygon class="leaf back" points="0,64 37,0 74,64"/><text class="label" x="37" y="42.7" text-anchor="middle" transform="rotate(180 37 42.7)">2B</text>
@@ -93,7 +94,7 @@
       <polygon class="leaf back" points="125,230 45,230 85,160.7"/><text class="label" x="85" y="206.9" text-anchor="middle" transform="rotate(120 85 206.9)">9B</text>
     </g>
 
-    <path class="arrow" d="M220 249C235 270 250 270 265 249" style="marker-end:url(#arrowStep4)"/>
+    <path class="arrow" d="M212.5 249H257.5" style="marker-end:url(#arrowStep4)"/>
 
     <!-- After: tucking the flap reveals 2B. -->
     <g>
@@ -110,6 +111,6 @@
     <rect class="panel" width="470" height="110" rx="18"/>
     <text class="stepNumber" x="40" y="43">5</text>
     <text class="step" x="70" y="43">GLUE</text>
-    <text class="caption" x="40" y="82">Join the two facing panels.</text>
+    <text class="caption" x="40" y="82">Join the two glue flaps.</text>
   </g>
 </svg>

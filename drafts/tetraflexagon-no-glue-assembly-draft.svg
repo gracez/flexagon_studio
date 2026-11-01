@@ -32,12 +32,13 @@
   <rect class="paper" width="1600" height="1120"/>
   <text x="90" y="94" class="heading">Tetraflexagon assembly</text>
   <text x="90" y="133" class="sub">No glue flaps · tape closure</text>
-  <line x1="90" y1="165" x2="1510" y2="165" stroke="#d7ddd0" stroke-width="2"/>
+  <text x="90" y="158" class="small">Before beginning, pre-fold every crease both ways.</text>
+  <line x1="90" y1="180" x2="1510" y2="180" stroke="#d7ddd0" stroke-width="2"/>
 
   <g transform="translate(70 215)">
     <rect class="panel" width="700" height="760" rx="18"/>
     <text class="stepNumber" x="40" y="43">1</text>
-    <text class="step" x="70" y="43">PRE-FOLD THE STAIRCASE</text>
+    <text class="step" x="70" y="43">ROLL UP THE STAIRCASE</text>
     <text class="caption" x="40" y="99">Back side up.</text>
     <!-- Actual eight-leaf staircase, numbered from lower left to upper right. -->
     <g transform="translate(138 185)">
@@ -73,7 +74,7 @@
     <g transform="translate(126 180)">
       <rect class="f ink" x="0" y="0" width="112" height="112"/><rect class="f ink" x="112" y="0" width="112" height="112"/><rect class="f ink" x="224" y="0" width="112" height="112"/><rect class="f ink" x="336" y="0" width="112" height="112"/>
       <text class="label" x="56" y="66" text-anchor="middle">1F</text><text class="label" x="168" y="66" text-anchor="middle">4F</text><text class="label" x="280" y="66" text-anchor="middle">5F</text><text class="label" x="392" y="66" text-anchor="middle">8F</text>
-      <path class="creaseUnder" d="M224 -22V134"/><path class="crease" d="M224 -22V134"/><path class="arrow" d="M196 142 C230 182,270 182,304 142"/>
+      <path class="creaseUnder" d="M224 -22V134"/><path class="crease" d="M224 -22V134"/><path class="arrow" d="M196 142 C230 182,270 182,304 142" transform="translate(-26 0)"/>
     </g>
   </g>
 

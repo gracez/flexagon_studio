@@ -19,6 +19,12 @@ const GUIDES = {
       filename: 'flexagon-studio-trihexaflexagon-assembly-glue-flaps.pdf',
     },
   },
+  hexahexa: {
+    tape: {
+      path: 'assembly-guides/hexahexaflexagon-tape-closure.pdf',
+      filename: 'flexagon-studio-hexahexaflexagon-assembly-no-glue.pdf',
+    },
+  },
 };
 
 export function assemblyGuideFor(modelId, {addGlueFlaps = false} = {}) {
