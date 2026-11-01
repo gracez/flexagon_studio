@@ -16,6 +16,12 @@ test('hexahexaflexagon has three two-orientation and three four-orientation face
  assert.deepEqual(MODELS.hexahexa.faces.map(f=>f.orientations.length).sort(),[2,2,2,4,4,4]);
  assert.equal(MODELS.hexahexa.faces.reduce((n,f)=>n+f.orientations.length,0),18);
 });
+test('hexahexaflexagon face numbers map to their intended physical leaf sides',()=>{
+ assert.deepEqual(MODELS.hexahexa.faces.map(face=>face.orientations[0].placements.map(p=>p.side)),[
+  [0,30,24,18,12,6], [4,34,28,22,16,10], [8,2,32,26,20,14],
+  [9,7,33,31,21,19], [13,11,1,35,25,23], [17,15,5,3,29,27],
+ ]);
+});
 test('faces and models own independent placements with complete destination slots',()=>{
  const seen=new Set();
  for(const model of Object.values(MODELS))for(const face of model.faces)for(const orientation of face.orientations){
