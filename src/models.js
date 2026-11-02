@@ -107,20 +107,20 @@ export const FACE_MAPS = {
     },
     {
       name: 'Face 4', orientations: [
+        orientation('A', [9, 7, 33, 31, 21, 19], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+        orientation('B', [7, 9, 19, 21, 31, 33], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
+      ]
+    },
+    {
+      name: 'Face 5', orientations: [
         orientation('A', [13, 11, 1, 35, 25, 23], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [11, 13, 23, 25, 35, 1], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
     {
-      name: 'Face 5', orientations: [
+      name: 'Face 6', orientations: [
         orientation('A', [17, 15, 5, 3, 29, 27], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
         orientation('B', [15, 17, 27, 29, 3, 5], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
-      ]
-    },
-    {
-      name: 'Face 6', orientations: [
-        orientation('A', [9, 7, 33, 31, 21, 19], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
-        orientation('B', [7, 9, 19, 21, 31, 33], [0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3, 0, 2 * Math.PI / 3]),
       ]
     },
   ],
