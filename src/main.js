@@ -11,7 +11,7 @@ import {setupPanelResizers} from './panel-resizers.js';
 import {assemblyGuideFor, downloadAssemblyGuidePDF} from './assembly-guide.js';
 import {createIcons, FolderOpen, Save, Download, Paintbrush, Eraser, ImagePlus, Undo2, Redo2, Trash2, LassoSelect, Pipette, Hand, ArrowLeftRight, CircleHelp} from 'lucide';
 const icons={FolderOpen,Save,Download,Paintbrush,Eraser,ImagePlus,Undo2,Redo2,Trash2,LassoSelect,Pipette,Hand,ArrowLeftRight,CircleHelp};
-import {MODELS, PDF_LAYOUTS, SQUARE, TRIANGLE, HEXAGON_START_ANGLE, HEXAHEXA_FACE_MAP_VERSION, LEGACY_HEXAHEXA_FACE_MAP, placementMatrix, inverse, printLayout, canonicalModelId} from './models.js';
+import {MODELS, PDF_LAYOUTS, SQUARE, TRIANGLE, HEXAGON_START_ANGLE, placementMatrix, inverse, printLayout, canonicalModelId} from './models.js';
 const $=s=>document.querySelector(s), N=512, SIZE=720;
 let model=MODELS.hexahexa,face=0,orientation=0,tool='ink',color='#cf6d4d',size=18,opacity=.85,softness=.15,sampleDesign=false,showGrid=false;
 let autosave=null,activity=0,fingerDrawing=true,penActive=false,lastPenAt=-Infinity;
@@ -341,7 +341,7 @@ function download(blob,name){const a=document.createElement('a'),url=URL.createO
 const BACKUP_NOTICE_KEY='flexagon-studio-backup-notice-seen';
 function acknowledgeBackupNotice(){try{localStorage.setItem(BACKUP_NOTICE_KEY,'true');}catch{}$('#backupNotice').classList.add('hidden');}
 function maybeShowBackupNotice(){let seen=false;try{seen=localStorage.getItem(BACKUP_NOTICE_KEY)==='true';}catch{}if(!seen&&$('#recoveryBanner').classList.contains('hidden'))$('#backupNotice').classList.remove('hidden');}
-function projectMetadata(){return {format:'fold-studio',version:3,faceMapVersion:HEXAHEXA_FACE_MAP_VERSION,model:model.id,face,orientation,backgrounds:[...backgrounds()]};}
+function projectMetadata(){return {format:'fold-studio',version:3,model:model.id,face,orientation,backgrounds:[...backgrounds()]};}
 function canvasPngBytes(canvas){
  const encoded=canvas.toDataURL('image/png').split(',',2)[1],binary=atob(encoded),bytes=new Uint8Array(binary.length);
  for(let index=0;index<binary.length;index++)bytes[index]=binary.charCodeAt(index);
@@ -368,23 +368,6 @@ async function decodeArtwork(images,modelId){
  }));
 }
 function validBackgrounds(values,modelId){return Array.isArray(values)&&values.length===MODELS[modelId].faces.length&&values.every(value=>typeof value==='string'&&/^#[0-9a-f]{6}$/i.test(value));}
-function renderMappedFace(artwork,faceMap){
- const result=makeCanvas(SIZE,SIZE),ctx=result.getContext('2d');
- faceMap.orientations[0].placements.forEach(p=>{
-  const m=placementMatrix('triangle',p);ctx.save();ctx.transform(m[0]/N,m[1]/N,m[2]/N,m[3]/N,m[4],m[5]);polygon(ctx,TRIANGLE.map(([x,y])=>[x*N,y*N]));ctx.clip();ctx.drawImage(artwork[p.side],0,0);ctx.restore();
- });
- return result;
-}
-function writeMappedFace(artwork,faceMap,source){
- faceMap.orientations[0].placements.forEach(p=>{
-  const m=placementMatrix('triangle',p),det=m[0]*m[3]-m[1]*m[2],a=m[3]/det,b=-m[1]/det,c=-m[2]/det,d=m[0]/det,e=(m[2]*m[5]-m[3]*m[4])/det,f=(m[1]*m[4]-m[0]*m[5])/det,ctx=artwork[p.side].getContext('2d');
-  ctx.clearRect(0,0,N,N);ctx.save();polygon(ctx,TRIANGLE.map(([x,y])=>[x*N,y*N]));ctx.clip();ctx.setTransform(N*a,N*b,N*c,N*d,N*e,N*f);ctx.drawImage(source,0,0);ctx.restore();
- });
-}
-function migrateHexahexaFaceOrder(artwork){
- const faces=LEGACY_HEXAHEXA_FACE_MAP.map(faceMap=>renderMappedFace(artwork,faceMap));
- MODELS.hexahexa.faces.forEach((faceMap,index)=>writeMappedFace(artwork,faceMap,faces[index]));
-}
 async function restoreProject(data,{canApply=()=>true}={}){
  if(!data||data.format!=='fold-studio'||data.version!==3)throw Error('Unsupported project format.');
  const modelId=canonicalModelId(data.model);if(!Object.hasOwn(MODELS,modelId))throw Error('Unknown flexagon model.');
@@ -393,9 +376,7 @@ async function restoreProject(data,{canApply=()=>true}={}){
  if(!Number.isInteger(data.face)||!Number.isInteger(data.orientation)||!MODELS[modelId].faces[data.face]?.orientations[data.orientation])throw Error('Invalid selected face.');
  if(!canApply())return false;
  // Swap only after every image and metadata field has validated successfully.
- const migrateFaceOrder=modelId==='hexahexa'&&(data.faceMapVersion??1)<HEXAHEXA_FACE_MAP_VERSION;
- if(migrateFaceOrder)migrateHexahexaFaceOrder(artwork);
- lasso.clear();cancelImage();banks={[modelId]:artwork};faceBackgrounds={[modelId]:[...backgroundValues]};model=MODELS[modelId];face=data.face;orientation=data.orientation;history=[];future=[];updateUI();view.reset();if(migrateFaceOrder)toast('Hexahexa artwork moved to the corrected face locations.');return true;
+ lasso.clear();cancelImage();banks={[modelId]:artwork};faceBackgrounds={[modelId]:[...backgroundValues]};model=MODELS[modelId];face=data.face;orientation=data.orientation;history=[];future=[];updateUI();view.reset();return true;
 }
 $('#saveProject').onclick=downloadProject;
 $('#downloadFromNotice').onclick=downloadProject;$('#dismissBackupNotice').onclick=acknowledgeBackupNotice;
