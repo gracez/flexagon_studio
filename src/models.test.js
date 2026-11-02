@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {MODELS,placementMatrix,inverse,printLayout,TETRA_NET,canonicalModelId} from './models.js';
+import {MODELS,placementMatrix,inverse,printLayout,TETRA_NET,HEXAHEXA_FACE_MAP_VERSION,LEGACY_HEXAHEXA_FACE_MAP,canonicalModelId} from './models.js';
 for(const m of Object.values(MODELS)){
  test(`${m.name}: orientation maps preserve sides and transforms`,()=>{
   for(const f of m.faces){assert.equal(new Set(f.orientations.map(o=>JSON.stringify(o.placements))).size,f.orientations.length);const expected=f.orientations[0].placements.map(p=>p.side).sort((a,b)=>a-b);
@@ -20,6 +20,13 @@ test('hexahexaflexagon face numbers map to their intended physical leaf sides',(
  assert.deepEqual(MODELS.hexahexa.faces.map(face=>face.orientations[0].placements.map(p=>p.side)),[
   [0,30,24,18,12,6], [4,34,28,22,16,10], [8,2,32,26,20,14],
   [9,7,33,31,21,19], [13,11,1,35,25,23], [17,15,5,3,29,27],
+ ]);
+});
+test('hexahexaflexagon legacy map preserves the previous artwork locations for migration',()=>{
+ assert.equal(HEXAHEXA_FACE_MAP_VERSION,2);
+ assert.deepEqual(LEGACY_HEXAHEXA_FACE_MAP.map(face=>face.orientations[0].placements.map(p=>p.side)),[
+  [0,30,24,18,12,6], [4,34,28,22,16,10], [8,2,32,26,20,14],
+  [13,11,1,35,25,23], [17,15,5,3,29,27], [9,7,33,31,21,19],
  ]);
 });
 test('faces and models own independent placements with complete destination slots',()=>{

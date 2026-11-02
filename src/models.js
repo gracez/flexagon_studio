@@ -126,6 +126,12 @@ export const FACE_MAPS = {
   ],
 };
 
+// Projects created before v2 stored hexahexa artwork under the previous
+// 1→6, 2→4, 3→5 opening-pair labels. Keep that map so their artwork can be
+// moved once when those projects are opened.
+export const HEXAHEXA_FACE_MAP_VERSION = 2;
+export const LEGACY_HEXAHEXA_FACE_MAP = [0, 1, 2, 4, 5, 3].map(index => FACE_MAPS.hexahexa[index]);
+
 const colors = ['#d76c49', '#598675', '#7183ba', '#cba34e', '#a47797', '#5b9ba5'];
 function model(id, name, shape, leafCount) {
   return {
